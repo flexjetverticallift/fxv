@@ -150,6 +150,9 @@ td.number{text-align:right}
   .perf-section { padding: 12px; }
   .perf-title { font-size: 15px !important; }
   .perf-inputs { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  .perf-inputs input { width: 100% !important; min-width: 0 !important; font-size: 12px !important; padding: 5px !important; box-sizing: border-box; }
+  .perf-inputs label { font-size: 11px !important; }
+  .perf-inputs .form-group { min-width: 0; overflow: hidden; }
   .perf-outputs { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px; padding: 8px; }
   .perf-out { padding: 4px; }
   .perf-label { font-size: 10px; }
@@ -726,7 +729,7 @@ function render(){
     <div class="perf-title">Performance Calculations</div>
     <div class="perf-inputs">
       <div class="form-group"><label>Temperature (&deg;F)</label><input type="number" inputmode="numeric" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div>
-      <div class="form-group"><label>Altimeter (inHg)</label><input type="number" inputmode="numeric" step="0.01" value="${state.altimeter}" onchange="updateAltimeter(this.value)" placeholder="e.g., 30.12"></div>
+      <div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" oninput="formatAltimeter(this)" onchange="updateAltimeter(this.value)" placeholder="29.92" style="ime-mode:disabled;"></div>
       <div class="form-group"><label>Field Elevation (ft)</label><input type="number" inputmode="numeric" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" placeholder="Enter elevation"></div>
       <div class="form-group"><label>Temperature Aloft at 6000 ft (&deg;C)</label><input type="number" inputmode="numeric" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" placeholder="Enter temperature"></div>
     </div>
@@ -832,26 +835,50 @@ function drawGraph(c){
   const fullOK=inEnv(c.cg,c.totalWeight),zeroOK=inEnv(c.zeroFuelCG,c.zeroFuelWeight);
   ctx.fillStyle=fullOK?"#2196F3":"#f44336";ctx.beginPath();ctx.arc(xPos(c.cg),yPos(c.totalWeight),7,0,2*Math.PI);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();
   ctx.fillStyle=zeroOK?"#2196F3":"#f44336";ctx.beginPath();ctx.arc(xPos(c.zeroFuelCG),yPos(c.zeroFuelWeight),7,0,2*Math.PI);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();
-  ctx.fillStyle="#333";ctx.font="bold 11px Arial";ctx.textAlign="center";
-  const fullX=xPos(c.cg),fullY=yPos(c.totalWeight),fullLY=fullY<h/2?fullY+20:fullY-20;
-  ctx.fillText("Full Fuel",fullX,fullLY);ctx.font="10px Arial";ctx.fillText(`${c.totalWeight.toFixed(0)} lbs, ${c.cg.toFixed(2)}"`,fullX,fullLY+12);
-  ctx.font="bold 11px Arial";const zeroX=xPos(c.zeroFuelCG),zeroY=yPos(c.zeroFuelWeight),zeroLY=zeroY<h/2?zeroY+20:zeroY-20;
-  ctx.fillText("Zero Fuel",zeroX,zeroLY);ctx.font="10px Arial";ctx.fillText(`${c.zeroFuelWeight.toFixed(0)} lbs, ${c.zeroFuelCG.toFixed(2)}"`,zeroX,zeroLY+12);
+  const isMobile=w<500;
+  const axisFont=isMobile?"9px Arial":"11px Arial";
+  const axisFontBold=isMobile?"bold 10px Arial":"bold 12px Arial";
+  const cgStep=isMobile?4:2;
+
+  // Dot labels — only on desktop
+  if(!isMobile){
+    ctx.fillStyle="#333";ctx.font="bold 11px Arial";ctx.textAlign="center";
+    const fullX=xPos(c.cg),fullY=yPos(c.totalWeight),fullLY=fullY<h/2?fullY+20:fullY-20;
+    ctx.fillText("Full Fuel",fullX,fullLY);ctx.font="10px Arial";ctx.fillText(`${c.totalWeight.toFixed(0)} lbs, ${c.cg.toFixed(2)}"`,fullX,fullLY+12);
+    ctx.font="bold 11px Arial";const zeroX=xPos(c.zeroFuelCG),zeroY=yPos(c.zeroFuelWeight),zeroLY=zeroY<h/2?zeroY+20:zeroY-20;
+    ctx.fillText("Zero Fuel",zeroX,zeroLY);ctx.font="10px Arial";ctx.fillText(`${c.zeroFuelWeight.toFixed(0)} lbs, ${c.zeroFuelCG.toFixed(2)}"`,zeroX,zeroLY+12);
+  }
+
+  // Axes
   ctx.strokeStyle="#333";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,h-pad);ctx.lineTo(w-pad,h-pad);ctx.stroke();ctx.beginPath();ctx.moveTo(padL,pad);ctx.lineTo(padL,h-pad);ctx.stroke();
-  ctx.fillStyle="#333";ctx.font="11px Arial";ctx.textAlign="center";
-  for(let cg=minCG;cg<=maxCG;cg+=2)ctx.fillText(cg.toString(),xPos(cg),h-pad+20);
-  ctx.font="bold 12px Arial";ctx.fillText("CENTER OF GRAVITY - INCHES AFT OF DATUM",w/2,h-10);
-  ctx.textAlign="right";ctx.font="11px Arial";
-  for(let wt=minW;wt<=maxW;wt+=1000)ctx.fillText((wt/1000).toString(),padL-10,yPos(wt)+4);
-  ctx.save();ctx.translate(15,h/2);ctx.rotate(-Math.PI/2);ctx.font="bold 12px Arial";ctx.textAlign="center";ctx.fillText("GROSS WEIGHT - 1000 LB",0,0);ctx.restore();
-  const lx=w-220,ly=30;
-  ctx.fillStyle="rgba(76,175,80,0.3)";ctx.fillRect(lx,ly,20,15);ctx.strokeStyle="#2E7D32";ctx.lineWidth=2;ctx.strokeRect(lx,ly,20,15);
-  ctx.fillStyle="#333";ctx.font="12px Arial";ctx.textAlign="left";
+  ctx.fillStyle="#333";ctx.font=axisFont;ctx.textAlign="center";
+  for(let cg=minCG;cg<=maxCG;cg+=cgStep)ctx.fillText(cg.toString(),xPos(cg),h-pad+14);
+  ctx.font=axisFontBold;ctx.fillText("CENTER OF GRAVITY - INCHES AFT OF DATUM",w/2,h-4);
+  ctx.textAlign="right";ctx.font=axisFont;
+  for(let wt=minW;wt<=maxW;wt+=1000)ctx.fillText((wt/1000).toString(),padL-4,yPos(wt)+4);
+  if(!isMobile){ctx.save();ctx.translate(15,h/2);ctx.rotate(-Math.PI/2);ctx.font=axisFontBold;ctx.textAlign="center";ctx.fillText("GROSS WEIGHT - 1000 LB",0,0);ctx.restore();}
+
+  // Legend
   let mt="S-76C+";if(c.heli.model.includes("S-76D"))mt="S-76D";else if(c.heli.model.includes("C++"))mt="S-76C++";
-  ctx.fillText(`CG Envelope (${mt})`,lx+25,ly+11);
-  ctx.strokeStyle="#2196F3";ctx.lineWidth=3;ctx.setLineDash([8,4]);ctx.beginPath();ctx.moveTo(lx,ly+30);ctx.lineTo(lx+20,ly+30);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillText("Fuel Burn",lx+25,ly+33);ctx.font="bold 12px Arial";
-  if(fullOK&&zeroOK){ctx.fillStyle="#2E7D32";ctx.fillText("\u2713 WITHIN LIMITS",lx,ly+55);}else{ctx.fillStyle="#c62828";ctx.fillText("\u2717 OUT OF LIMITS",lx,ly+55);}
+  if(isMobile){
+    // Compact top-left legend on mobile
+    const lx=padL+4,ly=pad+4;
+    ctx.fillStyle="rgba(255,255,255,0.85)";ctx.fillRect(lx-2,ly-2,w-padL-pad-2,44);
+    ctx.fillStyle="rgba(76,175,80,0.3)";ctx.fillRect(lx,ly+2,12,10);ctx.strokeStyle="#2E7D32";ctx.lineWidth=1.5;ctx.strokeRect(lx,ly+2,12,10);
+    ctx.fillStyle="#333";ctx.font="bold 9px Arial";ctx.textAlign="left";ctx.fillText(`CG Envelope (${mt})`,lx+16,ly+11);
+    ctx.strokeStyle="#2196F3";ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.beginPath();ctx.moveTo(lx,ly+22);ctx.lineTo(lx+12,ly+22);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillText("Fuel Burn",lx+16,ly+25);
+    ctx.font="bold 9px Arial";
+    if(fullOK&&zeroOK){ctx.fillStyle="#2E7D32";ctx.fillText("\u2713 WITHIN LIMITS",lx,ly+38);}else{ctx.fillStyle="#c62828";ctx.fillText("\u2717 OUT OF LIMITS",lx,ly+38);}
+  } else {
+    const lx=w-220,ly=30;
+    ctx.fillStyle="rgba(76,175,80,0.3)";ctx.fillRect(lx,ly,20,15);ctx.strokeStyle="#2E7D32";ctx.lineWidth=2;ctx.strokeRect(lx,ly,20,15);
+    ctx.fillStyle="#333";ctx.font="12px Arial";ctx.textAlign="left";
+    ctx.fillText(`CG Envelope (${mt})`,lx+25,ly+11);
+    ctx.strokeStyle="#2196F3";ctx.lineWidth=3;ctx.setLineDash([8,4]);ctx.beginPath();ctx.moveTo(lx,ly+30);ctx.lineTo(lx+20,ly+30);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillText("Fuel Burn",lx+25,ly+33);ctx.font="bold 12px Arial";
+    if(fullOK&&zeroOK){ctx.fillStyle="#2E7D32";ctx.fillText("\u2713 WITHIN LIMITS",lx,ly+55);}else{ctx.fillStyle="#c62828";ctx.fillText("\u2717 OUT OF LIMITS",lx,ly+55);}
+  }
 }
 
 // =====================================================================
@@ -874,6 +901,17 @@ function updatePassAftWeight(v){state.passAftWeight=Number(v);render();}
 function updateBaggage(v){state.baggage=Number(v);render();}
 function updateFuel(v){state.fuel=Number(v);render();}
 function updateFahrenheit(v){state.fahrenheit=v;render();}
+function formatAltimeter(el){
+  // Strip non-digits
+  let digits=el.value.replace(/[^0-9]/g,'');
+  if(digits.length>=4){
+    // Auto-insert decimal after position 2: "2992" -> "29.92"
+    let formatted=digits.slice(0,2)+'.'+digits.slice(2,4);
+    el.value=formatted;
+    state.altimeter=formatted;
+    render();
+  }
+}
 function updateAltimeter(v){state.altimeter=v;render();}
 function updateFieldElevation(v){state.fieldElevation=v;render();}
 function updateTempAloft6000(v){state.tempAloft6000=v;render();}
