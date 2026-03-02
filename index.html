@@ -126,6 +126,77 @@ td.number{text-align:right}
 .save-status.err{color:#ef9a9a}
 
 /* Print */
+
+/* =====================================================================
+   PHONE RESPONSIVE (max-width: 480px)
+   ===================================================================== */
+@media screen and (max-width: 480px) {
+  body { padding: 8px; }
+  .container { padding: 12px; border-radius: 4px; }
+
+  /* Header */
+  h1 { font-size: 18px !important; }
+  h2 { font-size: 14px !important; }
+  .admin-btn { font-size: 10px; padding: 5px 12px; }
+
+  /* Aircraft section - stack vertically */
+  .aircraft-section { grid-template-columns: 1fr !important; gap: 10px; padding: 12px; }
+  .info-box { font-size: 12px; }
+
+  /* Flight info - stack vertically */
+  .flight-info { grid-template-columns: 1fr !important; gap: 8px; }
+
+  /* Performance section */
+  .perf-section { padding: 12px; }
+  .perf-title { font-size: 15px !important; }
+  .perf-inputs { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  .perf-outputs { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px; padding: 8px; }
+  .perf-out { padding: 4px; }
+  .perf-label { font-size: 10px; }
+  .perf-value { font-size: 16px !important; }
+
+  /* W&B table */
+  table { font-size: 11px; }
+  th, td { padding: 5px 4px; }
+  td.number { font-size: 11px; }
+  .total-row { font-size: 12px !important; }
+
+  /* Crew inputs - stack vertically on phone */
+  .crew-inputs { grid-template-columns: 1fr !important; gap: 6px; }
+  .crew-select select { font-size: 12px; }
+
+  /* Inline inputs - tighten up */
+  .inline-input { gap: 4px; flex-wrap: wrap; }
+  .inline-input input { width: 60px !important; }
+  .wide-input { width: 70px !important; }
+
+  /* Fuel shortcuts - horizontal row on phone */
+  .fuel-shortcuts { flex-direction: row !important; flex-wrap: wrap; gap: 4px; }
+  .fuel-shortcut-btn { font-size: 11px; padding: 5px 8px; }
+
+  /* CG result */
+  .cg-value { font-size: 16px !important; }
+  .cg-limits { font-size: 11px; }
+  .status { font-size: 14px !important; }
+
+  /* Summary cards - 2 columns on phone */
+  .summary { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  .summary-card { padding: 10px; }
+  .summary-label { font-size: 10px; }
+  .summary-value { font-size: 15px !important; }
+
+  /* Graph */
+  .graph-section { padding: 8px; }
+  #cgGraph { width: 100% !important; height: auto !important; }
+
+  /* Finish button */
+  .finish-btn { font-size: 14px; padding: 10px 20px; }
+
+  /* Form elements */
+  input, select { font-size: 13px !important; padding: 6px !important; }
+  label { font-size: 12px !important; }
+}
+
 @media print{
   .no-print{display:none !important}
   .admin-panel{display:none !important}
@@ -711,7 +782,7 @@ function render(){
   </div>
   <div class="graph-section">
     <div class="graph-title">Center of Gravity Envelope</div>
-    <canvas id="cgGraph" width="800" height="500"></canvas>
+    <canvas id="cgGraph" width="800" height="500" style="max-width:100%;"></canvas>
   </div>
   <button class="finish-btn no-print" onclick="doPrint()">Finish &amp; Print/Export</button>
   <div class="footer no-print">Helicopter Weight &amp; Balance Calculator</div>
@@ -724,6 +795,15 @@ function render(){
 // =====================================================================
 function drawGraph(c){
   const canvas=document.getElementById("cgGraph");if(!canvas)return;
+  // Resize canvas for screen width
+  const containerWidth=canvas.parentElement.clientWidth||800;
+  if(containerWidth<800){
+    canvas.width=containerWidth-16;
+    canvas.height=Math.round((containerWidth-16)*0.6);
+  } else {
+    canvas.width=800;
+    canvas.height=500;
+  }
   const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
   ctx.fillStyle="white";ctx.fillRect(0,0,w,h);
   const pad=60,padL=70,gw=w-padL-pad,gh=h-2*pad;
