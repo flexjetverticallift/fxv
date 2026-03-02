@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Helicopter W&B</title>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial;background:#f5f5f5;padding:20px}
@@ -208,9 +206,9 @@ td.number{text-align:right}
 
 <div id="app"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
-// =====================================================================
-// FIREBASE
 // =====================================================================
 const firebaseConfig = {
   apiKey: "AIzaSyC3CpGwwwFzs2UF_eCSSVGTwTXYTSnN_J4",
@@ -220,8 +218,13 @@ const firebaseConfig = {
   messagingSenderId: "313744532529",
   appId: "1:313744532529:web:8a3e8f7f256dd459e7a110"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+let db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+} catch(e) {
+  console.warn("Firebase unavailable, running with built-in data:", e);
+}
 
 // =====================================================================
 // DEFAULT DATA
@@ -289,6 +292,7 @@ refreshLists();
 // FIREBASE LOAD / SAVE
 // =====================================================================
 async function loadFromFirebase() {
+  if (!db) { refreshLists(); render(); return; }
   try {
     const pilotsSnap = await db.collection("config").doc("pilots").get();
     const acSnap     = await db.collection("config").doc("aircraft").get();
@@ -318,6 +322,7 @@ async function loadFromFirebase() {
 }
 
 async function saveToFirebase() {
+  if (!db) { alert("Firebase unavailable in this environment. Deploy to GitHub to save."); return; }
   const btn = document.getElementById("admin-save-btn");
   const status = document.getElementById("save-status");
   btn.disabled = true;
@@ -426,7 +431,9 @@ function calculate(){
   const maxGrossWeight=h.model.includes("S-76D")?11875:11700;
   const fuelCapacityGallons=parseFloat(h.fuelCapacity)||281.2;
   const weightExceeded=tw>maxGrossWeight;
-  const maxFuelPounds=maxGrossWeight-(tw-state.fuel);
+  const maxFuelPoundsByWeight=maxGrossWeight-(tw-state.fuel);
+  const maxFuelPoundsByCapacity=fuelCapacityGallons*6.7;
+  const maxFuelPounds=Math.min(maxFuelPoundsByWeight,maxFuelPoundsByCapacity);
   const maxFuelGallons=maxFuelPounds/6.7;
   return{heli:h,crewWeight:cw,emptyMoment:em,navBagMoment:nm,crewMoment:cm,credenzaMoment:crm,passFwdMoment:pfm,passAftMoment:pam,baggageMoment:bm,fuelMoment:fm,totalWeight:tw,totalMoment:tm,cg:cg,cgLimits:cgl,cgInLimits:cgok,zeroFuelWeight:zfw,zeroFuelCG:zfc,lateralCG:lateralCG,maxGrossWeight:maxGrossWeight,maxFuelGallons:maxFuelGallons,maxFuelPounds:maxFuelPounds,weightExceeded:weightExceeded,fuelArm:fuelArm};
 }
