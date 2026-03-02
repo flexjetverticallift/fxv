@@ -432,9 +432,9 @@ function calculate(){
   const fuelCapacityGallons=parseFloat(h.fuelCapacity)||281.2;
   const weightExceeded=tw>maxGrossWeight;
   const maxFuelPoundsByWeight=maxGrossWeight-(tw-state.fuel);
-  const maxFuelPoundsByCapacity=fuelCapacityGallons*6.7;
+  const maxFuelPoundsByCapacity=fuelCapacityGallons*6.8;
   const maxFuelPounds=Math.min(maxFuelPoundsByWeight,maxFuelPoundsByCapacity);
-  const maxFuelGallons=maxFuelPounds/6.7;
+  const maxFuelGallons=maxFuelPounds/6.8;
   return{heli:h,crewWeight:cw,emptyMoment:em,navBagMoment:nm,crewMoment:cm,credenzaMoment:crm,passFwdMoment:pfm,passAftMoment:pam,baggageMoment:bm,fuelMoment:fm,totalWeight:tw,totalMoment:tm,cg:cg,cgLimits:cgl,cgInLimits:cgok,zeroFuelWeight:zfw,zeroFuelCG:zfc,lateralCG:lateralCG,maxGrossWeight:maxGrossWeight,maxFuelGallons:maxFuelGallons,maxFuelPounds:maxFuelPounds,weightExceeded:weightExceeded,fuelArm:fuelArm};
 }
 
