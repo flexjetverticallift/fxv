@@ -189,8 +189,8 @@ td.number{text-align:right}
   .summary-value { font-size: 15px !important; }
 
   /* Graph */
-  .graph-section { padding: 8px; }
-  #cgGraph { width: 100% !important; height: auto !important; }
+  .graph-section { padding: 4px 0 !important; margin: 8px 0 !important; }
+  #cgGraph { width: 100% !important; height: auto !important; display: block; }
 
   /* Finish button */
   .finish-btn { font-size: 14px; padding: 10px 20px; }
@@ -799,10 +799,12 @@ function render(){
 function drawGraph(c){
   const canvas=document.getElementById("cgGraph");if(!canvas)return;
   // Resize canvas for screen width
-  const containerWidth=canvas.parentElement.clientWidth||800;
+  // Use document body width on mobile for most accurate sizing
+  const bodyWidth=document.body.clientWidth||window.innerWidth||800;
+  const containerWidth=bodyWidth<800?bodyWidth-16:800;
   if(containerWidth<800){
-    canvas.width=containerWidth-16;
-    canvas.height=Math.round((containerWidth-16)*0.6);
+    canvas.width=containerWidth;
+    canvas.height=Math.round(containerWidth*0.65);
   } else {
     canvas.width=800;
     canvas.height=500;
