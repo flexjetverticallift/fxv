@@ -460,7 +460,7 @@ function calcPerf(totalWeight,model){
 // =====================================================================
 // FUEL SHORTCUTS
 // =====================================================================
-function fuelToMaxGross(c){const maxFuel=Math.floor(c.maxFuelPounds/10)*10;state.fuel=Math.max(0,maxFuel);render();}
+function fuelToMaxGross(c){state.fuel=Math.max(0,Math.floor(c.maxFuelPounds));render();}
 function fuelToHOGE(p,c){if(p.hogeWeight===null)return;const nonFuel=c.totalWeight-state.fuel;const target=Math.floor((p.hogeWeight-nonFuel)/10)*10;state.fuel=Math.max(0,target);render();}
 function fuelToMEA(p,c){if(p.meaWeight===null)return;const nonFuel=c.totalWeight-state.fuel;const target=Math.floor((p.meaWeight-nonFuel)/10)*10;state.fuel=Math.max(0,target);render();}
 function doPrint(){state.passFwdWeight=0;state.numPassFwd=0;state.passAftWeight=0;state.numPassAft=0;state.baggage=0;window.print();}
