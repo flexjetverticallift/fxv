@@ -910,11 +910,19 @@ function formatAltimeter(el){
     // Auto-insert decimal after position 2: "2992" -> "29.92"
     let formatted=digits.slice(0,2)+'.'+digits.slice(2,4);
     el.value=formatted;
+    // Only update state and render once complete — no mid-type re-render
     state.altimeter=formatted;
     render();
+  } else {
+    // Just update the display value without re-rendering
+    state.altimeter=el.value;
   }
 }
-function updateAltimeter(v){state.altimeter=v;render();}
+function updateAltimeter(v){
+  // Handle manual entry with decimal already included (e.g. "29.92")
+  state.altimeter=v;
+  render();
+}
 function updateFieldElevation(v){state.fieldElevation=v;render();}
 function updateTempAloft6000(v){state.tempAloft6000=v;render();}
 
