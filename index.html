@@ -718,6 +718,7 @@ function adminAddAC(){
 // RENDER
 // =====================================================================
 function render(){
+  const _scrollY=window.scrollY;
   const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);
   document.getElementById("app").innerHTML=`
 <div class="container">
@@ -807,7 +808,7 @@ function render(){
   <button class="finish-btn no-print" onclick="doPrint()">Finish &amp; Print/Export</button>
   <div class="footer no-print">Helicopter Weight &amp; Balance Calculator</div>
 </div>`;
-  setTimeout(()=>drawGraph(c),10);
+  setTimeout(()=>{drawGraph(c);window.scrollTo(0,_scrollY);},10);
 }
 
 // =====================================================================
