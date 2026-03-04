@@ -397,7 +397,6 @@ async function loadFromFirebase() {
 }
 
 async function saveToFirebase() {
-  if (!db) { alert("Firebase unavailable in this environment. Deploy to GitHub to save."); return; }
   const btn = document.getElementById("admin-save-btn");
   const status = document.getElementById("save-status");
   btn.disabled = true;
@@ -405,17 +404,28 @@ async function saveToFirebase() {
   status.className = "save-status";
   status.textContent = "";
   try {
-    await db.collection("config").doc("pilots").set({ list: allPilots });
-    await db.collection("config").doc("aircraft").set({ list: helicopters });
-    status.className = "save-status ok";
-    status.textContent = "\u2713 Saved successfully";
-    btn.textContent = "\u2601 Save & Push to All Users";
-    btn.disabled = false;
-    setTimeout(() => { status.textContent = ""; }, 4000);
+    const response = await fetch("https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: "kbdr", pilots: allPilots, aircraft: helicopters })
+    });
+    const result = await response.json();
+    if(response.ok) {
+      status.className = "save-status ok";
+      status.textContent = "✓ Saved successfully";
+      btn.textContent = "☁ Save & Push to All Users";
+      btn.disabled = false;
+      setTimeout(() => { status.textContent = ""; }, 4000);
+    } else {
+      status.className = "save-status err";
+      status.textContent = "✗ Save failed: " + result.error;
+      btn.textContent = "☁ Save & Push to All Users";
+      btn.disabled = false;
+    }
   } catch(e) {
     status.className = "save-status err";
-    status.textContent = "\u2717 Save failed: " + e.message;
-    btn.textContent = "\u2601 Save & Push to All Users";
+    status.textContent = "✗ Save failed: " + e.message;
+    btn.textContent = "☁ Save & Push to All Users";
     btn.disabled = false;
   }
 }
