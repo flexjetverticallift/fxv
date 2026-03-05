@@ -9,6 +9,29 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial;background:#f5f5f5;padding:20px}.container{max-width:1200px;margin:0 auto;background:white;padding:30px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1)}.header{text-align:center;margin-bottom:30px}h1{font-size:24px;color:#333;margin-bottom:5px}h2{font-size:20px;color:#666}.aircraft-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px;background:#e3f2fd;border-radius:8px;margin-bottom:20px}.info-box{font-size:14px;line-height:1.6}.flight-info{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}.form-group{display:flex;flex-direction:column}label{font-size:14px;font-weight:bold;margin-bottom:5px;color:#333}input,select{padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}input:focus,select:focus{outline:none;border-color:#2196F3}table{width:100%;border-collapse:collapse;margin-bottom:20px}th,td{border:1px solid #ccc;padding:10px;text-align:left}th{background:#f5f5f5;font-weight:bold}td.number{text-align:right}.yellow-row{background:#fff9c4}.total-row{background:#bbdefb;font-weight:bold;font-size:16px}.crew-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}.crew-select{display:flex;flex-direction:column}.crew-select label{font-size:12px;margin-bottom:3px}.crew-select select{font-size:13px}.inline-input{display:flex;align-items:center;gap:8px}.inline-input input{width:80px}.wide-input{width:100px}.cg-result{padding:20px;background:#f5f5f5;border-radius:8px;margin-bottom:20px}.cg-value{font-size:24px;font-weight:bold;color:#2196F3;margin-bottom:10px}.cg-limits{font-size:14px;margin-bottom:10px}.status{font-size:18px;font-weight:bold;padding:10px;border-radius:4px}.status.ok{background:#c8e6c9;color:#2e7d32}.status.error{background:#ffcdd2;color:#c62828}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px}.summary-card{padding:15px;background:#e3f2fd;border-radius:8px}.summary-label{font-size:12px;color:#666;margin-bottom:5px}.summary-value{font-size:20px;font-weight:bold;color:#333}.graph-section{margin-top:20px;padding:20px;background:#f9f9f9;border-radius:8px}.graph-title{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center}#cgGraph{display:block;margin:0 auto;background:white;border:1px solid #ccc;border-radius:4px}.perf-section{margin-top:20px;padding:20px;background:#fff3e0;border-radius:8px}.perf-title{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center}.perf-inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px}.perf-outputs{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:15px;background:#e3f2fd;border-radius:8px}.perf-out{text-align:center}.perf-label{font-size:12px;color:#666;margin-bottom:5px}.perf-value{font-size:24px;font-weight:bold;color:#1976d2}.footer{text-align:center;font-size:12px;color:#666;margin-top:20px}
+@media(max-width:600px){
+  body{padding:8px}
+  .container{padding:12px;border-radius:4px}
+  .aircraft-section{grid-template-columns:1fr}
+  .flight-info{grid-template-columns:1fr 1fr}
+  .perf-inputs{grid-template-columns:1fr 1fr}
+  .perf-outputs{grid-template-columns:1fr 1fr;gap:8px}
+  .perf-value{font-size:18px}
+  .crew-inputs{grid-template-columns:1fr}
+  .summary{grid-template-columns:1fr 1fr}
+  .summary-value{font-size:16px}
+  table{font-size:12px}
+  th,td{padding:5px 4px}
+  .inline-input{flex-wrap:wrap;gap:4px}
+  .inline-input input{width:60px}
+  .wide-input{width:70px}
+  #cgGraph{width:100%;height:auto;max-width:100%}
+  .cg-value{font-size:18px}
+  .status{font-size:14px}
+  h1{font-size:18px}
+  h2{font-size:16px}
+  .fuel-shortcuts{flex-wrap:wrap}
+}
 
     /* Print-only styles */
     @media print {
@@ -425,30 +448,30 @@ function drawWBToCanvas(){
   const cx=[L,L+CW*0.46,L+CW*0.62,L+CW*0.79];
   bx(L,y,CW,RH,'#1a237e');sf(8,true,'#fff');
   ['Item','Weight (lbs)','Arm (in)','Moment'].forEach((t,i)=>ctx.fillText(t,cx[i]+2,y+12));y+=RH;
+  const cgStatusStr=cv.weightExceeded?'MGTOW EXCEEDED':cv.cgInLimits?'WITHIN LIMITS':'OUT OF CG LIMITS';
   const rows=[
     ['Empty Weight',h.emptyWeight,h.emptyArm.toFixed(2),cv.emptyMoment.toFixed(0)],
     ['Nav Bag',state.navBag,h.arms.navBag,cv.navBagMoment.toFixed(0)],
-    ['PIC: '+(state.picName||'--'),cv.picWeight,h.arms.pic,cv.picMoment.toFixed(0)],
-    ['SIC: '+(state.sicName||'--'),cv.sicWeight,h.arms.sic,cv.sicMoment.toFixed(0)],
+    ['Crew: '+(state.picName||'--')+' / '+(state.sicName||'--'),cv.crewWeight,h.arms.crew,cv.crewMoment.toFixed(0)],
     ['Credenza',state.credenza,h.arms.credenza,cv.credenzaMoment.toFixed(0)],
-    ['Pax Fwd (×'+state.numPassFwd+')',state.passFwdWeight,h.arms.passFwd,cv.passFwdMoment.toFixed(0)],
-    ['Pax Aft (×'+state.numPassAft+')',state.passAftWeight,h.arms.passAft,cv.passAftMoment.toFixed(0)],
+    ['Pax Fwd (\xd7'+state.numPassFwd+')',state.passFwdWeight,h.arms.passFwd,cv.passFwdMoment.toFixed(0)],
+    ['Pax Aft (\xd7'+state.numPassAft+')',state.passAftWeight,h.arms.passAft,cv.passAftMoment.toFixed(0)],
     ['Baggage',state.baggage,h.arms.baggage,cv.baggageMoment.toFixed(0)],
-    ['Zero Fuel Wt',cv.zeroFuelWeight,cv.zeroFuelArm.toFixed(2),(cv.zeroFuelWeight*cv.zeroFuelArm).toFixed(0)],
+    ['Zero Fuel Wt',cv.zeroFuelWeight,cv.zeroFuelCG.toFixed(2),(cv.zeroFuelWeight*cv.zeroFuelCG).toFixed(0)],
     ['Fuel',state.fuel,cv.fuelArm.toFixed(2),cv.fuelMoment.toFixed(0)],
     ['TOTAL',cv.totalWeight.toFixed(1),cv.cg.toFixed(2),cv.totalMoment.toFixed(0)],
   ];
   rows.forEach((row,ri)=>{
-    const isT=ri===rows.length-1,isZ=ri===8;
+    const isT=ri===rows.length-1,isZ=ri===7;
     bx(L,y,CW,RH,isT?'#e0e0e0':isZ?'#fff9c4':(ri%2===0?'#fff':'#f9f9f9'));
     sf(8,isT||isZ,'#000');row.forEach((cell,i)=>ctx.fillText(String(cell),cx[i]+2,y+12));
     hl(y+RH);y+=RH;
   });
   y+=6;
-  const ok=cv.cgStatus==='WITHIN LIMITS';
+  const ok=!cv.weightExceeded&&cv.cgInLimits;
   bx(L,y,CW,20,ok?'#c8e6c9':'#ffcdd2');
   sf(9,true,ok?'#2e7d32':'#c62828');
-  ctx.fillText('CG: '+cv.cg.toFixed(2)+' in  —  '+cv.cgStatus+'  (Limits: '+cv.cgLimits.min+' – '+cv.cgLimits.max+')',L+4,y+13);
+  ctx.fillText('CG: '+cv.cg.toFixed(2)+' in  —  '+cgStatusStr+'  (Limits: '+cv.cgLimits.min+' – '+cv.cgLimits.max+')',L+4,y+13);
   y+=26;
   sf(9,true,'#333');ctx.fillText('Center of Gravity Envelope',L,y+9);y+=12;
   const gc=document.getElementById('cgGraph');
