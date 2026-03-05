@@ -201,6 +201,7 @@ td.number{text-align:right}
   label { font-size: 12px !important; }
 }
 
+.print-header-bar{display:none}
 @media print{
   /* ── Hide interactive / non-record elements ── */
   .no-print{display:none !important}
@@ -210,60 +211,64 @@ td.number{text-align:right}
   .summary{display:none !important}
 
   /* ── Page setup ── */
-  @page{margin:0.25in;size:letter}
+  @page{margin:0.2in;size:letter}
   *{box-sizing:border-box}
   body{font-size:9px !important}
-  .container{padding:4px 6px !important}
+  .container{padding:3px 5px !important}
 
-  /* ── Header ── */
-  .header{padding:4px 0 !important;margin-bottom:4px !important}
-  .header h1{font-size:16px !important;margin:2px 0 !important}
-  .header h2{font-size:11px !important;margin:1px 0 !important}
+  /* ── Hide normal header/aircraft on print, show compact bar ── */
+  .header{display:none !important}
+  .aircraft-section{display:none !important}
   .admin-btn{display:none !important}
-
-  /* ── Aircraft info — single row ── */
-  .aircraft-section{margin:2px 0 !important;font-size:9px !important}
-  .info-box{display:flex;flex-wrap:wrap;gap:6px 16px !important;font-size:9px !important;padding:2px 0 !important}
+  .print-header-bar{
+    display:flex !important;
+    flex-direction:column !important;
+    margin-bottom:3px !important;
+    padding-bottom:2px !important;
+    border-bottom:1px solid #333 !important;
+  }
+  .print-title{font-size:12px !important;font-weight:bold !important;letter-spacing:0.5px !important}
+  .print-ac{font-size:8px !important;color:#333 !important;margin-top:1px !important}
 
   /* ── Flight info row ── */
-  .flight-info{margin:2px 0 !important;gap:8px !important}
-  .form-group{margin:0 6px 0 0 !important}
+  .flight-info{margin:1px 0 !important;gap:6px !important}
+  .form-group{margin:0 5px 0 0 !important}
   .form-group label{font-size:8px !important}
 
   /* ── Performance section — outputs only ── */
-  .perf-section{background:#f5f5dc !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:4px 8px !important;margin:4px 0 !important}
-  .perf-title{font-size:11px !important;margin:0 0 3px 0 !important}
-  .perf-outputs{gap:4px !important;padding:2px 0 !important;margin:0 !important}
-  .perf-out{padding:3px !important}
-  .perf-label{font-size:8px !important}
-  .perf-value{font-size:12px !important}
+  .perf-section{background:#f5f5dc !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:3px 6px !important;margin:2px 0 !important}
+  .perf-title{font-size:10px !important;margin:0 0 2px 0 !important}
+  .perf-outputs{gap:3px !important;padding:1px 0 !important;margin:0 !important}
+  .perf-out{padding:2px 4px !important}
+  .perf-label{font-size:7px !important}
+  .perf-value{font-size:11px !important}
 
   /* ── W&B heading ── */
-  h3{font-size:11px !important;margin:4px 0 2px 0 !important;padding:3px 0 !important}
+  h3{font-size:10px !important;margin:2px 0 1px 0 !important;padding:2px 0 !important}
 
   /* ── Table ── */
-  table{font-size:9px !important;margin:2px 0 !important;width:100% !important}
-  th,td{padding:1px 3px !important;line-height:1.3 !important}
-  th{font-size:9px !important}
+  table{font-size:8px !important;margin:1px 0 !important;width:100% !important}
+  th,td{padding:1px 3px !important;line-height:1.25 !important}
+  th{font-size:8px !important}
   .yellow-row{background:#fff9c4 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .total-row{background:#e0e0e0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .inline-input span{font-size:8px !important}
-  .crew-inputs{gap:4px !important}
+  .inline-input span{font-size:7px !important}
+  .crew-inputs{gap:2px !important}
   select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
-  input{border:none !important;background:transparent !important;font-size:9px !important;padding:0 !important}
+  input{border:none !important;background:transparent !important;font-size:8px !important;padding:0 !important}
 
   /* ── CG result ── */
-  .cg-result{margin:3px 0 !important;padding:4px 8px !important}
-  .cg-value{font-size:13px !important;margin:2px 0 !important}
-  .cg-limits{font-size:8px !important}
-  .status{padding:4px 8px !important;font-size:11px !important}
+  .cg-result{margin:2px 0 !important;padding:3px 6px !important}
+  .cg-value{font-size:12px !important;margin:1px 0 !important}
+  .cg-limits{font-size:7px !important}
+  .status{padding:3px 6px !important;font-size:10px !important}
   .status.ok{background:#c8e6c9 !important;color:#2e7d32 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .status.error{background:#ffcdd2 !important;color:#c62828 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
-  /* ── CG Graph — compact ── */
-  .graph-section{margin:2px 0 !important;padding:0 !important}
-  .graph-title{font-size:10px !important;margin:0 0 2px 0 !important}
-  #cgGraph{width:480px !important;height:240px !important;display:block;margin:0 auto}
+  /* ── CG Graph — maximally compact ── */
+  .graph-section{margin:1px 0 !important;padding:0 !important}
+  .graph-title{font-size:9px !important;margin:0 0 1px 0 !important}
+  #cgGraph{width:100% !important;max-width:380px !important;height:170px !important;display:block;margin:0 auto}
 }
 </style>
 </head>
@@ -745,6 +750,10 @@ function render(){
     <h2>LOAD MANIFEST</h2>
     <button class="admin-btn no-print" onclick="openPW()">&#x1F512; Update / Edit (Admin Only)</button>
   </div>
+  <div class="print-header-bar">
+    <span class="print-title">FLEXJET VERTICAL LIFT &mdash; LOAD MANIFEST</span>
+    <span class="print-ac">${h.tailNumber} &bull; ${h.model} &bull; S/N ${h.serial} &bull; EW ${h.emptyWeight} lbs &bull; Arm ${h.emptyArm.toFixed(2)}</span>
+  </div>
   <div class="aircraft-section">
     <div class="form-group"><label>Aircraft</label>
       <select onchange="updateHeli(this.value)">${helicopters.map((h,i)=>`<option value="${i}" ${i===state.selectedHeliIndex?"selected":""}>${h.tailNumber} - ${h.model}</option>`).join("")}</select>
@@ -834,10 +843,12 @@ function render(){
 // =====================================================================
 function drawGraph(c){
   const canvas=document.getElementById("cgGraph");if(!canvas)return;
-  // Resize canvas for screen width
-  // Size canvas to full screen width on mobile
+  const isPrint=window.matchMedia&&window.matchMedia('print').matches;
   const screenW=window.innerWidth||document.documentElement.clientWidth||800;
-  if(screenW<800){
+  if(isPrint){
+    canvas.width=380;
+    canvas.height=170;
+  } else if(screenW<800){
     canvas.width=screenW;
     canvas.height=Math.round(screenW*0.68);
   } else {
@@ -974,6 +985,14 @@ if('serviceWorker' in navigator){
     }).catch(err => console.log('SW registration failed:', err));
   });
 }
+window.addEventListener('beforeprint', () => {
+  const c = calculate();
+  drawGraph(c);
+});
+window.addEventListener('afterprint', () => {
+  const c = calculate();
+  drawGraph(c);
+});
 </script>
 </body>
 </html>
