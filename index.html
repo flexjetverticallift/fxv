@@ -1,216 +1,105 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Helicopter W&B</title>
+<html><head><meta charset="UTF-8"><title>FXV W&B</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FXV W&amp;B">
+<meta name="theme-color" content="#1a237e">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;background:#f5f5f5;padding:20px}
-.container{max-width:1200px;margin:0 auto;background:white;padding:30px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
-.header{text-align:center;margin-bottom:30px}
-h1{font-size:24px;color:#333;margin-bottom:5px}
-h2{font-size:20px;color:#666}
-.aircraft-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px;background:#e3f2fd;border-radius:8px;margin-bottom:20px}
-.info-box{font-size:14px;line-height:1.6}
-.flight-info{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
-.form-group{display:flex;flex-direction:column}
-label{font-size:14px;font-weight:bold;margin-bottom:5px;color:#333}
-input,select{padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}
-input:focus,select:focus{outline:none;border-color:#2196F3}
-table{width:100%;border-collapse:collapse;margin-bottom:20px}
-th,td{border:1px solid #ccc;padding:10px;text-align:left}
-th{background:#f5f5f5;font-weight:bold}
-td.number{text-align:right}
-.yellow-row{background:#fff9c4}
-.total-row{background:#bbdefb;font-weight:bold;font-size:16px}
-.crew-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.crew-select{display:flex;flex-direction:column}
-.crew-select label{font-size:12px;margin-bottom:3px}
-.crew-select select{font-size:13px}
-.inline-input{display:flex;align-items:center;gap:8px}
-.inline-input input{width:80px}
-.wide-input{width:100px}
-.cg-result{padding:20px;background:#f5f5f5;border-radius:8px;margin-bottom:20px}
-.cg-value{font-size:24px;font-weight:bold;color:#2196F3;margin-bottom:10px}
-.cg-limits{font-size:14px;margin-bottom:10px}
-.status{font-size:18px;font-weight:bold;padding:10px;border-radius:4px}
-.status.ok{background:#c8e6c9;color:#2e7d32}
-.status.error{background:#ffcdd2;color:#c62828}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px}
-.summary-card{padding:15px;background:#e3f2fd;border-radius:8px}
-.summary-label{font-size:12px;color:#666;margin-bottom:5px}
-.summary-value{font-size:20px;font-weight:bold;color:#333}
-.graph-section{margin-top:20px;padding:20px;background:#f9f9f9;border-radius:8px}
-.graph-title{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center}
-#cgGraph{display:block;margin:0 auto;background:white;border:1px solid #ccc;border-radius:4px}
-.perf-section{margin-top:20px;padding:20px;background:#fff3e0;border-radius:8px}
-.perf-title{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center}
-.perf-inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px}
-.perf-outputs{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:15px;background:#e3f2fd;border-radius:8px}
-.perf-out{text-align:center}
-.perf-label{font-size:12px;color:#666;margin-bottom:5px}
-.perf-value{font-size:24px;font-weight:bold;color:#1976d2}
-.footer{text-align:center;font-size:12px;color:#666;margin-top:20px}
-.fuel-shortcuts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.fuel-shortcut-btn{padding:6px 12px;background:#4CAF50;color:white;border:none;border-radius:4px;font-size:12px;cursor:pointer;white-space:nowrap}
-.fuel-shortcut-btn:hover{background:#45a049}
-.finish-btn{margin:20px auto;display:block;padding:12px 30px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer}
-.finish-btn:hover{background:#1976D2}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial;background:#f5f5f5;padding:20px}.container{max-width:1200px;margin:0 auto;background:white;padding:30px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1)}.header{text-align:center;margin-bottom:30px}h1{font-size:24px;color:#333;margin-bottom:5px}h2{font-size:20px;color:#666}.aircraft-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px;background:#e3f2fd;border-radius:8px;margin-bottom:20px}.info-box{font-size:14px;line-height:1.6}.flight-info{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}.form-group{display:flex;flex-direction:column}label{font-size:14px;font-weight:bold;margin-bottom:5px;color:#333}input,select{padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}input:focus,select:focus{outline:none;border-color:#2196F3}table{width:100%;border-collapse:collapse;margin-bottom:20px}th,td{border:1px solid #ccc;padding:10px;text-align:left}th{background:#f5f5f5;font-weight:bold}td.number{text-align:right}.yellow-row{background:#fff9c4}.total-row{background:#bbdefb;font-weight:bold;font-size:16px}.crew-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}.crew-select{display:flex;flex-direction:column}.crew-select label{font-size:12px;margin-bottom:3px}.crew-select select{font-size:13px}.inline-input{display:flex;align-items:center;gap:8px}.inline-input input{width:80px}.wide-input{width:100px}.cg-result{padding:20px;background:#f5f5f5;border-radius:8px;margin-bottom:20px}.cg-value{font-size:24px;font-weight:bold;color:#2196F3;margin-bottom:10px}.cg-limits{font-size:14px;margin-bottom:10px}.status{font-size:18px;font-weight:bold;padding:10px;border-radius:4px}.status.ok{background:#c8e6c9;color:#2e7d32}.status.error{background:#ffcdd2;color:#c62828}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px}.summary-card{padding:15px;background:#e3f2fd;border-radius:8px}.summary-label{font-size:12px;color:#666;margin-bottom:5px}.summary-value{font-size:20px;font-weight:bold;color:#333}.graph-section{margin-top:20px;padding:20px;background:#f9f9f9;border-radius:8px}.graph-title{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center}#cgGraph{display:block;margin:0 auto;background:white;border:1px solid #ccc;border-radius:4px}.perf-section{margin-top:20px;padding:20px;background:#fff3e0;border-radius:8px}.perf-title{font-size:18px;font-weight:bold;margin-bottom:15px;text-align:center}.perf-inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px}.perf-outputs{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:15px;background:#e3f2fd;border-radius:8px}.perf-out{text-align:center}.perf-label{font-size:12px;color:#666;margin-bottom:5px}.perf-value{font-size:24px;font-weight:bold;color:#1976d2}.footer{text-align:center;font-size:12px;color:#666;margin-top:20px}
 
-/* Admin button */
-.admin-btn{display:block;margin:8px auto 0;padding:6px 18px;background:transparent;color:#aaa;border:1px solid #ddd;border-radius:4px;font-size:11px;cursor:pointer;letter-spacing:0.5px}
-.admin-btn:hover{background:#f5f5f5;color:#666}
+    /* Print-only styles */
+    @media print {
+      .no-print { display: none !important; }
+      
+      /* Preserve background colors */
+      .perf-section { background: #f5f5dc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .yellow-row { background: #fff9c4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .total-row { background: #e0e0e0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .status.ok { background: #c8e6c9 !important; color: #2e7d32 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .status.error { background: #ffcdd2 !important; color: #c62828 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      
+      /* More readable fonts while staying compact */
+      @page { margin: 0.3in; size: letter; }
+      body { font-size: 10px !important; }
+      .container { padding: 8px !important; }
+      .header h1 { font-size: 20px !important; margin: 4px 0 !important; }
+      .header h2 { font-size: 14px !important; margin: 3px 0 !important; }
+      .aircraft-section { margin: 5px 0 !important; font-size: 10px !important; }
+      .info-box { gap: 8px !important; font-size: 10px !important; }
+      .flight-info { margin: 5px 0 !important; }
+      .form-group { margin: 0 8px 0 0 !important; }
+      .form-group label { font-size: 10px !important; }
+      
+      /* Performance section */
+      .perf-section { padding: 8px !important; margin: 8px 0 !important; }
+      .perf-title { font-size: 14px !important; margin: 0 0 5px 0 !important; }
+      .perf-inputs { gap: 5px !important; padding: 5px 0 !important; }
+      .perf-outputs { gap: 5px !important; padding: 5px 0 !important; margin: 5px 0 !important; }
+      .perf-out { padding: 5px !important; }
+      .perf-label { font-size: 9px !important; }
+      .perf-value { font-size: 13px !important; }
+      
+      /* Weight & Balance header */
+      h3 { font-size: 15px !important; margin: 8px 0 5px 0 !important; padding: 5px 0 !important; }
+      
+      /* Table - larger fonts */
+      table { font-size: 10px !important; margin: 5px 0 !important; }
+      th, td { padding: 2px 4px !important; }
+      th { font-size: 10px !important; }
+      
+      /* Summary cards */
+      .summary { gap: 5px !important; margin: 8px 0 !important; }
+      .summary-card { padding: 5px !important; font-size: 10px !important; }
+      .summary-label { font-size: 9px !important; }
+      .summary-value { font-size: 13px !important; }
+      
+      /* CG Result - page break before */
+      .cg-result { margin: 8px 0 !important; padding: 8px !important; page-break-before: always; }
+      .cg-value { font-size: 16px !important; margin: 3px 0 !important; }
+      .cg-limits { font-size: 10px !important; }
+      .status { padding: 8px !important; font-size: 13px !important; }
+      
+      /* Graph */
+      .graph-section { margin: 5px 0 !important; padding: 8px 0 !important; }
+      .graph-title { font-size: 16px !important; margin: 0 0 8px 0 !important; }
+      #cgGraph { width: 600px !important; height: 380px !important; display: block; margin: 0 auto; }
+      
+      /* Clean up inputs */
+      input, select { border: none; background: transparent; font-size: 9px !important; padding: 0 !important; }
+      .fuel-shortcuts { display: none !important; }
+      .inline-input span { font-size: 8px !important; }
+      .crew-inputs { gap: 8px !important; }
+    }
+    
+    
+    .fuel-shortcuts { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .fuel-shortcut-btn { 
+      padding: 6px 12px; 
+      background: #4CAF50; 
+      color: white; 
+      border: none; 
+      border-radius: 4px; 
+      font-size: 12px; 
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .fuel-shortcut-btn:hover { background: #45a049; }
+    .fuel-shortcut-btn:active { background: #3d8b40; }
+    .finish-btn { margin: 20px auto; display: block; padding: 12px 30px; background: #2196F3; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; } white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    .finish-btn:hover { background: #1976D2; }
 
-/* Password modal */
-.pw-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center}
-.pw-box{background:white;padding:32px;border-radius:10px;width:320px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.3)}
-.pw-box h3{margin-bottom:16px;color:#333;font-size:18px}
-.pw-box input{width:100%;padding:10px;font-size:16px;border:2px solid #ccc;border-radius:6px;text-align:center;letter-spacing:2px;margin-bottom:12px}
-.pw-box input.shake{animation:shake 0.4s ease}
-.pw-box input.error{border-color:#f44336}
-.pw-btn{padding:10px 24px;background:#1976d2;color:white;border:none;border-radius:6px;font-size:15px;cursor:pointer;width:100%}
-.pw-btn:hover{background:#1565c0}
-.pw-cancel{margin-top:10px;background:none;border:none;color:#999;cursor:pointer;font-size:13px}
-@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
-/* Admin panel */
-.admin-panel{position:fixed;top:0;left:0;width:100%;height:100%;background:#f0f2f5;z-index:999;display:flex;flex-direction:column;overflow:hidden}
-.admin-header{background:#1a237e;color:white;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.admin-header h2{font-size:20px;font-weight:bold;letter-spacing:0.5px}
-.admin-header-right{display:flex;gap:12px;align-items:center}
-.admin-save-btn{padding:8px 22px;background:#43a047;color:white;border:none;border-radius:5px;font-size:14px;cursor:pointer;font-weight:bold}
-.admin-save-btn:hover{background:#388e3c}
-.admin-save-btn:disabled{background:#aaa;cursor:not-allowed}
-.admin-close-btn{padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:5px;font-size:14px;cursor:pointer}
-.admin-close-btn:hover{background:rgba(255,255,255,0.25)}
-.admin-tabs{display:flex;background:#283593;padding:0 24px;flex-shrink:0}
-.admin-tab{padding:12px 24px;color:rgba(255,255,255,0.7);cursor:pointer;font-size:14px;border-bottom:3px solid transparent;font-weight:500}
-.admin-tab.active{color:white;border-bottom-color:#90caf9}
-.admin-tab:hover:not(.active){color:white}
-.admin-body{flex:1;overflow-y:auto;padding:24px}
-.admin-section{background:white;border-radius:8px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-.admin-section h3{font-size:16px;color:#1a237e;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e3f2fd}
-.admin-table{width:100%;border-collapse:collapse}
-.admin-table th{background:#e8eaf6;padding:10px 12px;text-align:left;font-size:13px;color:#3949ab;font-weight:600;border-bottom:2px solid #c5cae9}
-.admin-table td{padding:8px 12px;border-bottom:1px solid #eee;vertical-align:middle}
-.admin-table tr:last-child td{border-bottom:none}
-.admin-table tr:hover td{background:#f8f9ff}
-.admin-input{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;width:100%}
-.admin-input:focus{outline:none;border-color:#3949ab}
-.admin-input-sm{width:70px}
-.admin-input-med{width:100px}
-.role-check{display:flex;gap:16px;align-items:center}
-.role-check label{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:normal;color:#333;cursor:pointer;margin:0}
-.role-check input[type=checkbox]{width:15px;height:15px;cursor:pointer;margin:0}
-.admin-del-btn{padding:4px 10px;background:#ef5350;color:white;border:none;border-radius:4px;font-size:12px;cursor:pointer}
-.admin-del-btn:hover{background:#c62828}
-.admin-add-row{background:#f3f4ff;border-top:2px solid #c5cae9}
-.admin-add-row td{padding:10px 12px}
-.admin-add-btn{padding:7px 16px;background:#1976d2;color:white;border:none;border-radius:4px;font-size:13px;cursor:pointer;font-weight:500;white-space:nowrap}
-.admin-add-btn:hover{background:#1565c0}
-.ac-card{border:1px solid #e0e0e0;border-radius:8px;padding:16px;margin-bottom:12px;background:white}
-.ac-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.ac-card-title{font-weight:bold;font-size:15px;color:#1a237e}
-.ac-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
-.ac-field{display:flex;flex-direction:column;gap:3px}
-.ac-field label{font-size:11px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin:0}
-.ac-field input,ac-field select{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px}
-.ac-field input:focus{outline:none;border-color:#3949ab}
-.ac-field select{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px}
-.ac-divider{font-size:11px;color:#888;margin:10px 0 6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-top:1px solid #eee;padding-top:10px}
-.add-ac-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#e3f2fd;border:2px dashed #90caf9;border-radius:8px;cursor:pointer;color:#1976d2;font-size:14px;font-weight:500;width:100%;margin-top:4px}
-.add-ac-btn:hover{background:#bbdefb}
-.save-status{font-size:13px;color:rgba(255,255,255,0.85);margin-right:4px}
-.save-status.ok{color:#a5d6a7}
-.save-status.err{color:#ef9a9a}
 
-/* Print */
-
-/* =====================================================================
-   PHONE RESPONSIVE (max-width: 480px)
-   ===================================================================== */
-@media screen and (max-width: 480px) {
-  body { padding: 8px; }
-  .container { padding: 12px; border-radius: 4px; }
-
-  /* Header */
-  h1 { font-size: 18px !important; }
-  h2 { font-size: 14px !important; }
-  .admin-btn { font-size: 10px; padding: 5px 12px; }
-
-  /* Aircraft section - stack vertically */
-  .aircraft-section { grid-template-columns: 1fr !important; gap: 10px; padding: 12px; }
-  .info-box { font-size: 12px; }
-
-  /* Flight info - stack vertically */
-  .flight-info { grid-template-columns: 1fr !important; gap: 8px; }
-
-  /* Performance section */
-  .perf-section { padding: 12px; }
-  .perf-title { font-size: 15px !important; }
-  .perf-inputs { grid-template-columns: 1fr 1fr !important; gap: 8px; }
-  .perf-inputs input { width: 100% !important; min-width: 0 !important; font-size: 12px !important; padding: 5px !important; box-sizing: border-box; }
-  .perf-inputs label { font-size: 11px !important; }
-  .perf-inputs .form-group { min-width: 0; overflow: hidden; }
-  .perf-outputs { grid-template-columns: 1fr 1fr 1fr !important; gap: 6px; padding: 8px; }
-  .perf-out { padding: 4px; }
-  .perf-label { font-size: 10px; }
-  .perf-value { font-size: 16px !important; }
-
-  /* W&B table */
-  table { font-size: 11px; }
-  th, td { padding: 5px 4px; }
-  td.number { font-size: 11px; }
-  .total-row { font-size: 12px !important; }
-
-  /* Crew inputs - stack vertically on phone */
-  .crew-inputs { grid-template-columns: 1fr !important; gap: 6px; }
-  .crew-select select { font-size: 12px; }
-
-  /* Inline inputs - tighten up */
-  .inline-input { gap: 4px; flex-wrap: wrap; }
-  .inline-input input { width: 60px !important; }
-  .wide-input { width: 70px !important; }
-
-  /* Fuel shortcuts - horizontal row on phone */
-  .fuel-shortcuts { flex-direction: row !important; flex-wrap: wrap; gap: 4px; }
-  .fuel-shortcut-btn { font-size: 11px; padding: 5px 8px; }
-
-  /* CG result */
-  .cg-value { font-size: 16px !important; }
-  .cg-limits { font-size: 11px; }
-  .status { font-size: 14px !important; }
-
-  /* Summary cards - 2 columns on phone */
-  .summary { grid-template-columns: 1fr 1fr !important; gap: 8px; }
-  .summary-card { padding: 10px; }
-  .summary-label { font-size: 10px; }
-  .summary-value { font-size: 15px !important; }
-
-  /* Graph */
-  .graph-section { padding: 0 !important; margin: 8px -12px !important; border-radius: 0 !important; }
-  #cgGraph { width: 100% !important; height: auto !important; display: block; border-radius: 0 !important; border-left: none !important; border-right: none !important; }
-  .graph-title { font-size: 15px !important; margin-bottom: 8px !important; }
-
-  /* Finish button */
-  .finish-btn { font-size: 14px; padding: 10px 20px; }
-
-  /* Form elements */
-  input, select { font-size: 13px !important; padding: 6px !important; }
-  label { font-size: 12px !important; }
-}
-
-.print-header-bar{display:none}
-
-/* ── PDF Export queue UI ── */
+/* PDF Queue UI */
 .pdf-queue-panel{background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:10px 14px;margin:12px 0 6px;display:none}
 .pdf-queue-panel.has-items{display:block}
 .pdf-queue-title{font-size:11px;font-weight:bold;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .pdf-queue-legs{display:flex;flex-wrap:wrap;gap:6px}
 .pdf-leg-pill{display:flex;align-items:center;gap:4px;background:#1a237e;color:#fff;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:bold}
 .pdf-leg-pill button{background:none;border:none;color:#90caf9;font-size:13px;cursor:pointer;padding:0 0 0 4px;line-height:1}
-.pdf-leg-pill button:hover{color:#fff}
 .pdf-leg-replacing{background:#e65100}
 .export-btn{margin:8px auto 4px;display:block;padding:12px 30px;background:#1a237e;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer;width:90%;max-width:340px}
 .export-btn:hover{background:#283593}
@@ -219,904 +108,490 @@ td.number{text-align:right}
 .send-ops-btn:hover{background:#1b5e20}
 .pdf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}
 .pdf-toast.show{opacity:1}
-
-/* ── Generating-PDF mode styles (unused, kept for reference) ── */
-body.generating-pdf .no-print{display:none !important}
-body.generating-pdf .summary{display:none !important}
-body.generating-pdf .perf-inputs{display:none !important}
-body.generating-pdf .pdf-queue-panel{display:none !important}
-body.generating-pdf .footer{display:none !important}
-body.generating-pdf .fuel-shortcuts{display:none !important}
-body.generating-pdf .header{display:none !important}
-body.generating-pdf .aircraft-section{display:none !important}
-body.generating-pdf .print-header-bar{display:flex !important;flex-direction:column;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid #333}
-body.generating-pdf .print-title{font-size:13px;font-weight:bold;letter-spacing:0.5px}
-body.generating-pdf .print-ac{font-size:9px;color:#333;margin-top:1px}
-body.generating-pdf .container{padding:8px 10px !important;max-width:680px !important;margin:0 !important}
-body.generating-pdf .flight-info{margin:2px 0 !important;gap:6px !important;font-size:9px !important}
-body.generating-pdf .form-group{margin:0 6px 0 0 !important}
-body.generating-pdf .form-group label{font-size:8px !important}
-body.generating-pdf .perf-section{padding:4px 8px !important;margin:3px 0 !important;font-size:9px !important}
-body.generating-pdf .perf-title{font-size:11px !important;margin:0 0 2px 0 !important}
-body.generating-pdf .perf-outputs{gap:4px !important;padding:2px 0 !important;margin:0 !important}
-body.generating-pdf .perf-out{padding:3px 6px !important}
-body.generating-pdf .perf-label{font-size:8px !important}
-body.generating-pdf .perf-value{font-size:12px !important}
-body.generating-pdf h3{font-size:11px !important;margin:3px 0 2px 0 !important;padding:2px 0 !important}
-body.generating-pdf table{font-size:9px !important;margin:2px 0 !important}
-body.generating-pdf th,body.generating-pdf td{padding:1px 4px !important;line-height:1.3 !important}
-body.generating-pdf th{font-size:9px !important}
-body.generating-pdf .inline-input span{font-size:8px !important}
-body.generating-pdf select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
-body.generating-pdf input{border:none !important;background:transparent !important;font-size:9px !important;padding:0 !important}
-body.generating-pdf .cg-result{margin:2px 0 !important;padding:4px 8px !important}
-body.generating-pdf .cg-value{font-size:13px !important;margin:1px 0 !important}
-body.generating-pdf .cg-limits{font-size:8px !important}
-body.generating-pdf .status{padding:4px 8px !important;font-size:11px !important}
-body.generating-pdf .graph-section{margin:2px 0 !important;padding:0 !important}
-body.generating-pdf .graph-title{font-size:10px !important;margin:0 0 2px 0 !important}
-body.generating-pdf #cgGraph{display:block;margin:0 auto}
-
+.print-header-bar{display:none}
 @media print{
-  /* ── Hide interactive / non-record elements ── */
   .no-print{display:none !important}
-  .admin-panel{display:none !important}
-  .pw-overlay{display:none !important}
   .fuel-shortcuts{display:none !important}
   .summary{display:none !important}
-
-  /* ── Page setup ── */
+  .perf-inputs{display:none !important}
+  .pdf-queue-panel{display:none !important}
   @page{margin:0.2in;size:letter}
-  *{box-sizing:border-box}
   body{font-size:9px !important}
   .container{padding:3px 5px !important}
-
-  /* ── Hide normal header/aircraft on print, show compact bar ── */
   .header{display:none !important}
   .aircraft-section{display:none !important}
-  .admin-btn{display:none !important}
-  .print-header-bar{
-    display:flex !important;
-    flex-direction:column !important;
-    margin-bottom:3px !important;
-    padding-bottom:2px !important;
-    border-bottom:1px solid #333 !important;
-  }
-  .print-title{font-size:12px !important;font-weight:bold !important;letter-spacing:0.5px !important}
+  .print-header-bar{display:flex !important;flex-direction:column !important;margin-bottom:3px !important;padding-bottom:2px !important;border-bottom:1px solid #333 !important}
+  .print-title{font-size:12px !important;font-weight:bold !important}
   .print-ac{font-size:8px !important;color:#333 !important;margin-top:1px !important}
-
-  /* ── Flight info row ── */
-  .flight-info{margin:1px 0 !important;gap:6px !important}
+  .flight-info{margin:1px 0 !important}
   .form-group{margin:0 5px 0 0 !important}
   .form-group label{font-size:8px !important}
-
-  /* ── Performance section — outputs only ── */
   .perf-section{background:#f5f5dc !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:3px 6px !important;margin:2px 0 !important}
   .perf-title{font-size:10px !important;margin:0 0 2px 0 !important}
   .perf-outputs{gap:3px !important;padding:1px 0 !important;margin:0 !important}
   .perf-out{padding:2px 4px !important}
   .perf-label{font-size:7px !important}
   .perf-value{font-size:11px !important}
-
-  /* ── W&B heading ── */
   h3{font-size:10px !important;margin:2px 0 1px 0 !important;padding:2px 0 !important}
-
-  /* ── Table ── */
   table{font-size:8px !important;margin:1px 0 !important;width:100% !important}
   th,td{padding:1px 3px !important;line-height:1.25 !important}
-  th{font-size:8px !important}
   .yellow-row{background:#fff9c4 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .total-row{background:#e0e0e0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .inline-input span{font-size:7px !important}
-  .crew-inputs{gap:2px !important}
-  select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
+  select{-webkit-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
   input{border:none !important;background:transparent !important;font-size:8px !important;padding:0 !important}
-
-  /* ── CG result ── */
   .cg-result{margin:2px 0 !important;padding:3px 6px !important}
   .cg-value{font-size:12px !important;margin:1px 0 !important}
   .cg-limits{font-size:7px !important}
   .status{padding:3px 6px !important;font-size:10px !important}
   .status.ok{background:#c8e6c9 !important;color:#2e7d32 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .status.error{background:#ffcdd2 !important;color:#c62828 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-
-  /* ── CG Graph — maximally compact ── */
   .graph-section{margin:1px 0 !important;padding:0 !important}
   .graph-title{font-size:9px !important;margin:0 0 1px 0 !important}
   #cgGraph{width:100% !important;max-width:380px !important;height:170px !important;display:block;margin:0 auto}
 }
-</style>
-</head>
-<body>
-<div id="pw-overlay" class="pw-overlay" style="display:none">
-  <div class="pw-box">
-    <h3>&#x1F512; Admin Access</h3>
-    <p style="font-size:13px;color:#666;margin-bottom:14px">Enter admin password to continue</p>
-    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPW()">
-    <button class="pw-btn" onclick="checkPW()">Unlock</button>
-    <br><button class="pw-cancel" onclick="closePW()">Cancel</button>
-  </div>
-</div>
+</style></head><body><div id="app"></div><script>
+const helicopters=[
+{"tailNumber":"N76FX","serial":"760585","model":"SIKORSKY  S-76C+","emptyWeight":8363.7,"emptyArm":208,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N1103S","serial":"761016","model":"SIKORSKY S-76D","emptyWeight":8694.4,"emptyArm":207.8,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N276FX","serial":"760509","model":"SIKORSKY  S-76C+","emptyWeight":8225,"emptyArm":209,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":126,"passFwd":142,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N277FX","serial":"760676","model":"SIKORSKY S76C++","emptyWeight":8426.3,"emptyArm":205.1,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N176FX","serial":"760646","model":"SIKORSKY S76C++","emptyWeight":8488.8,"emptyArm":205.8,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N800SG","serial":"761006","model":"SIKORSKY S-76D","emptyWeight":8736.8,"emptyArm":206.92,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N676FX","serial":"761025","model":"SIKORSKY S-76D","emptyWeight":8730,"emptyArm":208.99,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}}
+];
 
-<div id="admin-panel" class="admin-panel" style="display:none">
-  <div class="admin-header">
-    <h2>&#x2699;&#xFE0F; Admin Panel &mdash; FXV Weight &amp; Balance</h2>
-    <div class="admin-header-right">
-      <span id="save-status" class="save-status"></span>
-      <button class="admin-save-btn" id="admin-save-btn" onclick="adminSave()">&#x2601; Save &amp; Push to All Users</button>
-      <button class="admin-close-btn" onclick="closeAdmin()">&#x2715; Close</button>
-    </div>
-  </div>
-  <div class="admin-tabs">
-    <div class="admin-tab active" id="tab-personnel" onclick="switchTab('personnel')">&#x1F9D1;&#x200D;&#x2708;&#xFE0F; Personnel</div>
-    <div class="admin-tab" id="tab-aircraft" onclick="switchTab('aircraft')">&#x1F681; Aircraft</div>
-  </div>
-  <div class="admin-body">
-    <div id="admin-personnel-panel"></div>
-    <div id="admin-aircraft-panel" style="display:none"></div>
-  </div>
-</div>
+// Fuel arm lookup tables (weight in lbs, arm in inches)
+const fuelArmCP = [[0,215.0],[478,215.1],[956,216.1],[1434,216.5],[1912,216.7]]; // C+ and C++
+const fuelArmD = [[0,215.0],[486,215.6],[973,216.3],[1459,216.7],[1945,216.8]]; // D models
 
-<div id="app"></div>
+function getFuelArm(fuelWeight, model) {
+  const table = model.includes('S-76D') ? fuelArmD : fuelArmCP;
+  
+  // Find the two points to interpolate between
+  for(let i=0; i<table.length-1; i++) {
+    if(fuelWeight >= table[i][0] && fuelWeight <= table[i+1][0]) {
+      const w1 = table[i][0], a1 = table[i][1];
+      const w2 = table[i+1][0], a2 = table[i+1][1];
+      // Linear interpolation
+      return a1 + (a2-a1) * (fuelWeight-w1) / (w2-w1);
+    }
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script>
-// =====================================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyC3CpGwwwFzs2UF_eCSSVGTwTXYTSnN_J4",
-  authDomain: "fxv-weight-and-balance.firebaseapp.com",
-  projectId: "fxv-weight-and-balance",
-  storageBucket: "fxv-weight-and-balance.firebasestorage.app",
-  messagingSenderId: "313744532529",
-  appId: "1:313744532529:web:8a3e8f7f256dd459e7a110"
+
+  }
+  
+  // If beyond range, use last value
+  if(fuelWeight > table[table.length-1][0]) return table[table.length-1][1];
+  return table[0][1];
+}
+
+const pilots=[{"name":"ALTIERI","weight":190},{"name":"APREA","weight":180},{"name":"COURTNEY","weight":185},{"name":"DEMARCHI","weight":150},{"name":"EVANS","weight":250},{"name":"FRONK","weight":180},{"name":"GUEDES","weight":182},{"name":"KEYES","weight":217},{"name":"KOPCYK","weight":245},{"name":"LAYDEN","weight":170},{"name":"LOCK","weight":216},{"name":"LOVETT","weight":210},{"name":"LUTCHKO","weight":165},{"name":"MARSHALL","weight":190},{"name":"MULLEN","weight":180},{"name":"PEARSON","weight":210},{"name":"PIACENTE","weight":215},{"name":"PROCUNIER","weight":260},{"name":"RENDON","weight":210},{"name":"ROBERTS","weight":205},{"name":"RYAN","weight":159},{"name":"SIMMONS","weight":240},{"name":"SIMONE","weight":175},{"name":"SOLO PILOT","weight":0},{"name":"SOTTILE","weight":220},{"name":"STOKOWSKI","weight":150},{"name":"TAYLOR","weight":235}];
+const captains=[{"name":"ALTIERI","weight":190},{"name":"APREA","weight":180},{"name":"SIMONE","weight":175},{"name":"LOCK","weight":216},{"name":"KOPCYK","weight":245},{"name":"PIACENTE","weight":215},{"name":"PEARSON","weight":210},{"name":"LANE","weight":198},{"name":"LOVETT","weight":210},{"name":"SIMMONS","weight":240},{"name":"GUEDES","weight":182},{"name":"EVANS","weight":250},{"name":"DEMARCHI","weight":150},{"name":"MARSHALL","weight":190},{"name":"RYAN","weight":159},{"name":"LUTCHKO","weight":165},{"name":"RENDON","weight":210},{"name":"LAYDEN","weight":170},{"name":"PROCUNIER","weight":260}];
+const HOGE_CP={"-30": 11700, "24": 11700, "25": 11600, "26": 11500, "27": 11450, "28": 11400, "29": 11350, "30": 11300, "31": 11250, "32": 11200, "33": 11150, "34": 11100, "35": 11000, "36": 10900, "37": 10850, "38": 10800, "39": 10750, "40": 10700, "41": 10650, "42": 10600};
+const HOGE_CPP={"-30": 11700, "31": 11700, "32": 11600, "33": 11550, "34": 11500, "35": 11400, "36": 11300, "37": 11250, "38": 11200, "39": 11150, "40": 11100, "41": 11050, "42": 11000, "43": 10950, "44": 10900, "45": 10800};
+const HOGE_D={"-30": 11875, "31": 11875, "32": 11875, "33": 11875, "34": 11875, "35": 11875, "36": 11875, "37": 11875, "38": 11875, "39": 11875, "40": 11875, "41": 11770, "42": 11665, "43": 11560, "44": 11455, "45": 11350};
+const MEA_CP={"-30": 11700, "-5": 11700, "-4": 11680, "-3": 11640, "-2": 11600, "-1": 11560, "0": 11520, "1": 11480, "2": 11440, "3": 11400, "4": 11360, "5": 11320, "6": 11280, "7": 11240, "8": 11200, "9": 11160, "10": 11120, "11": 11080, "12": 11040, "13": 11000, "14": 10925, "15": 10870, "16": 10815, "17": 10760, "18": 10705, "19": 10650, "20": 10610, "21": 10555, "22": 10500, "23": 10450, "24": 10400, "25": 10350, "26": 10300, "27": 10250, "28": 10200, "29": 10150, "30": 10100, "31": 10050, "32": 10000, "33": 9941, "34": 9878, "35": 9815, "36": 9752, "37": 9689, "38": 9626, "39": 9563, "40": 9500};
+const MEA_CPP={"-30": 11700, "7": 11700, "8": 11600, "9": 11550, "10": 11500, "11": 11450, "12": 11400, "13": 11350, "14": 11300, "15": 11250, "16": 11200, "17": 11150, "18": 11100, "19": 11050, "20": 11000, "21": 10900, "22": 10850, "23": 10800, "24": 10750, "25": 10700, "26": 10650, "27": 10600, "28": 10550, "29": 10500, "30": 10400, "31": 10350, "32": 10300, "33": 10250, "34": 10200, "35": 10150, "36": 10100, "37": 10050, "38": 10000, "39": 9950, "40": 9900, "41": 9850, "42": 9800, "43": 9750, "44": 9700, "45": 9650, "46": 9600, "47": 9575, "48": 9550, "49": 9525, "50": 9500};
+const MEA_D={"-30": 11875, "20": 11875, "21": 11825, "22": 11775, "23": 11725, "24": 11675, "25": 11625, "26": 11575, "27": 11525, "28": 11475, "29": 11425, "30": 11400, "31": 11310, "32": 11220, "33": 11130, "34": 11040, "35": 10950, "36": 10860, "37": 10770, "38": 10680, "39": 10590, "40": 10500};
+const V1_CP_TEMPS=[-30, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45];
+const V1_CP={"9500": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 32], "9600": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 31, 33], "9700": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 32, 34], "9800": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 31, 33, 35], "9900": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 32, 34, 36], "10000": [30, 30, 30, 30, 30, 30, 30, 30, 30, 31, 33, 35, 37], "10100": [30, 30, 30, 30, 30, 30, 30, 30, 30, 32, 34, 36, 38], "10200": [30, 30, 30, 30, 30, 30, 30, 30, 31, 33, 35, 37, 39], "10300": [30, 30, 30, 30, 30, 30, 30, 30, 32, 34, 36, 38, 40], "10400": [30, 30, 30, 30, 30, 30, 30, 31, 33, 35, 37, 39, 41], "10500": [30, 30, 30, 30, 30, 30, 30, 32, 34, 36, 38, 40, 42], "10600": [30, 30, 30, 30, 30, 30, 31, 33, 35, 37, 39, 41, 43], "10700": [30, 30, 30, 30, 30, 30, 32, 34, 36, 38, 40, 42, 44], "10800": [30, 30, 30, 30, 30, 31, 33, 35, 37, 39, 41, 43, 45], "10900": [30, 30, 30, 30, 30, 32, 34, 36, 38, 40, 42, 44, 46], "11000": [30, 30, 30, 30, 31, 33, 35, 37, 39, 41, 43, 45, 47], "11100": [30, 30, 30, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48], "11200": [30, 30, 30, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49], "11300": [30, 30, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50], "11400": [30, 30, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51], "11500": [30, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52], "11600": [30, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53], "11700": [30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54]};
+const V1_CPP_TEMPS=[-30, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45];
+const V1_CPP={"9700": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 32], "9800": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 32, 34], "9900": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 33, 36], "10000": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 31, 34, 37], "10100": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 32, 35, 38], "10200": [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 33, 36, 39], "10300": [30, 30, 30, 30, 30, 30, 30, 30, 30, 31, 34, 37, 40], "10400": [30, 30, 30, 30, 30, 30, 30, 30, 30, 32, 35, 38, 41], "10500": [30, 30, 30, 30, 30, 30, 30, 30, 31, 33, 36, 39, 42], "10600": [30, 30, 30, 30, 30, 30, 30, 30, 32, 34, 37, 40, 43], "10700": [30, 30, 30, 30, 30, 30, 30, 30, 33, 35, 38, 41, 44], "10800": [30, 30, 30, 30, 30, 30, 30, 31, 34, 36, 39, 42, 45], "10900": [30, 30, 30, 30, 30, 30, 30, 32, 35, 37, 40, 43, 46], "11000": [30, 30, 30, 30, 30, 30, 31, 33, 36, 38, 41, 44, 47], "11100": [30, 30, 30, 30, 30, 30, 32, 34, 37, 39, 42, 45, 48], "11200": [30, 30, 30, 30, 30, 31, 33, 35, 38, 40, 43, 46, 49], "11300": [30, 30, 30, 30, 30, 32, 34, 36, 39, 41, 44, 47, 50], "11400": [30, 30, 30, 30, 31, 33, 35, 37, 40, 42, 45, 48, 51], "11500": [30, 30, 30, 30, 31, 34, 36, 38, 41, 43, 46, 49, 52], "11600": [30, 30, 30, 31, 33, 35, 37, 39, 42, 44, 47, 50, 53], "11700": [30, 30, 31, 32, 34, 36, 38, 40, 43, 45, 48, 51, 54]};
+
+let state={selectedHeliIndex:0,date:new Date().toISOString().split('T')[0],from:'',to:'',picName:'',sicName:'',navBag:20,credenza:14,numPassFwd:0,passFwdWeight:0,numPassAft:0,passAftWeight:0,baggage:0,fuel:1500,fahrenheit:'',altimeter:'',fieldElevation:'',tempAloft6000:''};
+
+
+const lateralArms = {
+  empty: 0.0,
+  navBag: 0.0,
+  crew: 0.0,      // Will calculate based on pilot/copilot positions
+  credenza: 0.0,
+  passFwd: 0.0,   // Centerline for now, can be adjusted
+  passAft: 0.0,   // Centerline for now, can be adjusted
+  baggage: 0.0,
+  fuel: 0.0
 };
-let db = null;
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.firestore();
-} catch(e) {
-  console.warn("Firebase unavailable, running with built-in data:", e);
-}
+const pilotLateralArm = 18.0;    // PIC - Right side
+const copilotLateralArm = -17.0;   // SIC - Left side
 
-// =====================================================================
-// DEFAULT DATA
-// =====================================================================
-const DEFAULT_PILOTS = [
-  {name:"ALTIERI",   weight:190, roles:["pic","sic"]},
-  {name:"APREA",     weight:180, roles:["pic","sic"]},
-  {name:"COURTNEY",  weight:185, roles:["sic"]},
-  {name:"DEMARCHI",  weight:150, roles:["pic","sic"]},
-  {name:"EVANS",     weight:250, roles:["pic","sic"]},
-  {name:"FRONK",     weight:180, roles:["sic"]},
-  {name:"GUEDES",    weight:182, roles:["pic","sic"]},
-  {name:"KEYES",     weight:217, roles:["sic"]},
-  {name:"KOPCYK",    weight:245, roles:["pic","sic"]},
-  {name:"KURIKOVA",  weight:120, roles:["sic"]},
-  {name:"LANE",      weight:198, roles:["pic"]},
-  {name:"LAYDEN",    weight:170, roles:["pic","sic"]},
-  {name:"LOCK",      weight:216, roles:["pic","sic"]},
-  {name:"LOVETT",    weight:210, roles:["pic","sic"]},
-  {name:"LUTCHKO",   weight:165, roles:["pic","sic"]},
-  {name:"MARSHALL",  weight:190, roles:["pic","sic"]},
-  {name:"MULLEN",    weight:180, roles:["sic"]},
-  {name:"PEARSON",   weight:210, roles:["pic","sic"]},
-  {name:"PIACENTE",  weight:215, roles:["pic","sic"]},
-  {name:"PROCUNIER", weight:260, roles:["pic","sic"]},
-  {name:"RENDON",    weight:210, roles:["pic","sic"]},
-  {name:"ROBERTS",   weight:205, roles:["sic"]},
-  {name:"RYAN",      weight:159, roles:["pic","sic"]},
-  {name:"SIMMONS",   weight:240, roles:["pic","sic"]},
-  {name:"SIMONE",    weight:175, roles:["pic","sic"]},
-  {name:"SOLO PILOT",weight:0,   roles:["sic"]},
-  {name:"SOTTILE",   weight:220, roles:["sic"]},
-  {name:"STOKOWSKI", weight:150, roles:["sic"]},
-  {name:"TAYLOR",    weight:235, roles:["sic"]}
-];
+function getCGLimits(m){if(m.includes('S-76B'))return{min:197,max:205.93};else if(m.includes('C+')||m.includes('C++'))return{min:195.8,max:207.33};else if(m.includes('S-76D'))return{min:196.66,max:208};return{min:195,max:208}}
 
-const DEFAULT_HELICOPTERS = [
-  {tailNumber:"N76FX", serial:"760585", model:"SIKORSKY  S-76C+", emptyWeight:8363.7, emptyArm:208, fuelCapacity:"281.2", arms:{navBag:110, crew:102.5, credenza:134, passFwd:133, passAft:197.5, baggage:235}},
-  {tailNumber:"N1103S",serial:"761016", model:"SIKORSKY S-76D",   emptyWeight:8694.4, emptyArm:207.8, fuelCapacity:"286",   arms:{navBag:126.5, crew:102.5, credenza:134, passFwd:131, passAft:197.5, baggage:235}},
-  {tailNumber:"N276FX",serial:"760509", model:"SIKORSKY  S-76C+", emptyWeight:8225,   emptyArm:209,   fuelCapacity:"281.2", arms:{navBag:110, crew:102.5, credenza:126, passFwd:142, passAft:197.5, baggage:235}},
-  {tailNumber:"N277FX",serial:"760676", model:"SIKORSKY S76C++",  emptyWeight:8426.3, emptyArm:205.1, fuelCapacity:"281.2", arms:{navBag:110, crew:102.5, credenza:134, passFwd:133, passAft:197.5, baggage:235}},
-  {tailNumber:"N176FX",serial:"760646", model:"SIKORSKY S76C++",  emptyWeight:8488.8, emptyArm:205.8, fuelCapacity:"281.2", arms:{navBag:110, crew:102.5, credenza:134, passFwd:133, passAft:197.5, baggage:235}},
-  {tailNumber:"N800SG",serial:"761006", model:"SIKORSKY S-76D",   emptyWeight:8736.8, emptyArm:206.92,fuelCapacity:"286",   arms:{navBag:126.5, crew:102.5, credenza:134, passFwd:131, passAft:197.5, baggage:235}},
-  {tailNumber:"N676FX",serial:"761025", model:"SIKORSKY S-76D",   emptyWeight:8730,   emptyArm:208.99,fuelCapacity:"286",   arms:{navBag:126.5, crew:102.5, credenza:134, passFwd:131, passAft:197.5, baggage:235}}
-];
-
-// =====================================================================
-// LIVE DATA (populated from Firebase, falls back to defaults)
-// =====================================================================
-let allPilots = JSON.parse(JSON.stringify(DEFAULT_PILOTS));
-let helicopters = JSON.parse(JSON.stringify(DEFAULT_HELICOPTERS));
-
-// Derived working lists (rebuilt after any data change)
-let pilots = [];    // SIC-capable
-let captains = [];  // PIC-capable
-
-function refreshLists() {
-  const sorted = [...allPilots].sort((a,b) => a.name.localeCompare(b.name));
-  captains = sorted.filter(p => p.roles.includes("pic"));
-  pilots   = sorted.filter(p => p.roles.includes("sic"));
-}
-refreshLists();
-
-// =====================================================================
-// FIREBASE LOAD / SAVE
-// =====================================================================
-async function loadFromFirebase() {
-  if (!db) { refreshLists(); render(); return; }
-  try {
-    const pilotsSnap = await db.collection("config").doc("pilots").get();
-    const acSnap     = await db.collection("config").doc("aircraft").get();
-
-    if (pilotsSnap.exists && pilotsSnap.data().list && pilotsSnap.data().list.length > 0) {
-      allPilots = pilotsSnap.data().list;
-    } else {
-      // First run — seed defaults
-      await db.collection("config").doc("pilots").set({ list: DEFAULT_PILOTS });
-    }
-
-    if (acSnap.exists && acSnap.data().list && acSnap.data().list.length > 0) {
-      helicopters = acSnap.data().list;
-    } else {
-      await db.collection("config").doc("aircraft").set({ list: DEFAULT_HELICOPTERS });
-    }
-
-    // Clamp selected index in case aircraft list shrank
-    if (state.selectedHeliIndex >= helicopters.length) state.selectedHeliIndex = 0;
-    refreshLists();
-    render();
-  } catch(e) {
-    console.warn("Firebase load failed, using defaults:", e);
-    refreshLists();
-    render();
-  }
-}
-
-async function saveToFirebase() {
-  const btn = document.getElementById("admin-save-btn");
-  const status = document.getElementById("save-status");
-  btn.disabled = true;
-  btn.textContent = "Saving...";
-  status.className = "save-status";
-  status.textContent = "";
-  try {
-    const response = await fetch("https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: "kbdr", pilots: allPilots, aircraft: helicopters })
-    });
-    const result = await response.json();
-    if(response.ok) {
-      status.className = "save-status ok";
-      status.textContent = "✓ Saved successfully";
-      btn.textContent = "☁ Save & Push to All Users";
-      btn.disabled = false;
-      setTimeout(() => { status.textContent = ""; }, 4000);
-    } else {
-      status.className = "save-status err";
-      status.textContent = "✗ Save failed: " + result.error;
-      btn.textContent = "☁ Save & Push to All Users";
-      btn.disabled = false;
-    }
-  } catch(e) {
-    status.className = "save-status err";
-    status.textContent = "✗ Save failed: " + e.message;
-    btn.textContent = "☁ Save & Push to All Users";
-    btn.disabled = false;
-  }
-}
-
-// =====================================================================
-// PERFORMANCE DATA
-// =====================================================================
-const fuelArmCP = [[0,215.0],[478,215.1],[956,216.1],[1434,216.5],[1912,216.7]];
-const fuelArmD  = [[0,215.0],[486,215.6],[973,216.3],[1459,216.7],[1945,216.8]];
-function getFuelArm(fw,model){
-  const t=model.includes("S-76D")?fuelArmD:fuelArmCP;
-  for(let i=0;i<t.length-1;i++){if(fw>=t[i][0]&&fw<=t[i+1][0]){const w1=t[i][0],a1=t[i][1],w2=t[i+1][0],a2=t[i+1][1];return a1+(a2-a1)*(fw-w1)/(w2-w1);}}
-  if(fw>t[t.length-1][0])return t[t.length-1][1];
-  return t[0][1];
-}
-const HOGE_CP={"-30":11700,"24":11700,"25":11600,"26":11500,"27":11450,"28":11400,"29":11350,"30":11300,"31":11250,"32":11200,"33":11150,"34":11100,"35":11000,"36":10900,"37":10850,"38":10800,"39":10750,"40":10700,"41":10650,"42":10600};
-const HOGE_CPP={"-30":11700,"31":11700,"32":11600,"33":11550,"34":11500,"35":11400,"36":11300,"37":11250,"38":11200,"39":11150,"40":11100,"41":11050,"42":11000,"43":10950,"44":10900,"45":10800};
-const HOGE_D={"-30":11875,"31":11875,"32":11875,"33":11875,"34":11875,"35":11875,"36":11875,"37":11875,"38":11875,"39":11875,"40":11875,"41":11770,"42":11665,"43":11560,"44":11455,"45":11350};
-const MEA_CP={"-30":11700,"-5":11700,"-4":11680,"-3":11640,"-2":11600,"-1":11560,"0":11520,"1":11480,"2":11440,"3":11400,"4":11360,"5":11320,"6":11280,"7":11240,"8":11200,"9":11160,"10":11120,"11":11080,"12":11040,"13":11000,"14":10925,"15":10870,"16":10815,"17":10760,"18":10705,"19":10650,"20":10610,"21":10555,"22":10500,"23":10450,"24":10400,"25":10350,"26":10300,"27":10250,"28":10200,"29":10150,"30":10100,"31":10050,"32":10000,"33":9941,"34":9878,"35":9815,"36":9752,"37":9689,"38":9626,"39":9563,"40":9500};
-const MEA_CPP={"-30":11700,"7":11700,"8":11600,"9":11550,"10":11500,"11":11450,"12":11400,"13":11350,"14":11300,"15":11250,"16":11200,"17":11150,"18":11100,"19":11050,"20":11000,"21":10900,"22":10850,"23":10800,"24":10750,"25":10700,"26":10650,"27":10600,"28":10550,"29":10500,"30":10400,"31":10350,"32":10300,"33":10250,"34":10200,"35":10150,"36":10100,"37":10050,"38":10000,"39":9950,"40":9900,"41":9850,"42":9800,"43":9750,"44":9700,"45":9650,"46":9600,"47":9575,"48":9550,"49":9525,"50":9500};
-const MEA_D={"-30":11875,"20":11875,"21":11825,"22":11775,"23":11725,"24":11675,"25":11625,"26":11575,"27":11525,"28":11475,"29":11425,"30":11400,"31":11310,"32":11220,"33":11130,"34":11040,"35":10950,"36":10860,"37":10770,"38":10680,"39":10590,"40":10500};
-const hogeTableCP={"0":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11700,"20":11700,"30":11500,"40":10800,"49":9900},"1000":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11700,"20":11625,"30":11175,"40":10375,"49":9525},"2000":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11650,"20":11200,"30":10800,"40":9950},"3000":{"-30":11700,"-20":11700,"-10":11700,"0":11600,"10":11225,"20":10775,"30":10250,"40":9550},"4000":{"-30":11700,"-20":11700,"-10":11575,"0":11200,"10":10800,"20":10375,"30":9850,"40":9175},"5000":{"-30":11700,"-20":11550,"-10":11150,"0":10775,"10":10400,"20":9950,"30":9450,"40":8775}}
-const hogeTableCPP={"0":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11700,"20":11700,"30":11700,"40":11250,"49":10575},"1000":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11700,"20":11700,"30":11550,"40":10850,"49":10150},"2000":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11700,"20":11700,"30":11075,"40":10400},"3000":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11700,"20":11250,"30":10525,"40":9975},"4000":{"-30":11700,"-20":11700,"-10":11700,"0":11700,"10":11300,"20":10775,"30":10200,"40":9575},"5000":{"-30":11700,"-20":11700,"-10":11625,"0":11275,"10":10850,"20":10325,"30":9775,"40":9150}}
-const hogeTableD={"0":{"-30":11875,"-20":11875,"-10":11875,"0":11875,"10":11875,"20":11875,"30":11875,"40":11875,"45":11525},"1000":{"-30":11875,"-20":11875,"-10":11875,"0":11875,"10":11875,"20":11875,"30":11875,"40":11625,"45":11075},"2000":{"-30":11875,"-20":11875,"-10":11875,"0":11875,"10":11875,"20":11875,"30":11575,"40":11150,"45":10600},"3000":{"-30":11875,"-20":11875,"-10":11875,"0":11875,"10":11875,"20":11500,"30":11150,"40":10675},"4000":{"-30":11875,"-20":11875,"-10":11875,"0":11825,"10":11475,"20":11100,"30":10750,"40":10200},"5000":{"-30":11875,"-20":11875,"-10":11825,"0":11450,"10":11075,"20":10700,"30":10375},"6000":{"-30":11875,"-20":11825,"-10":11425,"0":11050,"10":10675,"20":10300},"7000":{"-30":11850,"-20":11425,"-10":11050,"0":10650,"10":10300,"20":9925}}
-const CDP_CP_INT=10478.20, CDP_CP_SLO=0.307894;
-const CDP_CPP_INT=10498.10, CDP_CPP_SLO=0.277373;
-
-function getHOGEWeight(hp,celsius,model){
-  const table=model.includes("S-76D")?hogeTableD:model.includes("C++")?hogeTableCPP:hogeTableCP;
-  const altKeys=Object.keys(table).map(Number).sort((a,b)=>a-b);
-  let altLower=altKeys[0],altUpper=altKeys[altKeys.length-1];
-  for(let i=0;i<altKeys.length-1;i++){if(hp>=altKeys[i]&&hp<=altKeys[i+1]){altLower=altKeys[i];altUpper=altKeys[i+1];break;}}
-  // Check if temperature exceeds the permitted range at either bounding altitude
-  const tempKeysL=Object.keys(table[altLower]).map(Number).sort((a,b)=>a-b);
-  const tempKeysU=Object.keys(table[altUpper]).map(Number).sort((a,b)=>a-b);
-  const maxTempL=tempKeysL[tempKeysL.length-1];
-  const maxTempU=tempKeysU[tempKeysU.length-1];
-  if(celsius>maxTempL||celsius>maxTempU)return null; // not permitted
-  let tempLower=tempKeysL[0],tempUpper=tempKeysL[tempKeysL.length-1];
-  for(let i=0;i<tempKeysL.length-1;i++){if(celsius>=tempKeysL[i]&&celsius<=tempKeysL[i+1]){tempLower=tempKeysL[i];tempUpper=tempKeysL[i+1];break;}}
-  const w1=table[altLower][tempLower],w2=table[altLower][tempUpper],w3=table[altUpper][tempLower],w4=table[altUpper][tempUpper];
-  if(altUpper===altLower&&tempUpper===tempLower)return w1;
-  else if(altUpper===altLower){const t=(celsius-tempLower)/(tempUpper-tempLower);return w1+t*(w2-w1);}
-  else if(tempUpper===tempLower){const t=(hp-altLower)/(altUpper-altLower);return w1+t*(w3-w1);}
-  else{const tA=(hp-altLower)/(altUpper-altLower),tT=(celsius-tempLower)/(tempUpper-tempLower);return(w1+tT*(w2-w1))+tA*((w3+tT*(w4-w3))-(w1+tT*(w2-w1)));}
-}
-
-
-// =====================================================================
-// STATE
-// =====================================================================
-let state={selectedHeliIndex:0,date:new Date().toISOString().split("T")[0],from:"",to:"",picName:"",sicName:"",picWeightOverride:null,sicWeightOverride:null,navBag:20,credenza:14,numPassFwd:0,passFwdWeight:0,numPassAft:0,passAftWeight:0,baggage:0,fuel:1500,fahrenheit:"",altimeter:"",fieldElevation:"",tempAloft6000:""};
-
-// =====================================================================
-// CG / ENVELOPE
-// =====================================================================
-const pilotLateralArm=18.0, copilotLateralArm=-17.0;
-function getCGLimits(m){if(m.includes("C+")||m.includes("C++"))return{min:195.8,max:207.33};else if(m.includes("S-76D"))return{min:196.66,max:208};return{min:195,max:208};}
-function checkInEnvelope(cg,weight,model,lateralCG){
+function checkInEnvelope(cg, weight, model, lateralCG) {
+  // Get the envelope based on model and lateral CG
   let env;
-  if(model.includes("S-76D")){const a=Math.abs(lateralCG||0);if(a<=1.0)env=[[208.3,7350],[194.0,9250],[194.0,9500],[197.0,11000],[199.6,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];else if(a<=2.5)env=[[208.3,7350],[196.5,8918],[196.5,9500],[199.5,11000],[202.2,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];else if(a<=3.5)env=[[208.3,7350],[199.0,8586],[199.0,9500],[202.0,11000],[203.3,11400],[205.6,11400],[210.0,9500],[210.0,9250],[208.3,7350]];else env=[[208.3,7350],[194.0,9250],[194.0,9500],[196.6,10800],[207.0,10800],[210.0,9500],[210.0,9250],[208.3,7350]];}
-  else env=[[208.2,7350],[199.2,7500],[194.0,8500],[194.0,9500],[197.0,11000],[199.2,11700],[204.0,11700],[210.0,9250],[208.2,7350]];
-  const minWE=Math.min(...env.map(p=>p[1])),maxWE=Math.max(...env.map(p=>p[1]));
+  if(model.includes('S-76D')){
+    const absLat=Math.abs(lateralCG||0);
+    if(absLat<=1.0)env=[[208.3,7350],[194.0,9250],[194.0,9500],[197.0,11000],[199.6,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];
+    else if(absLat<=2.5)env=[[208.3,7350],[196.5,8918],[196.5,9500],[199.5,11000],[202.2,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];
+    else if(absLat<=3.5)env=[[208.3,7350],[199.0,8586],[199.0,9500],[202.0,11000],[203.3,11400],[205.6,11400],[210.0,9500],[210.0,9250],[208.3,7350]];
+    else if(absLat<=4.5)env=[[208.3,7350],[194.0,9250],[194.0,9500],[196.6,10800],[207.0,10800],[210.0,9500],[210.0,9250],[208.3,7350]];
+    else env=[[208.3,7350],[194.0,9250],[194.0,9500],[196.6,10800],[207.0,10800],[210.0,9500],[210.0,9250],[208.3,7350]];
+  }else{
+    env=[[208.2,7350],[199.2,7500],[194.0,8500],[194.0,9500],[197.0,11000],[199.2,11700],[204.0,11700],[210.0,9250],[208.2,7350]];
+  }
+  
+  // Check if weight is in range
+  const minWE=Math.min(...env.map(p=>p[1]));
+  const maxWE=Math.max(...env.map(p=>p[1]));
   if(weight<minWE||weight>maxWE)return false;
+  
+  // Point-in-polygon check
   let inside=false;
-  for(let i=0,j=env.length-1;i<env.length;j=i++){const xi=env[i][0],yi=env[i][1],xj=env[j][0],yj=env[j][1];const intersect=((yi>weight)!==(yj>weight))&&(cg<(xj-xi)*(weight-yi)/(yj-yi)+xi);if(intersect)inside=!inside;}
+  for(let i=0,j=env.length-1;i<env.length;j=i++){
+    const xi=env[i][0],yi=env[i][1];
+    const xj=env[j][0],yj=env[j][1];
+    const intersect=((yi>weight)!==(yj>weight))&&(cg<(xj-xi)*(weight-yi)/(yj-yi)+xi);
+    if(intersect)inside=!inside;
+  }
   return inside;
 }
 
-// =====================================================================
-// CALCULATE
-// =====================================================================
-function calculate(){
-  const h=helicopters[state.selectedHeliIndex];
-  const pic=captains.find(p=>p.name===state.picName);
-  const sic=pilots.find(p=>p.name===state.sicName);
-  const picW=state.picWeightOverride!==null?state.picWeightOverride:(pic?.weight||0);
-  const sicW=state.sicWeightOverride!==null?state.sicWeightOverride:(sic?.weight||0);
-  const cw=picW+sicW;
-  const em=h.emptyWeight*h.emptyArm,nm=state.navBag*h.arms.navBag,cm=cw*h.arms.crew,crm=state.credenza*h.arms.credenza;
-  const pfm=state.passFwdWeight*h.arms.passFwd,pam=state.passAftWeight*h.arms.passAft,bm=state.baggage*h.arms.baggage;
-  const fuelArm=getFuelArm(state.fuel,h.model),fm=state.fuel*fuelArm;
-  const tw=h.emptyWeight+state.navBag+cw+state.credenza+state.passFwdWeight+state.passAftWeight+state.baggage+state.fuel;
-  const tm=em+nm+cm+crm+pfm+pam+bm+fm;
-  const cg=tm/tw,zfw=tw-state.fuel,zfm=tm-fm,zfc=zfm/zfw;
-  const cgl=getCGLimits(h.model);
-  let lateralCG=0;
-  if(h.model.includes("S-76D")){
-    const picLat=picW*pilotLateralArm,sicLat=sicW*copilotLateralArm;
-    const totalLat=h.emptyWeight*0+state.navBag*0+picLat+sicLat+state.credenza*0+state.passFwdWeight*0+state.passAftWeight*0+state.baggage*0+state.fuel*0;
-    lateralCG=totalLat/tw;
+function calculate(){const h=helicopters[state.selectedHeliIndex];const pic=pilots.find(p=>p.name===state.picName);const sic=pilots.find(p=>p.name===state.sicName);const cw=(pic?.weight||0)+(sic?.weight||0);const em=h.emptyWeight*h.emptyArm;const nm=state.navBag*h.arms.navBag;const cm=cw*h.arms.crew;const crm=state.credenza*h.arms.credenza;const pfm=state.passFwdWeight*h.arms.passFwd;const pam=state.passAftWeight*h.arms.passAft;const bm=state.baggage*h.arms.baggage;const fuelArm=getFuelArm(state.fuel,h.model);const fm=state.fuel*fuelArm;const tw=h.emptyWeight+state.navBag+cw+state.credenza+state.passFwdWeight+state.passAftWeight+state.baggage+state.fuel;const tm=em+nm+cm+crm+pfm+pam+bm+fm;const cg=tm/tw;const zfw=tw-state.fuel;const zfm=tm-fm;const zfc=zfm/zfw;const cgl=getCGLimits(h.model);
+// Calculate lateral CG for D models
+let lateralCG = 0;
+if(h.model.includes('S-76D')){
+const picWeight=(pic?.weight||0);
+const sicWeight=(sic?.weight||0);
+const lateralEmptyMoment=h.emptyWeight*lateralArms.empty;
+const lateralNavBagMoment=state.navBag*lateralArms.navBag;
+const lateralCrewMoment=picWeight*pilotLateralArm+sicWeight*copilotLateralArm;
+const lateralCredenzaMoment=state.credenza*lateralArms.credenza;
+const lateralPassFwdMoment=state.passFwdWeight*lateralArms.passFwd;
+const lateralPassAftMoment=state.passAftWeight*lateralArms.passAft;
+const lateralBaggageMoment=state.baggage*lateralArms.baggage;
+const lateralFuelMoment=state.fuel*lateralArms.fuel;
+const totalLateralMoment=lateralEmptyMoment+lateralNavBagMoment+lateralCrewMoment+lateralCredenzaMoment+lateralPassFwdMoment+lateralPassAftMoment+lateralBaggageMoment+lateralFuelMoment;
+lateralCG=totalLateralMoment/tw;
+}
+const cgok=checkInEnvelope(cg,tw,h.model,lateralCG);
+const maxGrossWeight=h.model.includes('S-76D')?11875:11700;
+const fuelCapacityGallons=h.model.includes('S-76D')?286.0:281.2;
+const zeroFuelWeight=tw-state.fuel;
+const maxFuelWeight=maxGrossWeight-zeroFuelWeight;
+const maxFuelGallonsByWeight=maxFuelWeight/6.8;
+const maxFuelGallons=Math.min(Math.max(0,maxFuelGallonsByWeight),fuelCapacityGallons);
+const maxFuelPounds=maxFuelGallons*6.8;
+const weightExceeded=tw>maxGrossWeight;
+
+return{heli:h,crewWeight:cw,emptyMoment:em,navBagMoment:nm,crewMoment:cm,credenzaMoment:crm,passFwdMoment:pfm,passAftMoment:pam,baggageMoment:bm,fuelMoment:fm,totalWeight:tw,totalMoment:tm,cg:cg,cgLimits:cgl,cgInLimits:cgok,zeroFuelWeight:zfw,zeroFuelCG:zfc,lateralCG:lateralCG,maxGrossWeight:maxGrossWeight,maxFuelGallons:maxFuelGallons,maxFuelPounds:maxFuelPounds,weightExceeded:weightExceeded,fuelArm:fuelArm}}
+// HOGE Weight lookup tables - 2D interpolation (pressure altitude × temperature)
+// Altitudes in feet, temperatures in °C, weights in lbs
+const hogeTableCP = {"0":{"-30":11700,"-28":11660,"-26":11620,"-24":11580,"-22":11540,"-20":11500,"-18":11460,"-16":11420,"-14":11380,"-12":11340,"-10":11300,"-8":11260,"-6":11220,"-4":11180,"-2":11140,"0":11100,"2":11060,"4":11020,"6":10980,"8":10940,"10":10900,"12":10860,"14":10820,"16":10780,"18":10740,"20":10700,"22":10660,"24":10620,"26":10580,"28":10540,"30":10500,"32":10460,"34":10420,"36":10380,"38":10340,"40":10300,"42":10260,"44":10220},"250":{"-30":11650,"-28":11610,"-26":11570,"-24":11530,"-22":11490,"-20":11450,"-18":11410,"-16":11370,"-14":11330,"-12":11290,"-10":11250,"-8":11210,"-6":11170,"-4":11130,"-2":11090,"0":11050,"2":11010,"4":10970,"6":10930,"8":10890,"10":10850,"12":10810,"14":10770,"16":10730,"18":10690,"20":10650,"22":10610,"24":10570,"26":10530,"28":10490,"30":10450,"32":10410,"34":10370,"36":10330,"38":10290,"40":10250,"42":10210,"44":10170},"500":{"-30":11600,"-28":11560,"-26":11520,"-24":11480,"-22":11440,"-20":11400,"-18":11360,"-16":11320,"-14":11280,"-12":11240,"-10":11200,"-8":11160,"-6":11120,"-4":11080,"-2":11040,"0":11000,"2":10960,"4":10920,"6":10880,"8":10840,"10":10800,"12":10760,"14":10720,"16":10680,"18":10640,"20":10600,"22":10560,"24":10520,"26":10480,"28":10440,"30":10400,"32":10360,"34":10320,"36":10280,"38":10240,"40":10200,"42":10160,"44":10120},"750":{"-30":11550,"-28":11510,"-26":11470,"-24":11430,"-22":11390,"-20":11350,"-18":11310,"-16":11270,"-14":11230,"-12":11190,"-10":11150,"-8":11110,"-6":11070,"-4":11030,"-2":10990,"0":10950,"2":10910,"4":10870,"6":10830,"8":10790,"10":10750,"12":10710,"14":10670,"16":10630,"18":10590,"20":10550,"22":10510,"24":10470,"26":10430,"28":10390,"30":10350,"32":10310,"34":10270,"36":10230,"38":10190,"40":10150,"42":10110,"44":10070},"1000":{"-30":11500,"-28":11460,"-26":11420,"-24":11380,"-22":11340,"-20":11300,"-18":11260,"-16":11220,"-14":11180,"-12":11140,"-10":11100,"-8":11060,"-6":11020,"-4":10980,"-2":10940,"0":10900,"2":10860,"4":10820,"6":10780,"8":10740,"10":10700,"12":10660,"14":10620,"16":10580,"18":10540,"20":10500,"22":10460,"24":10420,"26":10380,"28":10340,"30":10300,"32":10260,"34":10220,"36":10180,"38":10140,"40":10100,"42":10060,"44":10020},"1250":{"-30":11450,"-28":11410,"-26":11370,"-24":11330,"-22":11290,"-20":11250,"-18":11210,"-16":11170,"-14":11130,"-12":11090,"-10":11050,"-8":11010,"-6":10970,"-4":10930,"-2":10890,"0":10850,"2":10810,"4":10770,"6":10730,"8":10690,"10":10650,"12":10610,"14":10570,"16":10530,"18":10490,"20":10450,"22":10410,"24":10370,"26":10330,"28":10290,"30":10250,"32":10210,"34":10170,"36":10130,"38":10090,"40":10050,"42":10010,"44":9970},"1500":{"-30":11400,"-28":11360,"-26":11320,"-24":11280,"-22":11240,"-20":11200,"-18":11160,"-16":11120,"-14":11080,"-12":11040,"-10":11000,"-8":10960,"-6":10920,"-4":10880,"-2":10840,"0":10800,"2":10760,"4":10720,"6":10680,"8":10640,"10":10600,"12":10560,"14":10520,"16":10480,"18":10440,"20":10400,"22":10360,"24":10320,"26":10280,"28":10240,"30":10200,"32":10160,"34":10120,"36":10080,"38":10040,"40":10000,"42":9960,"44":9920},"1750":{"-30":11350,"-28":11310,"-26":11270,"-24":11230,"-22":11190,"-20":11150,"-18":11110,"-16":11070,"-14":11030,"-12":10990,"-10":10950,"-8":10910,"-6":10870,"-4":10830,"-2":10790,"0":10750,"2":10710,"4":10670,"6":10630,"8":10590,"10":10550,"12":10510,"14":10470,"16":10430,"18":10390,"20":10350,"22":10310,"24":10270,"26":10230,"28":10190,"30":10150,"32":10110,"34":10070,"36":10030,"38":9990,"40":9950,"42":9910,"44":9870},"2000":{"-30":11300,"-28":11260,"-26":11220,"-24":11180,"-22":11140,"-20":11100,"-18":11060,"-16":11020,"-14":10980,"-12":10940,"-10":10900,"-8":10860,"-6":10820,"-4":10780,"-2":10740,"0":10700,"2":10660,"4":10620,"6":10580,"8":10540,"10":10500,"12":10460,"14":10420,"16":10380,"18":10340,"20":10300,"22":10260,"24":10220,"26":10180,"28":10140,"30":10100,"32":10060,"34":10020,"36":9980,"38":9940,"40":9900,"42":9860,"44":9820},"2250":{"-30":11250,"-28":11210,"-26":11170,"-24":11130,"-22":11090,"-20":11050,"-18":11010,"-16":10970,"-14":10930,"-12":10890,"-10":10850,"-8":10810,"-6":10770,"-4":10730,"-2":10690,"0":10650,"2":10610,"4":10570,"6":10530,"8":10490,"10":10450,"12":10410,"14":10370,"16":10330,"18":10290,"20":10250,"22":10210,"24":10170,"26":10130,"28":10090,"30":10050,"32":10010,"34":9970,"36":9930,"38":9890,"40":9850,"42":9810,"44":9770},"2500":{"-30":11200,"-28":11160,"-26":11120,"-24":11080,"-22":11040,"-20":11000,"-18":10960,"-16":10920,"-14":10880,"-12":10840,"-10":10800,"-8":10760,"-6":10720,"-4":10680,"-2":10640,"0":10600,"2":10560,"4":10520,"6":10480,"8":10440,"10":10400,"12":10360,"14":10320,"16":10280,"18":10240,"20":10200,"22":10160,"24":10120,"26":10080,"28":10040,"30":10000,"32":9960,"34":9920,"36":9880,"38":9840,"40":9800,"42":9760,"44":9720},"2750":{"-30":11150,"-28":11110,"-26":11070,"-24":11030,"-22":10990,"-20":10950,"-18":10910,"-16":10870,"-14":10830,"-12":10790,"-10":10750,"-8":10710,"-6":10670,"-4":10630,"-2":10590,"0":10550,"2":10510,"4":10470,"6":10430,"8":10390,"10":10350,"12":10310,"14":10270,"16":10230,"18":10190,"20":10150,"22":10110,"24":10070,"26":10030,"28":9990,"30":9950,"32":9910,"34":9870,"36":9830,"38":9790,"40":9750,"42":9710,"44":9670},"3000":{"-30":11100,"-28":11060,"-26":11020,"-24":10980,"-22":10940,"-20":10900,"-18":10860,"-16":10820,"-14":10780,"-12":10740,"-10":10700,"-8":10660,"-6":10620,"-4":10580,"-2":10540,"0":10500,"2":10460,"4":10420,"6":10380,"8":10340,"10":10300,"12":10260,"14":10220,"16":10180,"18":10140,"20":10100,"22":10060,"24":10020,"26":9980,"28":9940,"30":9900,"32":9860,"34":9820,"36":9780,"38":9740,"40":9700,"42":9660,"44":9620},"3250":{"-30":11050,"-28":11010,"-26":10970,"-24":10930,"-22":10890,"-20":10850,"-18":10810,"-16":10770,"-14":10730,"-12":10690,"-10":10650,"-8":10610,"-6":10570,"-4":10530,"-2":10490,"0":10450,"2":10410,"4":10370,"6":10330,"8":10290,"10":10250,"12":10210,"14":10170,"16":10130,"18":10090,"20":10050,"22":10010,"24":9970,"26":9930,"28":9890,"30":9850,"32":9810,"34":9770,"36":9730,"38":9690,"40":9650,"42":9610,"44":9570},"3500":{"-30":11000,"-28":10960,"-26":10920,"-24":10880,"-22":10840,"-20":10800,"-18":10760,"-16":10720,"-14":10680,"-12":10640,"-10":10600,"-8":10560,"-6":10520,"-4":10480,"-2":10440,"0":10400,"2":10360,"4":10320,"6":10280,"8":10240,"10":10200,"12":10160,"14":10120,"16":10080,"18":10040,"20":10000,"22":9960,"24":9920,"26":9880,"28":9840,"30":9800,"32":9760,"34":9720,"36":9680,"38":9640,"40":9600,"42":9560,"44":9520},"3750":{"-30":10950,"-28":10910,"-26":10870,"-24":10830,"-22":10790,"-20":10750,"-18":10710,"-16":10670,"-14":10630,"-12":10590,"-10":10550,"-8":10510,"-6":10470,"-4":10430,"-2":10390,"0":10350,"2":10310,"4":10270,"6":10230,"8":10190,"10":10150,"12":10110,"14":10070,"16":10030,"18":9990,"20":9950,"22":9910,"24":9870,"26":9830,"28":9790,"30":9750,"32":9710,"34":9670,"36":9630,"38":9590,"40":9550,"42":9510,"44":9470},"4000":{"-30":10900,"-28":10860,"-26":10820,"-24":10780,"-22":10740,"-20":10700,"-18":10660,"-16":10620,"-14":10580,"-12":10540,"-10":10500,"-8":10460,"-6":10420,"-4":10380,"-2":10340,"0":10300,"2":10260,"4":10220,"6":10180,"8":10140,"10":10100,"12":10060,"14":10020,"16":9980,"18":9940,"20":9900,"22":9860,"24":9820,"26":9780,"28":9740,"30":9700,"32":9660,"34":9620,"36":9580,"38":9540,"40":9500,"42":9460,"44":9420},"4250":{"-30":10850,"-28":10810,"-26":10770,"-24":10730,"-22":10690,"-20":10650,"-18":10610,"-16":10570,"-14":10530,"-12":10490,"-10":10450,"-8":10410,"-6":10370,"-4":10330,"-2":10290,"0":10250,"2":10210,"4":10170,"6":10130,"8":10090,"10":10050,"12":10010,"14":9970,"16":9930,"18":9890,"20":9850,"22":9810,"24":9770,"26":9730,"28":9690,"30":9650,"32":9610,"34":9570,"36":9530,"38":9490,"40":9450,"42":9410,"44":9370},"4500":{"-30":10800,"-28":10760,"-26":10720,"-24":10680,"-22":10640,"-20":10600,"-18":10560,"-16":10520,"-14":10480,"-12":10440,"-10":10400,"-8":10360,"-6":10320,"-4":10280,"-2":10240,"0":10200,"2":10160,"4":10120,"6":10080,"8":10040,"10":10000,"12":9960,"14":9920,"16":9880,"18":9840,"20":9800,"22":9760,"24":9720,"26":9680,"28":9640,"30":9600,"32":9560,"34":9520,"36":9480,"38":9440,"40":9400,"42":9360,"44":9320},"4750":{"-30":10750,"-28":10710,"-26":10670,"-24":10630,"-22":10590,"-20":10550,"-18":10510,"-16":10470,"-14":10430,"-12":10390,"-10":10350,"-8":10310,"-6":10270,"-4":10230,"-2":10190,"0":10150,"2":10110,"4":10070,"6":10030,"8":9990,"10":9950,"12":9910,"14":9870,"16":9830,"18":9790,"20":9750,"22":9710,"24":9670,"26":9630,"28":9590,"30":9550,"32":9510,"34":9470,"36":9430,"38":9390,"40":9350,"42":9310,"44":9270},"5000":{"-30":10700,"-28":10660,"-26":10620,"-24":10580,"-22":10540,"-20":10500,"-18":10460,"-16":10420,"-14":10380,"-12":10340,"-10":10300,"-8":10260,"-6":10220,"-4":10180,"-2":10140,"0":10100,"2":10060,"4":10020,"6":9980,"8":9940,"10":9900,"12":9860,"14":9820,"16":9780,"18":9740,"20":9700,"22":9660,"24":9620,"26":9580,"28":9540,"30":9500,"32":9460,"34":9420,"36":9380,"38":9340,"40":9300,"42":9260,"44":9220},"5250":{"-30":10650,"-28":10610,"-26":10570,"-24":10530,"-22":10490,"-20":10450,"-18":10410,"-16":10370,"-14":10330,"-12":10290,"-10":10250,"-8":10210,"-6":10170,"-4":10130,"-2":10090,"0":10050,"2":10010,"4":9970,"6":9930,"8":9890,"10":9850,"12":9810,"14":9770,"16":9730,"18":9690,"20":9650,"22":9610,"24":9570,"26":9530,"28":9490,"30":9450,"32":9410,"34":9370,"36":9330,"38":9290,"40":9250,"42":9210,"44":9170},"5500":{"-30":10600,"-28":10560,"-26":10520,"-24":10480,"-22":10440,"-20":10400,"-18":10360,"-16":10320,"-14":10280,"-12":10240,"-10":10200,"-8":10160,"-6":10120,"-4":10080,"-2":10040,"0":10000,"2":9960,"4":9920,"6":9880,"8":9840,"10":9800,"12":9760,"14":9720,"16":9680,"18":9640,"20":9600,"22":9560,"24":9520,"26":9480,"28":9440,"30":9400,"32":9360,"34":9320,"36":9280,"38":9240,"40":9200,"42":9160,"44":9120},"5750":{"-30":10550,"-28":10510,"-26":10470,"-24":10430,"-22":10390,"-20":10350,"-18":10310,"-16":10270,"-14":10230,"-12":10190,"-10":10150,"-8":10110,"-6":10070,"-4":10030,"-2":9990,"0":9950,"2":9910,"4":9870,"6":9830,"8":9790,"10":9750,"12":9710,"14":9670,"16":9630,"18":9590,"20":9550,"22":9510,"24":9470,"26":9430,"28":9390,"30":9350,"32":9310,"34":9270,"36":9230,"38":9190,"40":9150,"42":9110,"44":9070},"6000":{"-30":10500,"-28":10460,"-26":10420,"-24":10380,"-22":10340,"-20":10300,"-18":10260,"-16":10220,"-14":10180,"-12":10140,"-10":10100,"-8":10060,"-6":10020,"-4":9980,"-2":9940,"0":9900,"2":9860,"4":9820,"6":9780,"8":9740,"10":9700,"12":9660,"14":9620,"16":9580,"18":9540,"20":9500,"22":9460,"24":9420,"26":9380,"28":9340,"30":9300,"32":9260,"34":9220,"36":9180,"38":9140,"40":9100,"42":9060,"44":9020},"6250":{"-30":10450,"-28":10410,"-26":10370,"-24":10330,"-22":10290,"-20":10250,"-18":10210,"-16":10170,"-14":10130,"-12":10090,"-10":10050,"-8":10010,"-6":9970,"-4":9930,"-2":9890,"0":9850,"2":9810,"4":9770,"6":9730,"8":9690,"10":9650,"12":9610,"14":9570,"16":9530,"18":9490,"20":9450,"22":9410,"24":9370,"26":9330,"28":9290,"30":9250,"32":9210,"34":9170,"36":9130,"38":9090,"40":9050,"42":9010,"44":8970},"6500":{"-30":10400,"-28":10360,"-26":10320,"-24":10280,"-22":10240,"-20":10200,"-18":10160,"-16":10120,"-14":10080,"-12":10040,"-10":10000,"-8":9960,"-6":9920,"-4":9880,"-2":9840,"0":9800,"2":9760,"4":9720,"6":9680,"8":9640,"10":9600,"12":9560,"14":9520,"16":9480,"18":9440,"20":9400,"22":9360,"24":9320,"26":9280,"28":9240,"30":9200,"32":9160,"34":9120,"36":9080,"38":9040,"40":9000,"42":8960,"44":8920},"6750":{"-30":10350,"-28":10310,"-26":10270,"-24":10230,"-22":10190,"-20":10150,"-18":10110,"-16":10070,"-14":10030,"-12":9990,"-10":9950,"-8":9910,"-6":9870,"-4":9830,"-2":9790,"0":9750,"2":9710,"4":9670,"6":9630,"8":9590,"10":9550,"12":9510,"14":9470,"16":9430,"18":9390,"20":9350,"22":9310,"24":9270,"26":9230,"28":9190,"30":9150,"32":9110,"34":9070,"36":9030,"38":8990,"40":8950,"42":8910,"44":8870},"7000":{"-30":10300,"-28":10260,"-26":10220,"-24":10180,"-22":10140,"-20":10100,"-18":10060,"-16":10020,"-14":9980,"-12":9940,"-10":9900,"-8":9860,"-6":9820,"-4":9780,"-2":9740,"0":9700,"2":9660,"4":9620,"6":9580,"8":9540,"10":9500,"12":9460,"14":9420,"16":9380,"18":9340,"20":9300,"22":9260,"24":9220,"26":9180,"28":9140,"30":9100,"32":9060,"34":9020,"36":8980,"38":8940,"40":8900,"42":8860,"44":8820}};
+
+const hogeTableCPP = {"0":{"-30":11700,"-28":11660,"-26":11620,"-24":11580,"-22":11540,"-20":11500,"-18":11460,"-16":11420,"-14":11380,"-12":11340,"-10":11300,"-8":11260,"-6":11220,"-4":11180,"-2":11140,"0":11100,"2":11060,"4":11020,"6":10980,"8":10940,"10":10900,"12":10860,"14":10820,"16":10780,"18":10740,"20":10700,"22":10660,"24":10620,"26":10580,"28":10540,"30":10500,"32":10460,"34":10420,"36":10380,"38":10340,"40":10300,"42":10260,"44":10220},"250":{"-30":11650,"-28":11610,"-26":11570,"-24":11530,"-22":11490,"-20":11450,"-18":11410,"-16":11370,"-14":11330,"-12":11290,"-10":11250,"-8":11210,"-6":11170,"-4":11130,"-2":11090,"0":11050,"2":11010,"4":10970,"6":10930,"8":10890,"10":10850,"12":10810,"14":10770,"16":10730,"18":10690,"20":10650,"22":10610,"24":10570,"26":10530,"28":10490,"30":10450,"32":10410,"34":10370,"36":10330,"38":10290,"40":10250,"42":10210,"44":10170},"500":{"-30":11600,"-28":11560,"-26":11520,"-24":11480,"-22":11440,"-20":11400,"-18":11360,"-16":11320,"-14":11280,"-12":11240,"-10":11200,"-8":11160,"-6":11120,"-4":11080,"-2":11040,"0":11000,"2":10960,"4":10920,"6":10880,"8":10840,"10":10800,"12":10760,"14":10720,"16":10680,"18":10640,"20":10600,"22":10560,"24":10520,"26":10480,"28":10440,"30":10400,"32":10360,"34":10320,"36":10280,"38":10240,"40":10200,"42":10160,"44":10120},"750":{"-30":11550,"-28":11510,"-26":11470,"-24":11430,"-22":11390,"-20":11350,"-18":11310,"-16":11270,"-14":11230,"-12":11190,"-10":11150,"-8":11110,"-6":11070,"-4":11030,"-2":10990,"0":10950,"2":10910,"4":10870,"6":10830,"8":10790,"10":10750,"12":10710,"14":10670,"16":10630,"18":10590,"20":10550,"22":10510,"24":10470,"26":10430,"28":10390,"30":10350,"32":10310,"34":10270,"36":10230,"38":10190,"40":10150,"42":10110,"44":10070},"1000":{"-30":11500,"-28":11460,"-26":11420,"-24":11380,"-22":11340,"-20":11300,"-18":11260,"-16":11220,"-14":11180,"-12":11140,"-10":11100,"-8":11060,"-6":11020,"-4":10980,"-2":10940,"0":10900,"2":10860,"4":10820,"6":10780,"8":10740,"10":10700,"12":10660,"14":10620,"16":10580,"18":10540,"20":10500,"22":10460,"24":10420,"26":10380,"28":10340,"30":10300,"32":10260,"34":10220,"36":10180,"38":10140,"40":10100,"42":10060,"44":10020},"1250":{"-30":11450,"-28":11410,"-26":11370,"-24":11330,"-22":11290,"-20":11250,"-18":11210,"-16":11170,"-14":11130,"-12":11090,"-10":11050,"-8":11010,"-6":10970,"-4":10930,"-2":10890,"0":10850,"2":10810,"4":10770,"6":10730,"8":10690,"10":10650,"12":10610,"14":10570,"16":10530,"18":10490,"20":10450,"22":10410,"24":10370,"26":10330,"28":10290,"30":10250,"32":10210,"34":10170,"36":10130,"38":10090,"40":10050,"42":10010,"44":9970},"1500":{"-30":11400,"-28":11360,"-26":11320,"-24":11280,"-22":11240,"-20":11200,"-18":11160,"-16":11120,"-14":11080,"-12":11040,"-10":11000,"-8":10960,"-6":10920,"-4":10880,"-2":10840,"0":10800,"2":10760,"4":10720,"6":10680,"8":10640,"10":10600,"12":10560,"14":10520,"16":10480,"18":10440,"20":10400,"22":10360,"24":10320,"26":10280,"28":10240,"30":10200,"32":10160,"34":10120,"36":10080,"38":10040,"40":10000,"42":9960,"44":9920},"1750":{"-30":11350,"-28":11310,"-26":11270,"-24":11230,"-22":11190,"-20":11150,"-18":11110,"-16":11070,"-14":11030,"-12":10990,"-10":10950,"-8":10910,"-6":10870,"-4":10830,"-2":10790,"0":10750,"2":10710,"4":10670,"6":10630,"8":10590,"10":10550,"12":10510,"14":10470,"16":10430,"18":10390,"20":10350,"22":10310,"24":10270,"26":10230,"28":10190,"30":10150,"32":10110,"34":10070,"36":10030,"38":9990,"40":9950,"42":9910,"44":9870},"2000":{"-30":11300,"-28":11260,"-26":11220,"-24":11180,"-22":11140,"-20":11100,"-18":11060,"-16":11020,"-14":10980,"-12":10940,"-10":10900,"-8":10860,"-6":10820,"-4":10780,"-2":10740,"0":10700,"2":10660,"4":10620,"6":10580,"8":10540,"10":10500,"12":10460,"14":10420,"16":10380,"18":10340,"20":10300,"22":10260,"24":10220,"26":10180,"28":10140,"30":10100,"32":10060,"34":10020,"36":9980,"38":9940,"40":9900,"42":9860,"44":9820},"2250":{"-30":11250,"-28":11210,"-26":11170,"-24":11130,"-22":11090,"-20":11050,"-18":11010,"-16":10970,"-14":10930,"-12":10890,"-10":10850,"-8":10810,"-6":10770,"-4":10730,"-2":10690,"0":10650,"2":10610,"4":10570,"6":10530,"8":10490,"10":10450,"12":10410,"14":10370,"16":10330,"18":10290,"20":10250,"22":10210,"24":10170,"26":10130,"28":10090,"30":10050,"32":10010,"34":9970,"36":9930,"38":9890,"40":9850,"42":9810,"44":9770},"2500":{"-30":11200,"-28":11160,"-26":11120,"-24":11080,"-22":11040,"-20":11000,"-18":10960,"-16":10920,"-14":10880,"-12":10840,"-10":10800,"-8":10760,"-6":10720,"-4":10680,"-2":10640,"0":10600,"2":10560,"4":10520,"6":10480,"8":10440,"10":10400,"12":10360,"14":10320,"16":10280,"18":10240,"20":10200,"22":10160,"24":10120,"26":10080,"28":10040,"30":10000,"32":9960,"34":9920,"36":9880,"38":9840,"40":9800,"42":9760,"44":9720},"2750":{"-30":11150,"-28":11110,"-26":11070,"-24":11030,"-22":10990,"-20":10950,"-18":10910,"-16":10870,"-14":10830,"-12":10790,"-10":10750,"-8":10710,"-6":10670,"-4":10630,"-2":10590,"0":10550,"2":10510,"4":10470,"6":10430,"8":10390,"10":10350,"12":10310,"14":10270,"16":10230,"18":10190,"20":10150,"22":10110,"24":10070,"26":10030,"28":9990,"30":9950,"32":9910,"34":9870,"36":9830,"38":9790,"40":9750,"42":9710,"44":9670},"3000":{"-30":11100,"-28":11060,"-26":11020,"-24":10980,"-22":10940,"-20":10900,"-18":10860,"-16":10820,"-14":10780,"-12":10740,"-10":10700,"-8":10660,"-6":10620,"-4":10580,"-2":10540,"0":10500,"2":10460,"4":10420,"6":10380,"8":10340,"10":10300,"12":10260,"14":10220,"16":10180,"18":10140,"20":10100,"22":10060,"24":10020,"26":9980,"28":9940,"30":9900,"32":9860,"34":9820,"36":9780,"38":9740,"40":9700,"42":9660,"44":9620},"3250":{"-30":11050,"-28":11010,"-26":10970,"-24":10930,"-22":10890,"-20":10850,"-18":10810,"-16":10770,"-14":10730,"-12":10690,"-10":10650,"-8":10610,"-6":10570,"-4":10530,"-2":10490,"0":10450,"2":10410,"4":10370,"6":10330,"8":10290,"10":10250,"12":10210,"14":10170,"16":10130,"18":10090,"20":10050,"22":10010,"24":9970,"26":9930,"28":9890,"30":9850,"32":9810,"34":9770,"36":9730,"38":9690,"40":9650,"42":9610,"44":9570},"3500":{"-30":11000,"-28":10960,"-26":10920,"-24":10880,"-22":10840,"-20":10800,"-18":10760,"-16":10720,"-14":10680,"-12":10640,"-10":10600,"-8":10560,"-6":10520,"-4":10480,"-2":10440,"0":10400,"2":10360,"4":10320,"6":10280,"8":10240,"10":10200,"12":10160,"14":10120,"16":10080,"18":10040,"20":10000,"22":9960,"24":9920,"26":9880,"28":9840,"30":9800,"32":9760,"34":9720,"36":9680,"38":9640,"40":9600,"42":9560,"44":9520},"3750":{"-30":10950,"-28":10910,"-26":10870,"-24":10830,"-22":10790,"-20":10750,"-18":10710,"-16":10670,"-14":10630,"-12":10590,"-10":10550,"-8":10510,"-6":10470,"-4":10430,"-2":10390,"0":10350,"2":10310,"4":10270,"6":10230,"8":10190,"10":10150,"12":10110,"14":10070,"16":10030,"18":9990,"20":9950,"22":9910,"24":9870,"26":9830,"28":9790,"30":9750,"32":9710,"34":9670,"36":9630,"38":9590,"40":9550,"42":9510,"44":9470},"4000":{"-30":10900,"-28":10860,"-26":10820,"-24":10780,"-22":10740,"-20":10700,"-18":10660,"-16":10620,"-14":10580,"-12":10540,"-10":10500,"-8":10460,"-6":10420,"-4":10380,"-2":10340,"0":10300,"2":10260,"4":10220,"6":10180,"8":10140,"10":10100,"12":10060,"14":10020,"16":9980,"18":9940,"20":9900,"22":9860,"24":9820,"26":9780,"28":9740,"30":9700,"32":9660,"34":9620,"36":9580,"38":9540,"40":9500,"42":9460,"44":9420},"4250":{"-30":10850,"-28":10810,"-26":10770,"-24":10730,"-22":10690,"-20":10650,"-18":10610,"-16":10570,"-14":10530,"-12":10490,"-10":10450,"-8":10410,"-6":10370,"-4":10330,"-2":10290,"0":10250,"2":10210,"4":10170,"6":10130,"8":10090,"10":10050,"12":10010,"14":9970,"16":9930,"18":9890,"20":9850,"22":9810,"24":9770,"26":9730,"28":9690,"30":9650,"32":9610,"34":9570,"36":9530,"38":9490,"40":9450,"42":9410,"44":9370},"4500":{"-30":10800,"-28":10760,"-26":10720,"-24":10680,"-22":10640,"-20":10600,"-18":10560,"-16":10520,"-14":10480,"-12":10440,"-10":10400,"-8":10360,"-6":10320,"-4":10280,"-2":10240,"0":10200,"2":10160,"4":10120,"6":10080,"8":10040,"10":10000,"12":9960,"14":9920,"16":9880,"18":9840,"20":9800,"22":9760,"24":9720,"26":9680,"28":9640,"30":9600,"32":9560,"34":9520,"36":9480,"38":9440,"40":9400,"42":9360,"44":9320},"4750":{"-30":10750,"-28":10710,"-26":10670,"-24":10630,"-22":10590,"-20":10550,"-18":10510,"-16":10470,"-14":10430,"-12":10390,"-10":10350,"-8":10310,"-6":10270,"-4":10230,"-2":10190,"0":10150,"2":10110,"4":10070,"6":10030,"8":9990,"10":9950,"12":9910,"14":9870,"16":9830,"18":9790,"20":9750,"22":9710,"24":9670,"26":9630,"28":9590,"30":9550,"32":9510,"34":9470,"36":9430,"38":9390,"40":9350,"42":9310,"44":9270},"5000":{"-30":10700,"-28":10660,"-26":10620,"-24":10580,"-22":10540,"-20":10500,"-18":10460,"-16":10420,"-14":10380,"-12":10340,"-10":10300,"-8":10260,"-6":10220,"-4":10180,"-2":10140,"0":10100,"2":10060,"4":10020,"6":9980,"8":9940,"10":9900,"12":9860,"14":9820,"16":9780,"18":9740,"20":9700,"22":9660,"24":9620,"26":9580,"28":9540,"30":9500,"32":9460,"34":9420,"36":9380,"38":9340,"40":9300,"42":9260,"44":9220},"5250":{"-30":10650,"-28":10610,"-26":10570,"-24":10530,"-22":10490,"-20":10450,"-18":10410,"-16":10370,"-14":10330,"-12":10290,"-10":10250,"-8":10210,"-6":10170,"-4":10130,"-2":10090,"0":10050,"2":10010,"4":9970,"6":9930,"8":9890,"10":9850,"12":9810,"14":9770,"16":9730,"18":9690,"20":9650,"22":9610,"24":9570,"26":9530,"28":9490,"30":9450,"32":9410,"34":9370,"36":9330,"38":9290,"40":9250,"42":9210,"44":9170},"5500":{"-30":10600,"-28":10560,"-26":10520,"-24":10480,"-22":10440,"-20":10400,"-18":10360,"-16":10320,"-14":10280,"-12":10240,"-10":10200,"-8":10160,"-6":10120,"-4":10080,"-2":10040,"0":10000,"2":9960,"4":9920,"6":9880,"8":9840,"10":9800,"12":9760,"14":9720,"16":9680,"18":9640,"20":9600,"22":9560,"24":9520,"26":9480,"28":9440,"30":9400,"32":9360,"34":9320,"36":9280,"38":9240,"40":9200,"42":9160,"44":9120},"5750":{"-30":10550,"-28":10510,"-26":10470,"-24":10430,"-22":10390,"-20":10350,"-18":10310,"-16":10270,"-14":10230,"-12":10190,"-10":10150,"-8":10110,"-6":10070,"-4":10030,"-2":9990,"0":9950,"2":9910,"4":9870,"6":9830,"8":9790,"10":9750,"12":9710,"14":9670,"16":9630,"18":9590,"20":9550,"22":9510,"24":9470,"26":9430,"28":9390,"30":9350,"32":9310,"34":9270,"36":9230,"38":9190,"40":9150,"42":9110,"44":9070},"6000":{"-30":10500,"-28":10460,"-26":10420,"-24":10380,"-22":10340,"-20":10300,"-18":10260,"-16":10220,"-14":10180,"-12":10140,"-10":10100,"-8":10060,"-6":10020,"-4":9980,"-2":9940,"0":9900,"2":9860,"4":9820,"6":9780,"8":9740,"10":9700,"12":9660,"14":9620,"16":9580,"18":9540,"20":9500,"22":9460,"24":9420,"26":9380,"28":9340,"30":9300,"32":9260,"34":9220,"36":9180,"38":9140,"40":9100,"42":9060,"44":9020},"6250":{"-30":10450,"-28":10410,"-26":10370,"-24":10330,"-22":10290,"-20":10250,"-18":10210,"-16":10170,"-14":10130,"-12":10090,"-10":10050,"-8":10010,"-6":9970,"-4":9930,"-2":9890,"0":9850,"2":9810,"4":9770,"6":9730,"8":9690,"10":9650,"12":9610,"14":9570,"16":9530,"18":9490,"20":9450,"22":9410,"24":9370,"26":9330,"28":9290,"30":9250,"32":9210,"34":9170,"36":9130,"38":9090,"40":9050,"42":9010,"44":8970},"6500":{"-30":10400,"-28":10360,"-26":10320,"-24":10280,"-22":10240,"-20":10200,"-18":10160,"-16":10120,"-14":10080,"-12":10040,"-10":10000,"-8":9960,"-6":9920,"-4":9880,"-2":9840,"0":9800,"2":9760,"4":9720,"6":9680,"8":9640,"10":9600,"12":9560,"14":9520,"16":9480,"18":9440,"20":9400,"22":9360,"24":9320,"26":9280,"28":9240,"30":9200,"32":9160,"34":9120,"36":9080,"38":9040,"40":9000,"42":8960,"44":8920},"6750":{"-30":10350,"-28":10310,"-26":10270,"-24":10230,"-22":10190,"-20":10150,"-18":10110,"-16":10070,"-14":10030,"-12":9990,"-10":9950,"-8":9910,"-6":9870,"-4":9830,"-2":9790,"0":9750,"2":9710,"4":9670,"6":9630,"8":9590,"10":9550,"12":9510,"14":9470,"16":9430,"18":9390,"20":9350,"22":9310,"24":9270,"26":9230,"28":9190,"30":9150,"32":9110,"34":9070,"36":9030,"38":8990,"40":8950,"42":8910,"44":8870},"7000":{"-30":10300,"-28":10260,"-26":10220,"-24":10180,"-22":10140,"-20":10100,"-18":10060,"-16":10020,"-14":9980,"-12":9940,"-10":9900,"-8":9860,"-6":9820,"-4":9780,"-2":9740,"0":9700,"2":9660,"4":9620,"6":9580,"8":9540,"10":9500,"12":9460,"14":9420,"16":9380,"18":9340,"20":9300,"22":9260,"24":9220,"26":9180,"28":9140,"30":9100,"32":9060,"34":9020,"36":8980,"38":8940,"40":8900,"42":8860,"44":8820}};
+
+const hogeTableD = {"0":{"-30":11875,"-28":11830,"-26":11785,"-24":11740,"-22":11695,"-20":11650,"-18":11605,"-16":11560,"-14":11515,"-12":11470,"-10":11425,"-8":11380,"-6":11335,"-4":11290,"-2":11245,"0":11200,"2":11155,"4":11110,"6":11065,"8":11020,"10":10975,"12":10930,"14":10885,"16":10840,"18":10795,"20":10750,"22":10705,"24":10660,"26":10615,"28":10570,"30":10525,"32":10480,"34":10435,"36":10390,"38":10345,"40":10300,"42":10255,"44":10210},"250":{"-30":11825,"-28":11780,"-26":11735,"-24":11690,"-22":11645,"-20":11600,"-18":11555,"-16":11510,"-14":11465,"-12":11420,"-10":11375,"-8":11330,"-6":11285,"-4":11240,"-2":11195,"0":11150,"2":11105,"4":11060,"6":11015,"8":10970,"10":10925,"12":10880,"14":10835,"16":10790,"18":10745,"20":10700,"22":10655,"24":10610,"26":10565,"28":10520,"30":10475,"32":10430,"34":10385,"36":10340,"38":10295,"40":10250,"42":10205,"44":10160},"500":{"-30":11775,"-28":11730,"-26":11685,"-24":11640,"-22":11595,"-20":11550,"-18":11505,"-16":11460,"-14":11415,"-12":11370,"-10":11325,"-8":11280,"-6":11235,"-4":11190,"-2":11145,"0":11100,"2":11055,"4":11010,"6":10965,"8":10920,"10":10875,"12":10830,"14":10785,"16":10740,"18":10695,"20":10650,"22":10605,"24":10560,"26":10515,"28":10470,"30":10425,"32":10380,"34":10335,"36":10290,"38":10245,"40":10200,"42":10155,"44":10110},"750":{"-30":11725,"-28":11680,"-26":11635,"-24":11590,"-22":11545,"-20":11500,"-18":11455,"-16":11410,"-14":11365,"-12":11320,"-10":11275,"-8":11230,"-6":11185,"-4":11140,"-2":11095,"0":11050,"2":11005,"4":10960,"6":10915,"8":10870,"10":10825,"12":10780,"14":10735,"16":10690,"18":10645,"20":10600,"22":10555,"24":10510,"26":10465,"28":10420,"30":10375,"32":10330,"34":10285,"36":10240,"38":10195,"40":10150,"42":10105,"44":10060},"1000":{"-30":11675,"-28":11630,"-26":11585,"-24":11540,"-22":11495,"-20":11450,"-18":11405,"-16":11360,"-14":11315,"-12":11270,"-10":11225,"-8":11180,"-6":11135,"-4":11090,"-2":11045,"0":11000,"2":10955,"4":10910,"6":10865,"8":10820,"10":10775,"12":10730,"14":10685,"16":10640,"18":10595,"20":10550,"22":10505,"24":10460,"26":10415,"28":10370,"30":10325,"32":10280,"34":10235,"36":10190,"38":10145,"40":10100,"42":10055,"44":10010},"1250":{"-30":11625,"-28":11580,"-26":11535,"-24":11490,"-22":11445,"-20":11400,"-18":11355,"-16":11310,"-14":11265,"-12":11220,"-10":11175,"-8":11130,"-6":11085,"-4":11040,"-2":10995,"0":10950,"2":10905,"4":10860,"6":10815,"8":10770,"10":10725,"12":10680,"14":10635,"16":10590,"18":10545,"20":10500,"22":10455,"24":10410,"26":10365,"28":10320,"30":10275,"32":10230,"34":10185,"36":10140,"38":10095,"40":10050,"42":10005,"44":9960},"1500":{"-30":11575,"-28":11530,"-26":11485,"-24":11440,"-22":11395,"-20":11350,"-18":11305,"-16":11260,"-14":11215,"-12":11170,"-10":11125,"-8":11080,"-6":11035,"-4":10990,"-2":10945,"0":10900,"2":10855,"4":10810,"6":10765,"8":10720,"10":10675,"12":10630,"14":10585,"16":10540,"18":10495,"20":10450,"22":10405,"24":10360,"26":10315,"28":10270,"30":10225,"32":10180,"34":10135,"36":10090,"38":10045,"40":10000,"42":9955,"44":9910},"1750":{"-30":11525,"-28":11480,"-26":11435,"-24":11390,"-22":11345,"-20":11300,"-18":11255,"-16":11210,"-14":11165,"-12":11120,"-10":11075,"-8":11030,"-6":10985,"-4":10940,"-2":10895,"0":10850,"2":10805,"4":10760,"6":10715,"8":10670,"10":10625,"12":10580,"14":10535,"16":10490,"18":10445,"20":10400,"22":10355,"24":10310,"26":10265,"28":10220,"30":10175,"32":10130,"34":10085,"36":10040,"38":9995,"40":9950,"42":9905,"44":9860},"2000":{"-30":11475,"-28":11430,"-26":11385,"-24":11340,"-22":11295,"-20":11250,"-18":11205,"-16":11160,"-14":11115,"-12":11070,"-10":11025,"-8":10980,"-6":10935,"-4":10890,"-2":10845,"0":10800,"2":10755,"4":10710,"6":10665,"8":10620,"10":10575,"12":10530,"14":10485,"16":10440,"18":10395,"20":10350,"22":10305,"24":10260,"26":10215,"28":10170,"30":10125,"32":10080,"34":10035,"36":9990,"38":9945,"40":9900,"42":9855,"44":9810},"2250":{"-30":11425,"-28":11380,"-26":11335,"-24":11290,"-22":11245,"-20":11200,"-18":11155,"-16":11110,"-14":11065,"-12":11020,"-10":10975,"-8":10930,"-6":10885,"-4":10840,"-2":10795,"0":10750,"2":10705,"4":10660,"6":10615,"8":10570,"10":10525,"12":10480,"14":10435,"16":10390,"18":10345,"20":10300,"22":10255,"24":10210,"26":10165,"28":10120,"30":10075,"32":10030,"34":9985,"36":9940,"38":9895,"40":9850,"42":9805,"44":9760},"2500":{"-30":11375,"-28":11330,"-26":11285,"-24":11240,"-22":11195,"-20":11150,"-18":11105,"-16":11060,"-14":11015,"-12":10970,"-10":10925,"-8":10880,"-6":10835,"-4":10790,"-2":10745,"0":10700,"2":10655,"4":10610,"6":10565,"8":10520,"10":10475,"12":10430,"14":10385,"16":10340,"18":10295,"20":10250,"22":10205,"24":10160,"26":10115,"28":10070,"30":10025,"32":9980,"34":9935,"36":9890,"38":9845,"40":9800,"42":9755,"44":9710},"2750":{"-30":11325,"-28":11280,"-26":11235,"-24":11190,"-22":11145,"-20":11100,"-18":11055,"-16":11010,"-14":10965,"-12":10920,"-10":10875,"-8":10830,"-6":10785,"-4":10740,"-2":10695,"0":10650,"2":10605,"4":10560,"6":10515,"8":10470,"10":10425,"12":10380,"14":10335,"16":10290,"18":10245,"20":10200,"22":10155,"24":10110,"26":10065,"28":10020,"30":9975,"32":9930,"34":9885,"36":9840,"38":9795,"40":9750,"42":9705,"44":9660},"3000":{"-30":11275,"-28":11230,"-26":11185,"-24":11140,"-22":11095,"-20":11050,"-18":11005,"-16":10960,"-14":10915,"-12":10870,"-10":10825,"-8":10780,"-6":10735,"-4":10690,"-2":10645,"0":10600,"2":10555,"4":10510,"6":10465,"8":10420,"10":10375,"12":10330,"14":10285,"16":10240,"18":10195,"20":10150,"22":10105,"24":10060,"26":10015,"28":9970,"30":9925,"32":9880,"34":9835,"36":9790,"38":9745,"40":9700,"42":9655,"44":9610},"3250":{"-30":11225,"-28":11180,"-26":11135,"-24":11090,"-22":11045,"-20":11000,"-18":10955,"-16":10910,"-14":10865,"-12":10820,"-10":10775,"-8":10730,"-6":10685,"-4":10640,"-2":10595,"0":10550,"2":10505,"4":10460,"6":10415,"8":10370,"10":10325,"12":10280,"14":10235,"16":10190,"18":10145,"20":10100,"22":10055,"24":10010,"26":9965,"28":9920,"30":9875,"32":9830,"34":9785,"36":9740,"38":9695,"40":9650,"42":9605,"44":9560},"3500":{"-30":11175,"-28":11130,"-26":11085,"-24":11040,"-22":10995,"-20":10950,"-18":10905,"-16":10860,"-14":10815,"-12":10770,"-10":10725,"-8":10680,"-6":10635,"-4":10590,"-2":10545,"0":10500,"2":10455,"4":10410,"6":10365,"8":10320,"10":10275,"12":10230,"14":10185,"16":10140,"18":10095,"20":10050,"22":10005,"24":9960,"26":9915,"28":9870,"30":9825,"32":9780,"34":9735,"36":9690,"38":9645,"40":9600,"42":9555,"44":9510},"3750":{"-30":11125,"-28":11080,"-26":11035,"-24":10990,"-22":10945,"-20":10900,"-18":10855,"-16":10810,"-14":10765,"-12":10720,"-10":10675,"-8":10630,"-6":10585,"-4":10540,"-2":10495,"0":10450,"2":10405,"4":10360,"6":10315,"8":10270,"10":10225,"12":10180,"14":10135,"16":10090,"18":10045,"20":10000,"22":9955,"24":9910,"26":9865,"28":9820,"30":9775,"32":9730,"34":9685,"36":9640,"38":9595,"40":9550,"42":9505,"44":9460},"4000":{"-30":11075,"-28":11030,"-26":10985,"-24":10940,"-22":10895,"-20":10850,"-18":10805,"-16":10760,"-14":10715,"-12":10670,"-10":10625,"-8":10580,"-6":10535,"-4":10490,"-2":10445,"0":10400,"2":10355,"4":10310,"6":10265,"8":10220,"10":10175,"12":10130,"14":10085,"16":10040,"18":9995,"20":9950,"22":9905,"24":9860,"26":9815,"28":9770,"30":9725,"32":9680,"34":9635,"36":9590,"38":9545,"40":9500,"42":9455,"44":9410},"4250":{"-30":11025,"-28":10980,"-26":10935,"-24":10890,"-22":10845,"-20":10800,"-18":10755,"-16":10710,"-14":10665,"-12":10620,"-10":10575,"-8":10530,"-6":10485,"-4":10440,"-2":10395,"0":10350,"2":10305,"4":10260,"6":10215,"8":10170,"10":10125,"12":10080,"14":10035,"16":9990,"18":9945,"20":9900,"22":9855,"24":9810,"26":9765,"28":9720,"30":9675,"32":9630,"34":9585,"36":9540,"38":9495,"40":9450,"42":9405,"44":9360},"4500":{"-30":10975,"-28":10930,"-26":10885,"-24":10840,"-22":10795,"-20":10750,"-18":10705,"-16":10660,"-14":10615,"-12":10570,"-10":10525,"-8":10480,"-6":10435,"-4":10390,"-2":10345,"0":10300,"2":10255,"4":10210,"6":10165,"8":10120,"10":10075,"12":10030,"14":9985,"16":9940,"18":9895,"20":9850,"22":9805,"24":9760,"26":9715,"28":9670,"30":9625,"32":9580,"34":9535,"36":9490,"38":9445,"40":9400,"42":9355,"44":9310},"4750":{"-30":10925,"-28":10880,"-26":10835,"-24":10790,"-22":10745,"-20":10700,"-18":10655,"-16":10610,"-14":10565,"-12":10520,"-10":10475,"-8":10430,"-6":10385,"-4":10340,"-2":10295,"0":10250,"2":10205,"4":10160,"6":10115,"8":10070,"10":10025,"12":9980,"14":9935,"16":9890,"18":9845,"20":9800,"22":9755,"24":9710,"26":9665,"28":9620,"30":9575,"32":9530,"34":9485,"36":9440,"38":9395,"40":9350,"42":9305,"44":9260},"5000":{"-30":10875,"-28":10830,"-26":10785,"-24":10740,"-22":10695,"-20":10650,"-18":10605,"-16":10560,"-14":10515,"-12":10470,"-10":10425,"-8":10380,"-6":10335,"-4":10290,"-2":10245,"0":10200,"2":10155,"4":10110,"6":10065,"8":10020,"10":9975,"12":9930,"14":9885,"16":9840,"18":9795,"20":9750,"22":9705,"24":9660,"26":9615,"28":9570,"30":9525,"32":9480,"34":9435,"36":9390,"38":9345,"40":9300,"42":9255,"44":9210},"5250":{"-30":10825,"-28":10780,"-26":10735,"-24":10690,"-22":10645,"-20":10600,"-18":10555,"-16":10510,"-14":10465,"-12":10420,"-10":10375,"-8":10330,"-6":10285,"-4":10240,"-2":10195,"0":10150,"2":10105,"4":10060,"6":10015,"8":9970,"10":9925,"12":9880,"14":9835,"16":9790,"18":9745,"20":9700,"22":9655,"24":9610,"26":9565,"28":9520,"30":9475,"32":9430,"34":9385,"36":9340,"38":9295,"40":9250,"42":9205,"44":9160},"5500":{"-30":10775,"-28":10730,"-26":10685,"-24":10640,"-22":10595,"-20":10550,"-18":10505,"-16":10460,"-14":10415,"-12":10370,"-10":10325,"-8":10280,"-6":10235,"-4":10190,"-2":10145,"0":10100,"2":10055,"4":10010,"6":9965,"8":9920,"10":9875,"12":9830,"14":9785,"16":9740,"18":9695,"20":9650,"22":9605,"24":9560,"26":9515,"28":9470,"30":9425,"32":9380,"34":9335,"36":9290,"38":9245,"40":9200,"42":9155,"44":9110},"5750":{"-30":10725,"-28":10680,"-26":10635,"-24":10590,"-22":10545,"-20":10500,"-18":10455,"-16":10410,"-14":10365,"-12":10320,"-10":10275,"-8":10230,"-6":10185,"-4":10140,"-2":10095,"0":10050,"2":10005,"4":9960,"6":9915,"8":9870,"10":9825,"12":9780,"14":9735,"16":9690,"18":9645,"20":9600,"22":9555,"24":9510,"26":9465,"28":9420,"30":9375,"32":9330,"34":9285,"36":9240,"38":9195,"40":9150,"42":9105,"44":9060},"6000":{"-30":10675,"-28":10630,"-26":10585,"-24":10540,"-22":10495,"-20":10450,"-18":10405,"-16":10360,"-14":10315,"-12":10270,"-10":10225,"-8":10180,"-6":10135,"-4":10090,"-2":10045,"0":10000,"2":9955,"4":9910,"6":9865,"8":9820,"10":9775,"12":9730,"14":9685,"16":9640,"18":9595,"20":9550,"22":9505,"24":9460,"26":9415,"28":9370,"30":9325,"32":9280,"34":9235,"36":9190,"38":9145,"40":9100,"42":9055,"44":9010},"6250":{"-30":10625,"-28":10580,"-26":10535,"-24":10490,"-22":10445,"-20":10400,"-18":10355,"-16":10310,"-14":10265,"-12":10220,"-10":10175,"-8":10130,"-6":10085,"-4":10040,"-2":9995,"0":9950,"2":9905,"4":9860,"6":9815,"8":9770,"10":9725,"12":9680,"14":9635,"16":9590,"18":9545,"20":9500,"22":9455,"24":9410,"26":9365,"28":9320,"30":9275,"32":9230,"34":9185,"36":9140,"38":9095,"40":9050,"42":9005,"44":8960},"6500":{"-30":10575,"-28":10530,"-26":10485,"-24":10440,"-22":10395,"-20":10350,"-18":10305,"-16":10260,"-14":10215,"-12":10170,"-10":10125,"-8":10080,"-6":10035,"-4":9990,"-2":9945,"0":9900,"2":9855,"4":9810,"6":9765,"8":9720,"10":9675,"12":9630,"14":9585,"16":9540,"18":9495,"20":9450,"22":9405,"24":9360,"26":9315,"28":9270,"30":9225,"32":9180,"34":9135,"36":9090,"38":9045,"40":9000,"42":8955,"44":8910},"6750":{"-30":10525,"-28":10480,"-26":10435,"-24":10390,"-22":10345,"-20":10300,"-18":10255,"-16":10210,"-14":10165,"-12":10120,"-10":10075,"-8":10030,"-6":9985,"-4":9940,"-2":9895,"0":9850,"2":9805,"4":9760,"6":9715,"8":9670,"10":9625,"12":9580,"14":9535,"16":9490,"18":9445,"20":9400,"22":9355,"24":9310,"26":9265,"28":9220,"30":9175,"32":9130,"34":9085,"36":9040,"38":8995,"40":8950,"42":8905,"44":8860},"7000":{"-30":10475,"-28":10430,"-26":10385,"-24":10340,"-22":10295,"-20":10250,"-18":10205,"-16":10160,"-14":10115,"-12":10070,"-10":10025,"-8":9980,"-6":9935,"-4":9890,"-2":9845,"0":9800,"2":9755,"4":9710,"6":9665,"8":9620,"10":9575,"12":9530,"14":9485,"16":9440,"18":9395,"20":9350,"22":9305,"24":9260,"26":9215,"28":9170,"30":9125,"32":9080,"34":9035,"36":8990,"38":8945,"40":8900,"42":8855,"44":8810}};
+
+// 2D interpolation for HOGE weight
+function getHOGEWeight(pressureAltitude, tempCelsius, model) {
+  // Select correct table based on model
+  let table;
+  if (model.includes('S-76D')) {
+    table = hogeTableD;
+  } else if (model.includes('C++')) {
+    table = hogeTableCPP;
+  } else {
+    // C+ models
+    table = hogeTableCP;
   }
-  const cgok=checkInEnvelope(cg,tw,h.model,lateralCG);
-  const maxGrossWeight=h.model.includes("S-76D")?11875:11700;
-  const fuelCapacityGallons=parseFloat(h.fuelCapacity)||281.2;
-  const weightExceeded=tw>maxGrossWeight;
-  const maxFuelPoundsByWeight=maxGrossWeight-(tw-state.fuel);
-  const maxFuelPoundsByCapacity=fuelCapacityGallons*6.8;
-  const maxFuelPounds=Math.min(maxFuelPoundsByWeight,maxFuelPoundsByCapacity);
-  const maxFuelGallons=maxFuelPounds/6.8;
-  return{heli:h,crewWeight:cw,emptyMoment:em,navBagMoment:nm,crewMoment:cm,credenzaMoment:crm,passFwdMoment:pfm,passAftMoment:pam,baggageMoment:bm,fuelMoment:fm,totalWeight:tw,totalMoment:tm,cg:cg,cgLimits:cgl,cgInLimits:cgok,zeroFuelWeight:zfw,zeroFuelCG:zfc,lateralCG:lateralCG,maxGrossWeight:maxGrossWeight,maxFuelGallons:maxFuelGallons,maxFuelPounds:maxFuelPounds,weightExceeded:weightExceeded,fuelArm:fuelArm};
+  
+  // Get available altitudes (keys of table)
+  const altitudes = Object.keys(table).map(Number).sort((a,b) => a-b);
+  
+  // Clamp pressure altitude to table range
+  const alt = Math.max(altitudes[0], Math.min(altitudes[altitudes.length-1], pressureAltitude));
+  
+  // Find surrounding altitude points
+  let altLower = altitudes[0];
+  let altUpper = altitudes[altitudes.length-1];
+  for (let i = 0; i < altitudes.length - 1; i++) {
+    if (alt >= altitudes[i] && alt <= altitudes[i+1]) {
+      altLower = altitudes[i];
+      altUpper = altitudes[i+1];
+      break;
+    }
+  }
+  
+  // Get temperature keys from table
+  const temps = Object.keys(table[altLower]).map(Number).sort((a,b) => a-b);
+  
+  // Clamp temperature to table range
+  const temp = Math.max(temps[0], Math.min(temps[temps.length-1], tempCelsius));
+  
+  // Find surrounding temperature points
+  let tempLower = temps[0];
+  let tempUpper = temps[temps.length-1];
+  for (let i = 0; i < temps.length - 1; i++) {
+    if (temp >= temps[i] && temp <= temps[i+1]) {
+      tempLower = temps[i];
+      tempUpper = temps[i+1];
+      break;
+    }
+  }
+  
+  // Get the 4 corner values
+  const w1 = table[altLower][tempLower];   // lower-left
+  const w2 = table[altLower][tempUpper];   // lower-right
+  const w3 = table[altUpper][tempLower];   // upper-left
+  const w4 = table[altUpper][tempUpper];   // upper-right
+  
+  // Bilinear interpolation
+  if (altUpper === altLower && tempUpper === tempLower) {
+    return w1;
+  } else if (altUpper === altLower) {
+    // Interpolate only in temperature
+    const t = (temp - tempLower) / (tempUpper - tempLower);
+    return w1 + t * (w2 - w1);
+  } else if (tempUpper === tempLower) {
+    // Interpolate only in altitude
+    const t = (alt - altLower) / (altUpper - altLower);
+    return w1 + t * (w3 - w1);
+  } else {
+    // Full bilinear interpolation
+    const tAlt = (alt - altLower) / (altUpper - altLower);
+    const tTemp = (temp - tempLower) / (tempUpper - tempLower);
+    const wLower = w1 + tTemp * (w2 - w1);
+    const wUpper = w3 + tTemp * (w4 - w3);
+    return wLower + tAlt * (wUpper - wLower);
+  }
 }
 
-// =====================================================================
-// PERF
-// =====================================================================
 function calcPerf(totalWeight,model){
-  const c=state.fahrenheit!==""?Math.round((parseFloat(state.fahrenheit)-32)*5/9):null;
-  const hp=(state.altimeter!==""&&state.fieldElevation!=="")?Math.round((29.92-parseFloat(state.altimeter))*1000+parseFloat(state.fieldElevation)):null;
-  const t5=state.tempAloft6000!==""?Math.round(parseFloat(state.tempAloft6000)+2):null;
-  function lookup(table,temp){if(temp===null)return null;const keys=Object.keys(table).map(Number).sort((a,b)=>a-b);if(temp<=-30)return table["-30"];let closest=keys[0],minDiff=Math.abs(temp-closest);for(let k of keys){const diff=Math.abs(temp-k);if(diff<minDiff){minDiff=diff;closest=k;}}return table[closest];}
-  function calcCDP(hp,celsius,weight,intercept,slope){if(hp===null||celsius===null||weight===null)return null;const tIsa=15-0.002*hp;const da=hp+120*(celsius-tIsa);const w30=intercept-da*slope;return Math.round(Math.max(30,Math.min(49,30+(weight-w30)/100)));}
-  let hogeWt=null,meaWt=null,v1=null;
-  if(c!==null&&hp!==null){
-    const _hw=getHOGEWeight(hp,c,model);hogeWt=_hw!==null?Math.round(_hw):null;
-    if(model.includes("S-76D")){meaWt=lookup(MEA_D,t5);v1=null;}
-    else if(model.includes("C++")){meaWt=lookup(MEA_CPP,t5);v1=calcCDP(hp,c,totalWeight,CDP_CPP_INT,CDP_CPP_SLO);}
-    else{meaWt=lookup(MEA_CP,t5);v1=calcCDP(hp,c,totalWeight,CDP_CP_INT,CDP_CP_SLO);}
-  }
-  return{celsius:c,hp:hp,temp5000:t5,hogeWeight:hogeWt,meaWeight:meaWt,v1:v1};
+const c=state.fahrenheit!==''?Math.round((state.fahrenheit-32)*5/9):null;
+const hp=(state.altimeter!==''&&state.fieldElevation!=='')?Math.round((29.92-parseFloat(state.altimeter))*1000+parseFloat(state.fieldElevation)):null;
+const t5=state.tempAloft6000!==''?Math.round(parseFloat(state.tempAloft6000)+2):null;
+function lookup(table,temp){if(temp===null)return null;const keys=Object.keys(table).map(Number).sort((a,b)=>a-b);if(temp<=-30)return table["-30"];let closest=keys[0];let minDiff=Math.abs(temp-closest);for(let k of keys){const diff=Math.abs(temp-k);if(diff<minDiff){minDiff=diff;closest=k}}return table[closest]}
+function lookupV1(temps,table,temp,weight){if(temp===null||weight===null)return null;const wt=Math.round(weight/100)*100;if(!table[wt])return null;let tempIdx=0;let minDiff=Math.abs(temp-temps[0]);for(let i=0;i<temps.length;i++){const diff=Math.abs(temp-temps[i]);if(diff<minDiff){minDiff=diff;tempIdx=i}}return table[wt][tempIdx]}
+let hogeWt=null,meaWt=null,v1=null;
+if(c!==null && hp!==null){
+hogeWt=Math.round(getHOGEWeight(hp,c,model));
+if(model.includes('S-76D')){meaWt=lookup(MEA_D,t5);v1=null}
+else if(model.includes('C++')){meaWt=lookup(MEA_CPP,t5);v1=lookupV1(V1_CPP_TEMPS,V1_CPP,c,totalWeight)}
+else{meaWt=lookup(MEA_CP,t5);v1=lookupV1(V1_CP_TEMPS,V1_CP,c,totalWeight)}
 }
+return{celsius:c,hp:hp,temp5000:t5,hogeWeight:hogeWt,meaWeight:meaWt,v1:v1}
+}
+// PDF Queue State
+let pdfQueue=[],currentLeg=1,replacingLeg=null,pdfGenerating=false;
 
-// =====================================================================
-// FUEL SHORTCUTS
-// =====================================================================
-function fuelToMaxGross(c){state.fuel=Math.max(0,Math.floor(c.maxFuelPounds));render();}
-function fuelToHOGE(p,c){if(p.hogeWeight===null)return;const nonFuel=c.totalWeight-state.fuel;const target=Math.floor((p.hogeWeight-nonFuel)/10)*10;state.fuel=Math.max(0,target);render();}
-function fuelToMEA(p,c){if(p.meaWeight===null)return;const nonFuel=c.totalWeight-state.fuel;const target=Math.floor((p.meaWeight-nonFuel)/10)*10;state.fuel=Math.max(0,target);render();}
-// ── Pure-JS PDF Export (no external libraries) ─────────────────────
-// Draws W&B content to an offscreen canvas, wraps in a single-image PDF.
-
+function showToast(msg,dur=2200){
+  let t=document.getElementById('pdf-toast');
+  if(!t){t=document.createElement('div');t.id='pdf-toast';t.className='pdf-toast';document.body.appendChild(t);}
+  t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);
+}
+function renderQueuePanel(){
+  const panel=document.getElementById('pdf-queue-panel');if(!panel)return;
+  if(pdfQueue.length===0){panel.classList.remove('has-items');return;}
+  panel.classList.add('has-items');
+  panel.innerHTML='<div class="pdf-queue-title">Queued PDFs</div><div class="pdf-queue-legs">'+
+    pdfQueue.map(i=>`<span class="pdf-leg-pill${replacingLeg===i.leg?' pdf-leg-replacing':''}">Leg ${i.leg}<button onclick="reExportLeg(${i.leg})">&#8635;</button><button onclick="removeLeg(${i.leg})">&#215;</button></span>`).join('')+
+    '</div>';
+}
+function reExportLeg(n){replacingLeg=n;renderQueuePanel();updateExportBtn();showToast('Re-export will replace Leg '+n);}
+function removeLeg(n){pdfQueue=pdfQueue.filter(i=>i.leg!==n);if(replacingLeg===n)replacingLeg=null;renderQueuePanel();updateExportBtn();updateSendBtn();}
+function updateExportBtn(){
+  const b=document.getElementById('export-pdf-btn');if(!b)return;
+  b.textContent=pdfGenerating?'Generating…':(replacingLeg?'Re-export Leg '+replacingLeg:'Export Leg '+currentLeg);
+  b.disabled=pdfGenerating;
+}
+function updateSendBtn(){
+  const b=document.getElementById('send-ops-btn');if(!b)return;
+  if(pdfQueue.length===0){b.style.display='none';return;}
+  b.style.display='block';
+  b.textContent='Send All to Ops ('+pdfQueue.length+' leg'+(pdfQueue.length>1?'s':'')+')';
+}
 function drawWBToCanvas(){
-  const c = calculate();
-  const h = helicopters[state.selectedHeliIndex];
-  const p = calcPerf(c.totalWeight, h.model);
-
-  const W = 816; // 8.5in @ 96dpi
-  const cv = document.createElement('canvas');
-  cv.width = W;
-  // We'll set height after measuring content
-  // Use a temp ctx to measure, then draw for real
-  const ctx = cv.getContext('2d');
-
-  // ── Helpers ──
-  const L = 24, R = W - 24; // left/right margins
-  const COL_W = R - L;
-  function setFont(size, bold=false, color='#000'){
-    ctx.font = `${bold?'bold ':''} ${size}px Arial`;
-    ctx.fillStyle = color;
-  }
-  function line(y){ ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(R,y); ctx.strokeStyle='#ccc'; ctx.lineWidth=0.5; ctx.stroke(); }
-  function rect(x,y,w,h,fill){ ctx.fillStyle=fill; ctx.fillRect(x,y,w,h); }
-
-  // ── Measure pass: collect all rows ──
-  const tableRows = [];
-
-  // Header row labels
-  const headers = ['Item','Weight (lbs)','Arm (in)','Moment'];
-  const colX = [L, L+COL_W*0.45, L+COL_W*0.62, L+COL_W*0.79];
-  const colW = [COL_W*0.44, COL_W*0.16, COL_W*0.16, COL_W*0.21];
-
-  // Build W&B rows
-  const rows = [
-    ['Pilot in Command', c.picWeight, h.arms.pic, c.picMoment],
-    ['Second in Command', c.sicWeight, h.arms.sic, c.sicMoment],
-    ['Nav Bag', state.navBag, h.arms.navBag, c.navBagMoment],
-    ['Credenza', state.credenza, h.arms.credenza, c.credenzaMoment],
-    ['Pax Fwd (×'+state.numPassFwd+')', state.passFwdWeight, h.arms.passFwd, c.passFwdMoment],
-    ['Pax Aft (×'+state.numPassAft+')', state.passAftWeight, h.arms.passAft, c.passAftMoment],
-    ['Baggage', state.baggage, h.arms.baggage, c.baggageMoment],
-    ['Fuel', state.fuel, c.fuelArm, c.fuelMoment],
-    ['ZERO FUEL WT', c.zeroFuelWeight, c.zeroFuelArm.toFixed(2), (c.zeroFuelWeight*c.zeroFuelArm).toFixed(0)],
-    ['Empty Weight', h.emptyWeight, h.emptyArm, c.emptyMoment],
-    ['TOTAL', c.totalWeight, c.cg.toFixed(2), c.totalMoment.toFixed(0)],
+  const cv=calculate();const h=cv.heli;const p=calcPerf(cv.totalWeight,h.model);
+  const W=816;const can=document.createElement('canvas');can.width=W;
+  const ctx=can.getContext('2d');
+  const L=24,R=W-24,CW=R-L,RH=18,GH=170;
+  function sf(sz,b,col){ctx.font=(b?'bold ':'')+sz+'px Arial';ctx.fillStyle=col||'#000';}
+  function hl(y){ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#ccc';ctx.lineWidth=0.5;ctx.stroke();}
+  function bx(x,y,w,h2,f){ctx.fillStyle=f;ctx.fillRect(x,y,w,h2);}
+  can.height=60+24+36+11*RH+30+22+GH+40;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,can.width,can.height);
+  let y=16;
+  sf(13,true,'#1a237e');ctx.fillText('FLEXJET VERTICAL LIFT — LOAD MANIFEST',L,y+13);y+=18;
+  sf(8,false,'#444');ctx.fillText(h.tailNumber+' • '+h.model+' • S/N '+h.serial+' • EW '+h.emptyWeight+' lbs • Arm '+h.emptyArm.toFixed(2),L,y+9);y+=14;
+  ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.stroke();y+=8;
+  const fi=[['Date',state.date||''],['From',state.from||''],['To',state.to||''],['PIC',state.picName||''],['SIC',state.sicName||'']].filter(f=>f[1]);
+  let fx=L;fi.forEach(([lbl,val])=>{sf(7,false,'#888');ctx.fillText(lbl,fx,y+7);sf(9,true,'#111');ctx.fillText(val,fx,y+17);fx+=120;});
+  y+=24;hl(y);y+=6;
+  bx(L,y,CW,32,'#f5f5dc');
+  sf(9,true,'#555');ctx.fillText('Performance (Anti-Ice OFF, PM=0%)',L+4,y+10);
+  [['HOGE',p.hogeWeight===null?'Not permitted':(p.hogeWeight+' lbs')],['MEA',p.meaWeight?(p.meaWeight+' lbs'):'N/A'],['V1/CDP',p.v1?(p.v1+' kts'):'N/A']].forEach(([lbl,val],i)=>{
+    let px=L+4+i*140;sf(7,false,'#666');ctx.fillText(lbl,px,y+20);sf(10,true,'#000');ctx.fillText(val,px,y+30);
+  });y+=38;
+  sf(10,true,'#1a237e');ctx.fillText('Weight & Balance',L,y+10);y+=14;
+  const cx=[L,L+CW*0.46,L+CW*0.62,L+CW*0.79];
+  bx(L,y,CW,RH,'#1a237e');sf(8,true,'#fff');
+  ['Item','Weight (lbs)','Arm (in)','Moment'].forEach((t,i)=>ctx.fillText(t,cx[i]+2,y+12));y+=RH;
+  const rows=[
+    ['Empty Weight',h.emptyWeight,h.emptyArm.toFixed(2),cv.emptyMoment.toFixed(0)],
+    ['Nav Bag',state.navBag,h.arms.navBag,cv.navBagMoment.toFixed(0)],
+    ['PIC: '+(state.picName||'--'),cv.picWeight,h.arms.pic,cv.picMoment.toFixed(0)],
+    ['SIC: '+(state.sicName||'--'),cv.sicWeight,h.arms.sic,cv.sicMoment.toFixed(0)],
+    ['Credenza',state.credenza,h.arms.credenza,cv.credenzaMoment.toFixed(0)],
+    ['Pax Fwd (×'+state.numPassFwd+')',state.passFwdWeight,h.arms.passFwd,cv.passFwdMoment.toFixed(0)],
+    ['Pax Aft (×'+state.numPassAft+')',state.passAftWeight,h.arms.passAft,cv.passAftMoment.toFixed(0)],
+    ['Baggage',state.baggage,h.arms.baggage,cv.baggageMoment.toFixed(0)],
+    ['Zero Fuel Wt',cv.zeroFuelWeight,cv.zeroFuelArm.toFixed(2),(cv.zeroFuelWeight*cv.zeroFuelArm).toFixed(0)],
+    ['Fuel',state.fuel,cv.fuelArm.toFixed(2),cv.fuelMoment.toFixed(0)],
+    ['TOTAL',cv.totalWeight.toFixed(1),cv.cg.toFixed(2),cv.totalMoment.toFixed(0)],
   ];
-
-  // Estimate total height
-  const ROW_H = 18;
-  const GRAPH_H = 180;
-  const estimatedH = 60 + 20 + 30 + 30 + 36 + 16 + (rows.length+1)*ROW_H + 30 + 30 + GRAPH_H + 40;
-  cv.height = estimatedH + 60;
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0,0,cv.width,cv.height);
-
-  let y = 16;
-
-  // ── Print header bar ──
-  setFont(13, true, '#1a237e');
-  ctx.fillText('FLEXJET VERTICAL LIFT — LOAD MANIFEST', L, y+13);
-  y += 18;
-  setFont(8, false, '#444');
-  ctx.fillText(`${h.tailNumber} • ${h.model} • S/N ${h.serial} • EW ${h.emptyWeight} lbs • Arm ${h.emptyArm.toFixed(2)}`, L, y+9);
-  y += 14;
-  ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(R,y); ctx.strokeStyle='#333'; ctx.lineWidth=1; ctx.stroke();
-  y += 8;
-
-  // ── Flight info ──
-  setFont(8, false, '#555');
-  const fi = [
-    ['Date', state.date||''],
-    ['From', state.from||''],
-    ['To', state.to||''],
-    ['PIC', state.picName||''],
-    ['SIC', state.sicName||''],
-  ].filter(f=>f[1]);
-  let fx = L;
-  fi.forEach(([lbl,val])=>{
-    setFont(7,false,'#888'); ctx.fillText(lbl, fx, y+7);
-    setFont(9,true,'#111'); ctx.fillText(val, fx, y+17);
-    fx += 120;
+  rows.forEach((row,ri)=>{
+    const isT=ri===rows.length-1,isZ=ri===8;
+    bx(L,y,CW,RH,isT?'#e0e0e0':isZ?'#fff9c4':(ri%2===0?'#fff':'#f9f9f9'));
+    sf(8,isT||isZ,'#000');row.forEach((cell,i)=>ctx.fillText(String(cell),cx[i]+2,y+12));
+    hl(y+RH);y+=RH;
   });
-  y += 24;
-  line(y); y += 6;
-
-  // ── Performance ──
-  rect(L, y, COL_W, 30, '#f5f5dc');
-  setFont(9, true, '#555');
-  ctx.fillText('Performance Calculations  (Anti-Ice OFF, PM=0%)', L+4, y+10);
-  const perfItems = [
-    ['HOGE', p.hogeWeight===null?'Not permitted':(p.hogeWeight+' lbs')],
-    ['MEA', p.meaWeight?(p.meaWeight+' lbs'):'N/A'],
-    ['V1/CDP', p.v1?(p.v1+' kts'):'N/A'],
-  ];
-  let px2 = L+4;
-  perfItems.forEach(([lbl,val])=>{
-    setFont(7,false,'#666'); ctx.fillText(lbl, px2, y+20);
-    setFont(10,true,'#000'); ctx.fillText(val, px2, y+29);
-    px2 += 130;
-  });
-  y += 36;
-
-  // ── W&B Table ──
-  setFont(10, true, '#1a237e');
-  ctx.fillText('Weight & Balance', L, y+10);
-  y += 14;
-
-  // Header row
-  rect(L, y, COL_W, ROW_H, '#1a237e');
-  setFont(8, true, '#fff');
-  headers.forEach((h2,i)=>{ ctx.fillText(h2, colX[i]+2, y+12); });
-  y += ROW_H;
-
-  // Data rows
-  rows.forEach((row, ri)=>{
-    const isTotal = ri === rows.length-1;
-    const isZFW = ri === rows.length-3;
-    const bg = isTotal ? '#e0e0e0' : isZFW ? '#fff9c4' : (ri%2===0?'#fff':'#f9f9f9');
-    rect(L, y, COL_W, ROW_H, bg);
-    setFont(8, isTotal||isZFW, '#000');
-    row.forEach((cell,i)=>{
-      const val = i===0 ? String(cell) : (typeof cell==='number'?cell.toLocaleString():String(cell));
-      ctx.fillText(val, colX[i]+2, y+12);
-    });
-    line(y+ROW_H);
-    y += ROW_H;
-  });
-  y += 8;
-
-  // ── CG Status ──
-  const cgOk = c.cgStatus === 'WITHIN LIMITS';
-  rect(L, y, COL_W, 22, cgOk?'#c8e6c9':'#ffcdd2');
-  setFont(10, true, cgOk?'#2e7d32':'#c62828');
-  ctx.fillText(`CG: ${c.cg.toFixed(2)} in  —  ${c.cgStatus}  (Limits: ${c.cgLimits})`, L+6, y+14);
-  y += 28;
-
-  // ── Graph ──
-  setFont(9, true, '#333');
-  ctx.fillText('Center of Gravity Envelope', L, y+9);
-  y += 12;
-
-  // Draw CG graph inline
-  const graphCanvas = document.getElementById('cgGraph');
-  if(graphCanvas){
-    const savedW = graphCanvas.width, savedH = graphCanvas.height;
-    graphCanvas.width = 560; graphCanvas.height = GRAPH_H;
-    drawGraph(c);
-    ctx.drawImage(graphCanvas, L, y, COL_W, GRAPH_H);
-    graphCanvas.width = savedW; graphCanvas.height = savedH;
-    drawGraph(c);
-  }
-  y += GRAPH_H + 16;
-
-  // Trim canvas height
-  const trimmed = document.createElement('canvas');
-  trimmed.width = W;
-  trimmed.height = y;
-  trimmed.getContext('2d').drawImage(cv, 0, 0);
-  return trimmed;
+  y+=6;
+  const ok=cv.cgStatus==='WITHIN LIMITS';
+  bx(L,y,CW,20,ok?'#c8e6c9':'#ffcdd2');
+  sf(9,true,ok?'#2e7d32':'#c62828');
+  ctx.fillText('CG: '+cv.cg.toFixed(2)+' in  —  '+cv.cgStatus+'  (Limits: '+cv.cgLimits.min+' – '+cv.cgLimits.max+')',L+4,y+13);
+  y+=26;
+  sf(9,true,'#333');ctx.fillText('Center of Gravity Envelope',L,y+9);y+=12;
+  const gc=document.getElementById('cgGraph');
+  if(gc){const sw=gc.width,sh=gc.height;gc.width=560;gc.height=GH;drawGraph(cv);ctx.drawImage(gc,L,y,CW,GH);gc.width=sw;gc.height=sh;drawGraph(cv);}
+  y+=GH+10;
+  const tr=document.createElement('canvas');tr.width=W;tr.height=y;tr.getContext('2d').drawImage(can,0,0);return tr;
 }
-
 function canvasToPDF(canvas){
-  // Build a minimal single-image PDF entirely in JS
-  const imgData = canvas.toDataURL('image/jpeg', 0.92).split(',')[1];
-  const imgBytes = atob(imgData);
-
-  // Page dimensions: Letter portrait in points (72pt/in)
-  const pageW = 612, pageH = 792;
-  // Scale image to fit page with 18pt margins
-  const margin = 18;
-  const maxW = pageW - margin*2;
-  const maxH = pageH - margin*2;
-  const scale = Math.min(maxW/canvas.width, maxH/canvas.height, 1);
-  const iW = Math.round(canvas.width * scale);
-  const iH = Math.round(canvas.height * scale);
-  const iX = margin;
-  const iY = pageH - margin - iH; // PDF Y is from bottom
-
-  // Build PDF objects
-  const objs = [];
-  function addObj(content){ objs.push(content); return objs.length; }
-
-  // Obj 1: Catalog
-  const catalogId = addObj('<<\n/Type /Catalog\n/Pages 2 0 R\n>>');
-  // Obj 2: Pages
-  const pagesId = addObj('<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>');
-  // Obj 3: Page
-  const pageId = addObj(`<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 ${pageW} ${pageH}]\n/Contents 4 0 R\n/Resources <<\n  /XObject << /Img 5 0 R >>\n>>\n>>`);
-  // Obj 4: Content stream
-  const stream = `q\n${iW} 0 0 ${iH} ${iX} ${iY} cm\n/Img Do\nQ`;
-  const contentId = addObj(`<<\n/Length ${stream.length}\n>>\nstream\n${stream}\nendstream`);
-  // Obj 5: Image XObject
-  const imgId = addObj(`<<\n/Type /XObject\n/Subtype /Image\n/Width ${canvas.width}\n/Height ${canvas.height}\n/ColorSpace /DeviceRGB\n/BitsPerComponent 8\n/Filter /DCTDecode\n/Length ${imgBytes.length}\n>>\nstream\n`);
-
-  // Build PDF bytes
-  let pdf = '%PDF-1.4\n';
-  const offsets = [];
-
-  for(let i=0; i<objs.length; i++){
-    offsets.push(pdf.length);
-    pdf += `${i+1} 0 obj\n${objs[i]}\nendobj\n`;
-    // For image obj, append raw image bytes separately
-    if(i === 4){
-      // We'll handle this differently - build as Uint8Array
-    }
-  }
-
-  // Use Uint8Array approach for binary safety
-  const enc = new TextEncoder();
-  const parts = [];
-
-  let pdfHeader = '%PDF-1.4\n';
-  const byteOffsets = [];
-  let byteCount = 0;
-
-  function addPart(str){
-    const b = enc.encode(str);
-    parts.push(b);
-    byteCount += b.length;
-  }
-  function addBinary(bytes){
-    parts.push(bytes);
-    byteCount += bytes.length;
-  }
-
-  addPart(pdfHeader);
-
-  const objDefs = [
-    { id:1, content:'<<\n/Type /Catalog\n/Pages 2 0 R\n>>' },
-    { id:2, content:'<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>' },
-    { id:3, content:`<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 ${pageW} ${pageH}]\n/Contents 4 0 R\n/Resources <<\n/XObject << /Img 5 0 R >>\n>>\n>>` },
-    { id:4, content:`<<\n/Length ${stream.length}\n>>\nstream\n${stream}\nendstream` },
-  ];
-
-  const xref = [];
-  objDefs.forEach(obj=>{
-    xref.push(byteCount);
-    addPart(`${obj.id} 0 obj\n${obj.content}\nendobj\n`);
-  });
-
-  // Image object (binary)
-  xref.push(byteCount);
-  const imgHeader = `5 0 obj\n<<\n/Type /XObject\n/Subtype /Image\n/Width ${canvas.width}\n/Height ${canvas.height}\n/ColorSpace /DeviceRGB\n/BitsPerComponent 8\n/Filter /DCTDecode\n/Length ${imgBytes.length}\n>>\nstream\n`;
-  addPart(imgHeader);
-  const imgByteArr = new Uint8Array(imgBytes.length);
-  for(let i=0;i<imgBytes.length;i++) imgByteArr[i]=imgBytes.charCodeAt(i);
-  addBinary(imgByteArr);
-  addPart('\nendstream\nendobj\n');
-
-  // xref table
-  const xrefOffset = byteCount;
-  let xrefStr = `xref\n0 6\n0000000000 65535 f \n`;
-  xref.forEach(o=>{ xrefStr += String(o).padStart(10,'0')+' 00000 n \n'; });
-  xrefStr += `trailer\n<<\n/Size 6\n/Root 1 0 R\n>>\nstartxref\n${xrefOffset}\n%%EOF`;
-  addPart(xrefStr);
-
-  // Combine all parts
-  let totalLen = 0;
-  parts.forEach(p=>totalLen+=p.length);
-  const result = new Uint8Array(totalLen);
-  let pos = 0;
-  parts.forEach(p=>{ result.set(p,pos); pos+=p.length; });
-  return new Blob([result], {type:'application/pdf'});
+  const id=canvas.toDataURL('image/jpeg',0.92).split(',')[1];
+  const ib=atob(id);
+  const pW=612,pH=792,mg=18,mxW=pW-mg*2,mxH=pH-mg*2;
+  const sc=Math.min(mxW/canvas.width,mxH/canvas.height,1);
+  const iW=Math.round(canvas.width*sc),iH=Math.round(canvas.height*sc);
+  const iX=mg,iY=pH-mg-iH;
+  const st='q\n'+iW+' 0 0 '+iH+' '+iX+' '+iY+' cm\n/Img Do\nQ';
+  const enc=new TextEncoder();const parts=[];let bc=0;
+  function ap(s){const b=enc.encode(s);parts.push(b);bc+=b.length;}
+  function ab(b){parts.push(b);bc+=b.length;}
+  ap('%PDF-1.4\n');
+  const xr=[];
+  [
+    '<<\n/Type /Catalog\n/Pages 2 0 R\n>>',
+    '<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>',
+    '<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 '+pW+' '+pH+']\n/Contents 4 0 R\n/Resources <<\n/XObject << /Img 5 0 R >>\n>>\n>>',
+    '<<\n/Length '+st.length+'\n>>\nstream\n'+st+'\nendstream',
+  ].forEach((o,i)=>{xr.push(bc);ap((i+1)+' 0 obj\n'+o+'\nendobj\n');});
+  xr.push(bc);
+  ap('5 0 obj\n<<\n/Type /XObject\n/Subtype /Image\n/Width '+canvas.width+'\n/Height '+canvas.height+'\n/ColorSpace /DeviceRGB\n/BitsPerComponent 8\n/Filter /DCTDecode\n/Length '+ib.length+'\n>>\nstream\n');
+  const ba=new Uint8Array(ib.length);for(let i=0;i<ib.length;i++)ba[i]=ib.charCodeAt(i);
+  ab(ba);ap('\nendstream\nendobj\n');
+  const xo=bc;
+  let xs='xref\n0 6\n0000000000 65535 f \n';
+  xr.forEach(o=>{xs+=String(o).padStart(10,'0')+' 00000 n \n';});
+  xs+='trailer\n<<\n/Size 6\n/Root 1 0 R\n>>\nstartxref\n'+xo+'\n%%EOF';ap(xs);
+  let tl=0;parts.forEach(p=>tl+=p.length);
+  const out=new Uint8Array(tl);let pos=0;parts.forEach(p=>{out.set(p,pos);pos+=p.length;});
+  return new Blob([out],{type:'application/pdf'});
 }
-
 async function exportPDF(){
-  if(pdfGenerating) return;
-  if(typeof drawWBToCanvas === 'undefined'){
-    alert('Export function not loaded.');
-    return;
-  }
-  pdfGenerating = true;
-  updateExportBtn();
-
-  try {
-    // Small delay to let UI update
+  if(pdfGenerating)return;
+  pdfGenerating=true;updateExportBtn();
+  try{
     await new Promise(r=>setTimeout(r,50));
-
-    const canvas = drawWBToCanvas();
-    const blob = canvasToPDF(canvas);
-
-    const legNum = replacingLeg || currentLeg;
-    const tail = (helicopters[state.selectedHeliIndex]||{}).tailNumber||'FXV';
-    const filename = `FXV_WB_${tail}_${state.date||new Date().toISOString().split('T')[0]}_leg${legNum}.pdf`;
-
-    const existingIdx = pdfQueue.findIndex(i=>i.leg===legNum);
-    if(existingIdx>=0){
-      pdfQueue[existingIdx]={leg:legNum,blob,filename};
-      showToast(`Leg ${legNum} replaced ✓`);
-    } else {
-      pdfQueue.push({leg:legNum,blob,filename});
-      showToast(`Leg ${legNum} added ✓`);
-      currentLeg = legNum+1;
-    }
-
-    replacingLeg = null;
-    renderQueuePanel();
-    updateSendBtn();
-
-  } catch(err){
-    alert('PDF error: '+(err&&err.message?err.message:String(err)));
-    console.error(err);
-  }
-
-  pdfGenerating = false;
-  updateExportBtn();
+    const canvas=drawWBToCanvas();
+    const blob=canvasToPDF(canvas);
+    const legNum=replacingLeg||currentLeg;
+    const tail=(helicopters[state.selectedHeliIndex]||{}).tailNumber||'FXV';
+    const fn='FXV_WB_'+tail+'_'+(state.date||new Date().toISOString().split('T')[0])+'_leg'+legNum+'.pdf';
+    const idx=pdfQueue.findIndex(i=>i.leg===legNum);
+    if(idx>=0){pdfQueue[idx]={leg:legNum,blob,filename:fn};showToast('Leg '+legNum+' replaced ✓');}
+    else{pdfQueue.push({leg:legNum,blob,filename:fn});showToast('Leg '+legNum+' added ✓');currentLeg=legNum+1;}
+    replacingLeg=null;renderQueuePanel();updateSendBtn();
+  }catch(err){alert('PDF error: '+(err&&err.message?err.message:String(err)));console.error(err);}
+  pdfGenerating=false;updateExportBtn();
 }
-
-
 async function sendToOps(){
-  if(pdfQueue.length===0) return;
-  try {
-    const files = pdfQueue
-      .sort((a,b)=>a.leg-b.leg)
-      .map(item=>new File([item.blob], item.filename, {type:'application/pdf'}));
-    if(navigator.share && navigator.canShare && navigator.canShare({files})){
-      await navigator.share({files, title:'FXV Weight & Balance', text:`W&B sheets — ${files.length} leg(s)`});
-    } else {
-      files.forEach(f=>{
-        const url=URL.createObjectURL(f);
-        const a=document.createElement('a'); a.href=url; a.download=f.name; a.click();
-        setTimeout(()=>URL.revokeObjectURL(url),1000);
-      });
+  if(pdfQueue.length===0)return;
+  try{
+    const files=pdfQueue.sort((a,b)=>a.leg-b.leg).map(i=>new File([i.blob],i.filename,{type:'application/pdf'}));
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files})){
+      await navigator.share({files,title:'FXV Weight & Balance',text:'W&B — '+files.length+' leg(s)'});
+    }else{
+      files.forEach(f=>{const u=URL.createObjectURL(f);const a=document.createElement('a');a.href=u;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
     }
-  } catch(err){
-    if(err.name!=='AbortError') showToast('Share failed — try again');
-  }
+  }catch(err){if(err.name!=='AbortError')showToast('Share failed — try again');}
 }
 
-// =====================================================================
-// GRAPH
-// =====================================================================
-function drawGraph(c){
-  const canvas=document.getElementById("cgGraph");if(!canvas)return;
-  const isPrint=window.matchMedia&&window.matchMedia('print').matches;
-  const screenW=window.innerWidth||document.documentElement.clientWidth||800;
-  if(isPrint){
-    canvas.width=380;
-    canvas.height=170;
-  } else if(screenW<800){
-    canvas.width=screenW;
-    canvas.height=Math.round(screenW*0.68);
-  } else {
-    canvas.width=800;
-    canvas.height=500;
-  }
-  const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
-  ctx.fillStyle="white";ctx.fillRect(0,0,w,h);
-  const pad=60,padL=70,gw=w-padL-pad,gh=h-2*pad;
-  function getEnv(m,lat){
-    if(m.includes("S-76D")){const a=Math.abs(lat);
-      if(a<=1.0)return[[208.3,7350],[194.0,9250],[194.0,9500],[197.0,11000],[199.6,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];
-      else if(a<=2.5)return[[208.3,7350],[196.5,8918],[196.5,9500],[199.5,11000],[202.2,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];
-      else if(a<=3.5)return[[208.3,7350],[199.0,8586],[199.0,9500],[202.0,11000],[203.3,11400],[205.6,11400],[210.0,9500],[210.0,9250],[208.3,7350]];
-      else return[[208.3,7350],[194.0,9250],[194.0,9500],[196.6,10800],[207.0,10800],[210.0,9500],[210.0,9250],[208.3,7350]];}
-    return[[208.2,7350],[199.2,7500],[194.0,8500],[194.0,9500],[197.0,11000],[199.2,11700],[204.0,11700],[210.0,9250],[208.2,7350]];
-  }
-  const env=getEnv(c.heli.model,c.lateralCG||0);
-  const minCG=193,maxCG=211,minW=7000,maxW=12000;
-  function xPos(cg){return padL+((cg-minCG)/(maxCG-minCG))*gw;}
-  function yPos(wt){return h-pad-((wt-minW)/(maxW-minW))*gh;}
-  ctx.strokeStyle="#e0e0e0";ctx.lineWidth=1;
-  for(let cg=minCG;cg<=maxCG;cg+=2){ctx.beginPath();ctx.moveTo(xPos(cg),pad);ctx.lineTo(xPos(cg),h-pad);ctx.stroke();}
-  for(let wt=minW;wt<=maxW;wt+=1000){ctx.beginPath();ctx.moveTo(padL,yPos(wt));ctx.lineTo(w-pad,yPos(wt));ctx.stroke();}
-  ctx.fillStyle="rgba(76,175,80,0.15)";ctx.strokeStyle="#2E7D32";ctx.lineWidth=2.5;
-  ctx.beginPath();ctx.moveTo(xPos(env[0][0]),yPos(env[0][1]));
-  for(let i=1;i<env.length;i++)ctx.lineTo(xPos(env[i][0]),yPos(env[i][1]));
-  ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.strokeStyle="#2196F3";ctx.lineWidth=3;ctx.setLineDash([8,4]);
-  ctx.beginPath();ctx.moveTo(xPos(c.cg),yPos(c.totalWeight));ctx.lineTo(xPos(c.zeroFuelCG),yPos(c.zeroFuelWeight));ctx.stroke();ctx.setLineDash([]);
-  function inEnv(cg,wt){const minWE=Math.min(...env.map(p=>p[1])),maxWE=Math.max(...env.map(p=>p[1]));if(wt<minWE||wt>maxWE)return false;let inside=false;for(let i=0,j=env.length-1;i<env.length;j=i++){const xi=env[i][0],yi=env[i][1],xj=env[j][0],yj=env[j][1];const intersect=((yi>wt)!==(yj>wt))&&(cg<(xj-xi)*(wt-yi)/(yj-yi)+xi);if(intersect)inside=!inside;}return inside;}
-  const fullOK=inEnv(c.cg,c.totalWeight),zeroOK=inEnv(c.zeroFuelCG,c.zeroFuelWeight);
-  ctx.fillStyle=fullOK?"#2196F3":"#f44336";ctx.beginPath();ctx.arc(xPos(c.cg),yPos(c.totalWeight),7,0,2*Math.PI);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();
-  ctx.fillStyle=zeroOK?"#2196F3":"#f44336";ctx.beginPath();ctx.arc(xPos(c.zeroFuelCG),yPos(c.zeroFuelWeight),7,0,2*Math.PI);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();
-  const isMobile=w<500;
-  const axisFont=isMobile?"9px Arial":"11px Arial";
-  const axisFontBold=isMobile?"bold 10px Arial":"bold 12px Arial";
-  const cgStep=isMobile?4:2;
 
-  // Dot labels — only on desktop
-  if(!isMobile){
-    ctx.fillStyle="#333";ctx.font="bold 11px Arial";ctx.textAlign="center";
-    const fullX=xPos(c.cg),fullY=yPos(c.totalWeight),fullLY=fullY<h/2?fullY+20:fullY-20;
-    ctx.fillText("Full Fuel",fullX,fullLY);ctx.font="10px Arial";ctx.fillText(`${c.totalWeight.toFixed(0)} lbs, ${c.cg.toFixed(2)}"`,fullX,fullLY+12);
-    ctx.font="bold 11px Arial";const zeroX=xPos(c.zeroFuelCG),zeroY=yPos(c.zeroFuelWeight),zeroLY=zeroY<h/2?zeroY+20:zeroY-20;
-    ctx.fillText("Zero Fuel",zeroX,zeroLY);ctx.font="10px Arial";ctx.fillText(`${c.zeroFuelWeight.toFixed(0)} lbs, ${c.zeroFuelCG.toFixed(2)}"`,zeroX,zeroLY+12);
-  }
 
-  // Axes
-  ctx.strokeStyle="#333";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,h-pad);ctx.lineTo(w-pad,h-pad);ctx.stroke();ctx.beginPath();ctx.moveTo(padL,pad);ctx.lineTo(padL,h-pad);ctx.stroke();
-  ctx.fillStyle="#333";ctx.font=axisFont;ctx.textAlign="center";
-  for(let cg=minCG;cg<=maxCG;cg+=cgStep)ctx.fillText(cg.toString(),xPos(cg),h-pad+14);
-  ctx.font=axisFontBold;ctx.fillText("CENTER OF GRAVITY - INCHES AFT OF DATUM",w/2,h-4);
-  ctx.textAlign="right";ctx.font=axisFont;
-  for(let wt=minW;wt<=maxW;wt+=1000)ctx.fillText((wt/1000).toString(),padL-4,yPos(wt)+4);
-  if(!isMobile){ctx.save();ctx.translate(15,h/2);ctx.rotate(-Math.PI/2);ctx.font=axisFontBold;ctx.textAlign="center";ctx.fillText("GROSS WEIGHT - 1000 LB",0,0);ctx.restore();}
-
-  // Legend
-  let mt="S-76C+";if(c.heli.model.includes("S-76D"))mt="S-76D";else if(c.heli.model.includes("C++"))mt="S-76C++";
-  if(isMobile){
-    // Compact top-left legend on mobile
-    const lx=padL+4,ly=pad+4;
-    ctx.fillStyle="rgba(255,255,255,0.85)";ctx.fillRect(lx-2,ly-2,w-padL-pad-2,44);
-    ctx.fillStyle="rgba(76,175,80,0.3)";ctx.fillRect(lx,ly+2,12,10);ctx.strokeStyle="#2E7D32";ctx.lineWidth=1.5;ctx.strokeRect(lx,ly+2,12,10);
-    ctx.fillStyle="#333";ctx.font="bold 9px Arial";ctx.textAlign="left";ctx.fillText(`CG Envelope (${mt})`,lx+16,ly+11);
-    ctx.strokeStyle="#2196F3";ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.beginPath();ctx.moveTo(lx,ly+22);ctx.lineTo(lx+12,ly+22);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillText("Fuel Burn",lx+16,ly+25);
-    ctx.font="bold 9px Arial";
-    if(fullOK&&zeroOK){ctx.fillStyle="#2E7D32";ctx.fillText("\u2713 WITHIN LIMITS",lx,ly+38);}else{ctx.fillStyle="#c62828";ctx.fillText("\u2717 OUT OF LIMITS",lx,ly+38);}
-  } else {
-    const lx=w-220,ly=30;
-    ctx.fillStyle="rgba(76,175,80,0.3)";ctx.fillRect(lx,ly,20,15);ctx.strokeStyle="#2E7D32";ctx.lineWidth=2;ctx.strokeRect(lx,ly,20,15);
-    ctx.fillStyle="#333";ctx.font="12px Arial";ctx.textAlign="left";
-    ctx.fillText(`CG Envelope (${mt})`,lx+25,ly+11);
-    ctx.strokeStyle="#2196F3";ctx.lineWidth=3;ctx.setLineDash([8,4]);ctx.beginPath();ctx.moveTo(lx,ly+30);ctx.lineTo(lx+20,ly+30);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillText("Fuel Burn",lx+25,ly+33);ctx.font="bold 12px Arial";
-    if(fullOK&&zeroOK){ctx.fillStyle="#2E7D32";ctx.fillText("\u2713 WITHIN LIMITS",lx,ly+55);}else{ctx.fillStyle="#c62828";ctx.fillText("\u2717 OUT OF LIMITS",lx,ly+55);}
-  }
-}
-
-// =====================================================================
-// UPDATE HANDLERS
-// =====================================================================
-function updateHeli(v){state.selectedHeliIndex=parseInt(v);render();}
-function updateDate(v){state.date=v;render();}
-function updateFrom(v){state.from=v.toUpperCase();render();}
-function updateTo(v){state.to=v.toUpperCase();render();}
-function updatePIC(v){state.picName=v;state.picWeightOverride=null;render();}
-function updatePICWeight(v){state.picWeightOverride=v===""?null:parseFloat(v);render();}
-function updateSIC(v){state.sicName=v;state.sicWeightOverride=null;render();}
-function updateSICWeight(v){state.sicWeightOverride=v===""?null:parseFloat(v);render();}
-function updateNavBag(v){state.navBag=Number(v);render();}
-function updateCredenza(v){state.credenza=Number(v);render();}
-function updateNumPassFwd(v){state.numPassFwd=Number(v);render();}
-function updatePassFwdWeight(v){state.passFwdWeight=Number(v);render();}
-function updateNumPassAft(v){state.numPassAft=Number(v);render();}
-function updatePassAftWeight(v){state.passAftWeight=Number(v);render();}
-function updateBaggage(v){state.baggage=Number(v);render();}
-function updateFuel(v){state.fuel=Number(v);render();}
-function updateFahrenheit(v){state.fahrenheit=v;render();}
-function formatAltimeter(el){
-  // Strip non-digits
-  let digits=el.value.replace(/[^0-9]/g,'');
-  if(digits.length>=4){
-    // Auto-insert decimal after position 2: "2992" -> "29.92"
-    let formatted=digits.slice(0,2)+'.'+digits.slice(2,4);
-    el.value=formatted;
-    // Only update state and render once complete — no mid-type re-render
-    state.altimeter=formatted;
-    render();
-  } else {
-    // Just update the display value without re-rendering
-    state.altimeter=el.value;
-  }
-}
-function updateAltimeter(v){
-  // Handle manual entry with decimal already included (e.g. "29.92")
-  state.altimeter=v;
+function fuelToMaxGross(c) {
+  const zeroFuelWeight = c.totalWeight - state.fuel;
+  const maxFuelPounds = c.maxGrossWeight - zeroFuelWeight;
+  const maxFuelGallons = maxFuelPounds / 6.8;
+  const fuelCapacity = c.heli.model.includes('S-76D') ? 286.0 : 281.2;
+  const finalFuel = Math.min(Math.max(0, maxFuelPounds), fuelCapacity * 6.8);
+  state.fuel = Math.round(finalFuel);
   render();
 }
-function updateFieldElevation(v){state.fieldElevation=v;render();}
-function updateTempAloft6000(v){state.tempAloft6000=v;render();}
 
-// =====================================================================
-// INIT
-// =====================================================================
-loadFromFirebase();
+function fuelToHOGE(p, c) {
+  if (!p.hogeWeight || p.hogeWeight === null) return;
+  const zeroFuelWeight = c.totalWeight - state.fuel;
+  const maxFuelPounds = p.hogeWeight - zeroFuelWeight;
+  const fuelCapacity = c.heli.model.includes('S-76D') ? 286.0 : 281.2;
+  const finalFuel = Math.min(Math.max(0, maxFuelPounds), fuelCapacity * 6.8);
+  state.fuel = Math.round(finalFuel);
+  render();
+}
+
+function fuelToMEA(p, c) {
+  if (!p.meaWeight || p.meaWeight === null) return;
+  const zeroFuelWeight = c.totalWeight - state.fuel;
+  const maxFuelPounds = p.meaWeight - zeroFuelWeight;
+  const fuelCapacity = c.heli.model.includes('S-76D') ? 286.0 : 281.2;
+  const finalFuel = Math.min(Math.max(0, maxFuelPounds), fuelCapacity * 6.8);
+  state.fuel = Math.round(finalFuel);
+  render();
+}
+
+function render(){const _scrollY=window.scrollY||0;const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);document.getElementById('app').innerHTML=`<div class="container"><div class="print-header-bar"><span class="print-title">FLEXJET VERTICAL LIFT — LOAD MANIFEST</span><span class="print-ac">${h.tailNumber} • ${h.model} • S/N ${h.serial} • EW ${h.emptyWeight} lbs • Arm ${h.emptyArm.toFixed(2)}</span></div><div class="header"><h1>FLEXJET VERTICAL LIFT</h1><h2>LOAD MANIFEST</h2></div><div class="aircraft-section"><div class="form-group"><label>Aircraft</label><select onchange="updateHeli(this.value)">${helicopters.map((h,i)=>`<option value="${i}" ${i===state.selectedHeliIndex?'selected':''}>${h.tailNumber} - ${h.model}</option>`).join('')}</select></div><div class="info-box"><div><strong>Serial:</strong> ${h.serial}</div><div><strong>Empty Weight:</strong> ${h.emptyWeight} lbs</div><div><strong>Empty Arm:</strong> ${h.emptyArm.toFixed(2)}</div><div><strong>Fuel Capacity:</strong> ${h.fuelCapacity} Gals.</div></div></div><div class="flight-info"><div class="form-group"><label>Date</label><input type="date" value="${state.date}" onchange="updateDate(this.value)"></div><div class="form-group"><label>From</label><input type="text" value="${state.from}" onchange="updateFrom(this.value)" placeholder="KJRA" style="text-transform:uppercase;"></div><div class="form-group"><label>To</label><input type="text" value="${state.to}" onchange="updateTo(this.value)" placeholder="KALB" style="text-transform:uppercase;"></div></div><div class="perf-section"><div class="perf-title">Performance Calculations</div><div class="perf-inputs"><div class="form-group"><label>Temperature (°F)</label><input type="number" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div><div class="form-group"><label>Altimeter (inHg)</label><input type="number" step="0.01" value="${state.altimeter}" onchange="updateAltimeter(this.value)" placeholder="e.g., 30.12"></div><div class="form-group"><label>Field Elevation (ft)</label><input type="number" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" placeholder="Enter elevation"></div><div class="form-group"><label>Temperature Aloft at 6000 ft (°C)</label><input type="number" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" placeholder="Enter temperature"></div></div><div class="perf-outputs"><div class="perf-out"><div class="perf-label">Temperature (°C)</div><div class="perf-value">${p.celsius!==null?p.celsius:'--'}</div></div><div class="perf-out"><div class="perf-label">Pressure Altitude (Hp)</div><div class="perf-value">${p.hp!==null?p.hp+' ft':'--'}</div></div><div class="perf-out"><div class="perf-label">Temp at 5000 ft (°C)</div><div class="perf-value">${p.temp5000!==null?p.temp5000:'--'}</div></div></div><div class="perf-outputs" style="margin-top:15px;"><div class="perf-out"><div class="perf-label">HOGE Weight</div><div class="perf-value">${p.hogeWeight!==null&&p.hogeWeight!==undefined?p.hogeWeight+' lbs':'--'}</div><div style="font-size:10px;color:#666;margin-top:3px;">(at computed Hp)</div></div><div class="perf-out"><div class="perf-label">MEA/5000ft Weight</div><div class="perf-value">${p.meaWeight!==null&&p.meaWeight!==undefined?p.meaWeight+' lbs':'--'}</div></div><div class="perf-out"><div class="perf-label">V1</div><div class="perf-value">${p.v1!==null&&p.v1!==undefined?p.v1+' kts':(c.heli.model.includes('S-76D')?'N/A':'--')}</div><div style="font-size:10px;color:#666;margin-top:3px;">(Sea level)</div></div></div></div><div style="margin-top:30px;margin-bottom:15px;"><h3 style="margin:0;padding:10px 0;border-bottom:3px solid #333;font-size:18px;">Weight & Balance</h3></div><table><thead><tr><th>Item</th><th class="number">Weight (LBS)</th><th class="number">Arm</th><th class="number">Moment</th></tr></thead><tbody><tr class="yellow-row"><td><strong>Empty Weight</strong></td><td class="number">${h.emptyWeight}</td><td class="number">${h.emptyArm.toFixed(2)}</td><td class="number">${c.emptyMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Nav Bag:<input type="number" value="${state.navBag}" onchange="updateNavBag(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.navBag}</td><td class="number">${h.arms.navBag}</td><td class="number">${c.navBagMoment.toFixed(0)}</td></tr><tr><td><div class="crew-inputs"><div class="crew-select"><label>PIC:</label><select onchange="updatePIC(this.value)"><option value="">Select PIC</option>${captains.map(cp=>`<option value="${cp.name}" ${cp.name===state.picName?'selected':''}>${cp.name} (${cp.weight})</option>`).join('')}</select></div><div class="crew-select"><label>SIC:</label><select onchange="updateSIC(this.value)"><option value="">Select SIC</option>${pilots.map(p=>`<option value="${p.name}" ${p.name===state.sicName?'selected':''}>${p.name} (${p.weight})</option>`).join('')}</select></div></div></td><td class="number"><strong>${c.crewWeight}</strong></td><td class="number">${h.arms.crew}</td><td class="number">${c.crewMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Credenza:<input type="number" value="${state.credenza}" onchange="updateCredenza(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.credenza}</td><td class="number">${h.arms.credenza}</td><td class="number">${c.credenzaMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>No.</span><input type="number" value="${state.numPassFwd}" onchange="updateNumPassFwd(this.value)" style="width:60px;"><span>Pax Forward:</span><input type="number" value="${state.passFwdWeight}" onchange="updatePassFwdWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passFwdWeight}</td><td class="number">${h.arms.passFwd}</td><td class="number">${c.passFwdMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>No.</span><input type="number" value="${state.numPassAft}" onchange="updateNumPassAft(this.value)" style="width:60px;"><span>Pax Aft:</span><input type="number" value="${state.passAftWeight}" onchange="updatePassAftWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passAftWeight}</td><td class="number">${h.arms.passAft}</td><td class="number">${c.passAftMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Baggage Comp:<input type="number" value="${state.baggage}" onchange="updateBaggage(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.baggage}</td><td class="number">${h.arms.baggage}</td><td class="number">${c.baggageMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Jet A Fuel:<input type="number" value="${state.fuel}" onchange="updateFuel(this.value)" class="wide-input"><span style="font-size:12px;color:#666;">lbs</span>${c.maxFuelGallons<=0?'<span style="font-size:11px;color:#c62828;margin-left:8px;">⚠ MGTOW exceeded</span>':'<span style="font-size:11px;color:#666;margin-left:8px;">(Max: '+c.maxFuelGallons.toFixed(1)+' gal / '+c.maxFuelPounds.toFixed(0)+' lbs)</span>'}<div class="fuel-shortcuts"><button class="fuel-shortcut-btn" onclick="fuelToMaxGross(calculate())">Max Gross</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToHOGE(p,c)">HOGE</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToMEA(p,c)">MEA/5000ft</button></div></div></td><td class="number">${state.fuel}</td><td class="number">${c.fuelArm.toFixed(2)}</td><td class="number">${c.fuelMoment.toFixed(0)}</td></tr><tr class="total-row"><td>TOTALS:</td><td class="number">${c.totalWeight.toFixed(1)}</td><td class="number">-</td><td class="number">${c.totalMoment.toFixed(0)}</td></tr></tbody></table><div class="cg-result"><div class="cg-value">CENTER OF GRAVITY (CG): ${c.cg.toFixed(2)}</div><div class="cg-limits">CG limits are from sta: <strong>${c.cgLimits.min}</strong> to Sta: <strong>${c.cgLimits.max}</strong> at this gross weight.</div><div class="status ${c.weightExceeded||!c.cgInLimits?'error':'ok'}">${c.weightExceeded?'✗ MGTOW EXCEEDED':c.cgInLimits?'✓ WITHIN LIMITS':'✗ OUT OF CG LIMITS'}</div></div><div class="summary"><div class="summary-card"><div class="summary-label">Total Weight</div><div class="summary-value">${c.totalWeight.toFixed(0)} lbs</div></div><div class="summary-card"><div class="summary-label">Center of Gravity</div><div class="summary-value">${c.cg.toFixed(2)}</div></div><div class="summary-card"><div class="summary-label">Total Passengers</div><div class="summary-value">${state.numPassFwd+state.numPassAft}</div></div><div class="summary-card"><div class="summary-label">Fuel Load</div><div class="summary-value">${state.fuel} lbs</div></div>${h.model.includes('S-76D')?'<div class="summary-card"><div class="summary-label">Lateral CG</div><div class="summary-value">'+c.lateralCG.toFixed(2)+' in</div></div>':''}</div><div class="graph-section"><div class="graph-title">Center of Gravity Envelope</div><canvas id="cgGraph" width="800" height="500"></canvas></div></div>
+
+<div id="pdf-queue-panel" class="pdf-queue-panel no-print"></div>
+  <button id="export-pdf-btn" class="export-btn no-print" onclick="exportPDF()">Export Leg 1</button>
+  <button id="send-ops-btn" class="send-ops-btn no-print" onclick="sendToOps()" style="display:none">Send All to Ops</button>
+<div class="footer no-print">Helicopter Weight & Balance Calculator</div>
+</div></div></div>`;setTimeout(()=>{drawGraph(c);renderQueuePanel();updateExportBtn();updateSendBtn();window.scrollTo(0,_scrollY);},10);}
+function drawGraph(c){const canvas=document.getElementById('cgGraph');if(!canvas)return;const ctx=canvas.getContext('2d');const w=canvas.width;const h=canvas.height;ctx.fillStyle='white';ctx.fillRect(0,0,w,h);const pad=60;const padL=70;const gw=w-padL-pad;const gh=h-2*pad;function getEnv(m,lat){if(m.includes('S-76D')){
+const absLat=Math.abs(lat);
+if(absLat<=1.0)return[[208.3,7350],[194.0,9250],[194.0,9500],[197.0,11000],[199.6,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];
+else if(absLat<=2.5)return[[208.3,7350],[196.5,8918],[196.5,9500],[199.5,11000],[202.2,11875],[204.5,11875],[210.0,9500],[210.0,9250],[208.3,7350]];
+else if(absLat<=3.5)return[[208.3,7350],[199.0,8586],[199.0,9500],[202.0,11000],[203.3,11400],[205.6,11400],[210.0,9500],[210.0,9250],[208.3,7350]];
+else if(absLat<=4.5)return[[208.3,7350],[194.0,9250],[194.0,9500],[196.6,10800],[207.0,10800],[210.0,9500],[210.0,9250],[208.3,7350]];
+else return[[208.3,7350],[194.0,9250],[194.0,9500],[196.6,10800],[207.0,10800],[210.0,9500],[210.0,9250],[208.3,7350]];
+}else return[[208.2,7350],[199.2,7500],[194.0,8500],[194.0,9500],[197.0,11000],[199.2,11700],[204.0,11700],[210.0,9250],[208.2,7350]]}const env=getEnv(c.heli.model,c.lateralCG||0);const minCG=193;const maxCG=211;const minW=7000;const maxW=12000;function xPos(cg){return padL+((cg-minCG)/(maxCG-minCG))*gw}function yPos(wt){return h-pad-((wt-minW)/(maxW-minW))*gh}ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;for(let cg=minCG;cg<=maxCG;cg+=2){ctx.beginPath();ctx.moveTo(xPos(cg),pad);ctx.lineTo(xPos(cg),h-pad);ctx.stroke()}for(let wt=minW;wt<=maxW;wt+=1000){ctx.beginPath();ctx.moveTo(padL,yPos(wt));ctx.lineTo(w-pad,yPos(wt));ctx.stroke()}ctx.fillStyle='rgba(76,175,80,0.15)';ctx.strokeStyle='#2E7D32';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(xPos(env[0][0]),yPos(env[0][1]));for(let i=1;i<env.length;i++)ctx.lineTo(xPos(env[i][0]),yPos(env[i][1]));ctx.closePath();ctx.fill();ctx.stroke();ctx.strokeStyle='#2196F3';ctx.lineWidth=3;ctx.setLineDash([8,4]);ctx.beginPath();ctx.moveTo(xPos(c.cg),yPos(c.totalWeight));ctx.lineTo(xPos(c.zeroFuelCG),yPos(c.zeroFuelWeight));ctx.stroke();ctx.setLineDash([]);function inEnv(cg,wt){const minWE=Math.min(...env.map(p=>p[1]));const maxWE=Math.max(...env.map(p=>p[1]));if(wt<minWE||wt>maxWE)return false;let inside=false;for(let i=0,j=env.length-1;i<env.length;j=i++){const xi=env[i][0],yi=env[i][1];const xj=env[j][0],yj=env[j][1];const intersect=((yi>wt)!==(yj>wt))&&(cg<(xj-xi)*(wt-yi)/(yj-yi)+xi);if(intersect)inside=!inside}return inside}const fullOK=inEnv(c.cg,c.totalWeight);const zeroOK=inEnv(c.zeroFuelCG,c.zeroFuelWeight);ctx.fillStyle=fullOK?'#2196F3':'#f44336';ctx.beginPath();ctx.arc(xPos(c.cg),yPos(c.totalWeight),7,0,2*Math.PI);ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle=zeroOK?'#2196F3':'#f44336';ctx.beginPath();ctx.arc(xPos(c.zeroFuelCG),yPos(c.zeroFuelWeight),7,0,2*Math.PI);ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#333';ctx.font='bold 11px Arial';ctx.textAlign='center';const fullX=xPos(c.cg);const fullY=yPos(c.totalWeight);const fullLY=fullY<h/2?fullY+20:fullY-20;ctx.fillText('Full Fuel',fullX,fullLY);ctx.font='10px Arial';ctx.fillText(`${c.totalWeight.toFixed(0)} lbs, ${c.cg.toFixed(2)}"`,fullX,fullLY+12);ctx.font='bold 11px Arial';const zeroX=xPos(c.zeroFuelCG);const zeroY=yPos(c.zeroFuelWeight);const zeroLY=zeroY<h/2?zeroY+20:zeroY-20;ctx.fillText('Zero Fuel',zeroX,zeroLY);ctx.font='10px Arial';ctx.fillText(`${c.zeroFuelWeight.toFixed(0)} lbs, ${c.zeroFuelCG.toFixed(2)}"`,zeroX,zeroLY+12);ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,h-pad);ctx.lineTo(w-pad,h-pad);ctx.stroke();ctx.beginPath();ctx.moveTo(padL,pad);ctx.lineTo(padL,h-pad);ctx.stroke();ctx.fillStyle='#333';ctx.font='11px Arial';ctx.textAlign='center';for(let cg=minCG;cg<=maxCG;cg+=2)ctx.fillText(cg.toString(),xPos(cg),h-pad+20);ctx.font='bold 12px Arial';ctx.fillText('CENTER OF GRAVITY - INCHES AFT OF DATUM',w/2,h-10);ctx.textAlign='right';ctx.font='11px Arial';for(let wt=minW;wt<=maxW;wt+=1000)ctx.fillText((wt/1000).toString(),padL-10,yPos(wt)+4);ctx.save();ctx.translate(15,h/2);ctx.rotate(-Math.PI/2);ctx.font='bold 12px Arial';ctx.textAlign='center';ctx.fillText('GROSS WEIGHT - 1000 LB',0,0);ctx.restore();const lx=w-220;const ly=30;ctx.fillStyle='rgba(76,175,80,0.3)';ctx.fillRect(lx,ly,20,15);ctx.strokeStyle='#2E7D32';ctx.lineWidth=2;ctx.strokeRect(lx,ly,20,15);ctx.fillStyle='#333';ctx.font='12px Arial';ctx.textAlign='left';let mt='S-76C+';if(c.heli.model.includes('S-76D'))mt='S-76D';else if(c.heli.model.includes('C++'))mt='S-76C++';ctx.fillText(`CG Envelope (${mt})`,lx+25,ly+11);ctx.strokeStyle='#2196F3';ctx.lineWidth=3;ctx.setLineDash([8,4]);ctx.beginPath();ctx.moveTo(lx,ly+30);ctx.lineTo(lx+20,ly+30);ctx.stroke();ctx.setLineDash([]);ctx.fillText('Fuel Burn',lx+25,ly+33);ctx.font='bold 12px Arial';if(fullOK&&zeroOK){ctx.fillStyle='#2E7D32';ctx.fillText('✓ WITHIN LIMITS',lx,ly+55)}else{ctx.fillStyle='#c62828';ctx.fillText('✗ OUT OF LIMITS',lx,ly+55)}}
+function updateHeli(v){state.selectedHeliIndex=parseInt(v);render()}
+function updateDate(v){state.date=v;render()}
+function updateFrom(v){state.from=v.toUpperCase();render()}
+function updateTo(v){state.to=v.toUpperCase();render()}
+function updatePIC(v){state.picName=v;render()}
+function updateSIC(v){state.sicName=v;render()}
+function updateNavBag(v){state.navBag=Number(v);render()}
+function updateCredenza(v){state.credenza=Number(v);render()}
+function updateNumPassFwd(v){state.numPassFwd=Number(v);render()}
+function updatePassFwdWeight(v){state.passFwdWeight=Number(v);render()}
+function updateNumPassAft(v){state.numPassAft=Number(v);render()}
+function updatePassAftWeight(v){state.passAftWeight=Number(v);render()}
+function updateBaggage(v){state.baggage=Number(v);render()}
+function updateFuel(v){state.fuel=Number(v);render()}
+function updateFahrenheit(v){state.fahrenheit=v;render()}
+function updateAltimeter(v){state.altimeter=v;render()}
+function updateFieldElevation(v){state.fieldElevation=v;render()}
+function updateTempAloft6000(v){state.tempAloft6000=v;render()}
+render();
 </script>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(reg => {
-      console.log('SW registered, scope:', reg.scope);
-    }).catch(err => console.log('SW registration failed:', err));
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js')
+      .then(function(r){console.log('SW:',r.scope);})
+      .catch(function(e){console.log('SW failed:',e);});
   });
 }
-window.addEventListener('beforeprint', () => {
-  const c = calculate();
-  drawGraph(c);
-});
-window.addEventListener('afterprint', () => {
-  const c = calculate();
-  drawGraph(c);
-});
+window.addEventListener('beforeprint',function(){drawGraph(calculate());});
+window.addEventListener('afterprint',function(){drawGraph(calculate());});
 </script>
-</body>
-</html>
+</body></html>
