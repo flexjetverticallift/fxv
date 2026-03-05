@@ -1,8 +1,11 @@
-const CACHE_NAME = 'fxv-wb-v1';
+const CACHE_NAME = 'fxv-wb-v2';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './manifest.json',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
 ];
 
 // Firebase domains to cache responses from

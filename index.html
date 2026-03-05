@@ -202,6 +202,61 @@ td.number{text-align:right}
 }
 
 .print-header-bar{display:none}
+
+/* ── PDF Export queue UI ── */
+.pdf-queue-panel{background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:10px 14px;margin:12px 0 6px;display:none}
+.pdf-queue-panel.has-items{display:block}
+.pdf-queue-title{font-size:11px;font-weight:bold;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.pdf-queue-legs{display:flex;flex-wrap:wrap;gap:6px}
+.pdf-leg-pill{display:flex;align-items:center;gap:4px;background:#1a237e;color:#fff;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:bold}
+.pdf-leg-pill button{background:none;border:none;color:#90caf9;font-size:13px;cursor:pointer;padding:0 0 0 4px;line-height:1}
+.pdf-leg-pill button:hover{color:#fff}
+.pdf-leg-replacing{background:#e65100}
+.export-btn{margin:8px auto 4px;display:block;padding:12px 30px;background:#1a237e;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer;width:90%;max-width:340px}
+.export-btn:hover{background:#283593}
+.export-btn:disabled{background:#aaa;cursor:not-allowed}
+.send-ops-btn{margin:4px auto 20px;display:block;padding:12px 30px;background:#2e7d32;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer;width:90%;max-width:340px}
+.send-ops-btn:hover{background:#1b5e20}
+.pdf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.pdf-toast.show{opacity:1}
+
+/* ── Generating-PDF mode: apply print-like styles for html2canvas capture ── */
+body.generating-pdf .no-print{display:none !important}
+body.generating-pdf .summary{display:none !important}
+body.generating-pdf .perf-inputs{display:none !important}
+body.generating-pdf .pdf-queue-panel{display:none !important}
+body.generating-pdf .footer{display:none !important}
+body.generating-pdf .fuel-shortcuts{display:none !important}
+body.generating-pdf .header{display:none !important}
+body.generating-pdf .aircraft-section{display:none !important}
+body.generating-pdf .print-header-bar{display:flex !important;flex-direction:column;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid #333}
+body.generating-pdf .print-title{font-size:13px;font-weight:bold;letter-spacing:0.5px}
+body.generating-pdf .print-ac{font-size:9px;color:#333;margin-top:1px}
+body.generating-pdf .container{padding:8px 10px !important;max-width:680px !important;margin:0 !important}
+body.generating-pdf .flight-info{margin:2px 0 !important;gap:6px !important;font-size:9px !important}
+body.generating-pdf .form-group{margin:0 6px 0 0 !important}
+body.generating-pdf .form-group label{font-size:8px !important}
+body.generating-pdf .perf-section{padding:4px 8px !important;margin:3px 0 !important;font-size:9px !important}
+body.generating-pdf .perf-title{font-size:11px !important;margin:0 0 2px 0 !important}
+body.generating-pdf .perf-outputs{gap:4px !important;padding:2px 0 !important;margin:0 !important}
+body.generating-pdf .perf-out{padding:3px 6px !important}
+body.generating-pdf .perf-label{font-size:8px !important}
+body.generating-pdf .perf-value{font-size:12px !important}
+body.generating-pdf h3{font-size:11px !important;margin:3px 0 2px 0 !important;padding:2px 0 !important}
+body.generating-pdf table{font-size:9px !important;margin:2px 0 !important}
+body.generating-pdf th,body.generating-pdf td{padding:1px 4px !important;line-height:1.3 !important}
+body.generating-pdf th{font-size:9px !important}
+body.generating-pdf .inline-input span{font-size:8px !important}
+body.generating-pdf select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
+body.generating-pdf input{border:none !important;background:transparent !important;font-size:9px !important;padding:0 !important}
+body.generating-pdf .cg-result{margin:2px 0 !important;padding:4px 8px !important}
+body.generating-pdf .cg-value{font-size:13px !important;margin:1px 0 !important}
+body.generating-pdf .cg-limits{font-size:8px !important}
+body.generating-pdf .status{padding:4px 8px !important;font-size:11px !important}
+body.generating-pdf .graph-section{margin:2px 0 !important;padding:0 !important}
+body.generating-pdf .graph-title{font-size:10px !important;margin:0 0 2px 0 !important}
+body.generating-pdf #cgGraph{display:block;margin:0 auto}
+
 @media print{
   /* ── Hide interactive / non-record elements ── */
   .no-print{display:none !important}
@@ -577,7 +632,173 @@ function calcPerf(totalWeight,model){
 function fuelToMaxGross(c){state.fuel=Math.max(0,Math.floor(c.maxFuelPounds));render();}
 function fuelToHOGE(p,c){if(p.hogeWeight===null)return;const nonFuel=c.totalWeight-state.fuel;const target=Math.floor((p.hogeWeight-nonFuel)/10)*10;state.fuel=Math.max(0,target);render();}
 function fuelToMEA(p,c){if(p.meaWeight===null)return;const nonFuel=c.totalWeight-state.fuel;const target=Math.floor((p.meaWeight-nonFuel)/10)*10;state.fuel=Math.max(0,target);render();}
-function doPrint(){state.passFwdWeight=0;state.numPassFwd=0;state.passAftWeight=0;state.numPassAft=0;state.baggage=0;window.print();}
+// ── PDF Export System ──────────────────────────────────────────────
+let pdfQueue = [];      // [{leg, blob, filename}]
+let currentLeg = 1;
+let replacingLeg = null; // if set, next export replaces this leg number
+let pdfGenerating = false;
+
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+
+function legFilename(legNum){
+  const c = calculate();
+  const tail = (helicopters[state.selectedHeliIndex]||{}).tailNumber||'FXV';
+  return `FXV_WB_${tail}_${state.date||todayStr()}_leg${legNum}.pdf`;
+}
+
+function showToast(msg, duration=2200){
+  let t = document.getElementById('pdf-toast');
+  if(!t){ t=document.createElement('div'); t.id='pdf-toast'; t.className='pdf-toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), duration);
+}
+
+function renderQueuePanel(){
+  const panel = document.getElementById('pdf-queue-panel');
+  if(!panel) return;
+  if(pdfQueue.length === 0){ panel.classList.remove('has-items'); return; }
+  panel.classList.add('has-items');
+  const legs = pdfQueue.map(item => {
+    const isReplacing = replacingLeg === item.leg;
+    return `<span class="pdf-leg-pill${isReplacing?' pdf-leg-replacing':''}">
+      Leg ${item.leg}
+      <button onclick="reExportLeg(${item.leg})" title="Re-export leg ${item.leg}">↺</button>
+      <button onclick="removeLeg(${item.leg})" title="Remove leg ${item.leg}">×</button>
+    </span>`;
+  }).join('');
+  panel.innerHTML = `<div class="pdf-queue-title">Queued PDFs</div><div class="pdf-queue-legs">${legs}</div>`;
+}
+
+function reExportLeg(legNum){
+  replacingLeg = legNum;
+  renderQueuePanel();
+  updateExportBtn();
+  showToast(`Re-export will replace Leg ${legNum}`);
+}
+
+function removeLeg(legNum){
+  pdfQueue = pdfQueue.filter(i => i.leg !== legNum);
+  if(replacingLeg === legNum) replacingLeg = null;
+  renderQueuePanel();
+  updateExportBtn();
+  updateSendBtn();
+}
+
+function updateExportBtn(){
+  const btn = document.getElementById('export-pdf-btn');
+  if(!btn) return;
+  const legLabel = replacingLeg ? `Re-export Leg ${replacingLeg}` : `Export Leg ${currentLeg}`;
+  btn.textContent = pdfGenerating ? 'Generating…' : legLabel;
+  btn.disabled = pdfGenerating;
+}
+
+function updateSendBtn(){
+  const btn = document.getElementById('send-ops-btn');
+  if(!btn) return;
+  if(pdfQueue.length === 0){ btn.style.display='none'; return; }
+  btn.style.display='block';
+  btn.textContent = `Send All to Ops (${pdfQueue.length} leg${pdfQueue.length>1?'s':''})`;
+}
+
+async function exportPDF(){
+  if(pdfGenerating) return;
+  pdfGenerating = true;
+  updateExportBtn();
+
+  try {
+    const c = calculate();
+    const h = helicopters[state.selectedHeliIndex];
+
+    // Resize graph canvas for PDF capture
+    const canvas = document.getElementById('cgGraph');
+    canvas.width = 560; canvas.height = 210;
+    drawGraph(c);
+
+    // Apply PDF capture mode
+    document.body.classList.add('generating-pdf');
+
+    // Small delay for styles to apply
+    await new Promise(r => setTimeout(r, 80));
+
+    const container = document.querySelector('.container');
+    const captureCanvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+      width: container.scrollWidth,
+      height: container.scrollHeight,
+      windowWidth: container.scrollWidth + 40,
+    });
+
+    document.body.classList.remove('generating-pdf');
+
+    // Restore graph to screen size
+    const screenW = window.innerWidth || 800;
+    if(screenW < 800){ canvas.width=screenW; canvas.height=Math.round(screenW*0.68); }
+    else { canvas.width=800; canvas.height=500; }
+    drawGraph(c);
+
+    // Build PDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation:'portrait', unit:'in', format:'letter' });
+    const pageW = 8.5, pageH = 11, margin = 0.25;
+    const usableW = pageW - margin*2;
+    const imgH = (captureCanvas.height / captureCanvas.width) * usableW;
+    const finalH = Math.min(imgH, pageH - margin*2);
+    const imgData = captureCanvas.toDataURL('image/jpeg', 0.92);
+    pdf.addImage(imgData, 'JPEG', margin, margin, usableW, finalH);
+
+    const blob = pdf.output('blob');
+    const legNum = replacingLeg || currentLeg;
+    const filename = legFilename(legNum);
+
+    // Add or replace in queue
+    const existingIdx = pdfQueue.findIndex(i => i.leg === legNum);
+    if(existingIdx >= 0){
+      pdfQueue[existingIdx] = { leg:legNum, blob, filename };
+      showToast(`Leg ${legNum} replaced ✓`);
+    } else {
+      pdfQueue.push({ leg:legNum, blob, filename });
+      showToast(`Leg ${legNum} added ✓`);
+      currentLeg = legNum + 1;
+    }
+
+    replacingLeg = null;
+    renderQueuePanel();
+    updateSendBtn();
+
+  } catch(err){
+    document.body.classList.remove('generating-pdf');
+    showToast('PDF generation failed — try again');
+    console.error('PDF export error:', err);
+  }
+
+  pdfGenerating = false;
+  updateExportBtn();
+}
+
+async function sendToOps(){
+  if(pdfQueue.length === 0) return;
+  try {
+    const files = pdfQueue
+      .sort((a,b) => a.leg - b.leg)
+      .map(item => new File([item.blob], item.filename, { type:'application/pdf' }));
+    if(navigator.share && navigator.canShare && navigator.canShare({files})){
+      await navigator.share({ files, title:'FXV Weight & Balance', text:`W&B sheets — ${files.length} leg(s)` });
+    } else {
+      // Desktop fallback: download each file
+      files.forEach(f => {
+        const url = URL.createObjectURL(f);
+        const a = document.createElement('a'); a.href=url; a.download=f.name; a.click();
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+      });
+    }
+  } catch(err){
+    if(err.name !== 'AbortError') showToast('Share failed — try again');
+  }
+}
 
 // =====================================================================
 // PASSWORD / ADMIN
@@ -832,10 +1053,18 @@ function render(){
     <div class="graph-title">Center of Gravity Envelope</div>
     <canvas id="cgGraph" width="800" height="500" style="max-width:100%;"></canvas>
   </div>
-  <button class="finish-btn no-print" onclick="doPrint()">Finish &amp; Print/Export</button>
+  <div id="pdf-queue-panel" class="pdf-queue-panel no-print"></div>
+  <button id="export-pdf-btn" class="export-btn no-print" onclick="exportPDF()">Export Leg 1</button>
+  <button id="send-ops-btn" class="send-ops-btn no-print" onclick="sendToOps()" style="display:none">Send All to Ops</button>
   <div class="footer no-print">Helicopter Weight &amp; Balance Calculator</div>
 </div>`;
-  setTimeout(()=>{drawGraph(c);window.scrollTo(0,_scrollY);},10);
+  setTimeout(()=>{
+    drawGraph(c);
+    window.scrollTo(0,_scrollY);
+    renderQueuePanel();
+    updateExportBtn();
+    updateSendBtn();
+  },10);
 }
 
 // =====================================================================
