@@ -747,10 +747,10 @@ function render(){
   <div class="perf-section">
     <div class="perf-title">Performance Calculations</div>
     <div class="perf-inputs">
-      <div class="form-group"><label>Temperature (&deg;F)</label><input type="number" inputmode="numeric" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div>
+      <div class="form-group"><label>Temperature (&deg;F)</label><input type="number" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div>
       <div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" oninput="formatAltimeter(this)" onchange="updateAltimeter(this.value)" placeholder="29.92" style="ime-mode:disabled;"></div>
       <div class="form-group"><label>Field Elevation (ft)</label><input type="number" inputmode="numeric" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" placeholder="Enter elevation"></div>
-      <div class="form-group"><label>Temperature Aloft at 6000 ft (&deg;C)</label><input type="number" inputmode="numeric" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" placeholder="Enter temperature"></div>
+      <div class="form-group"><label>Temperature Aloft at 6000 ft (&deg;C)</label><input type="number" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" placeholder="Enter temperature"></div>
     </div>
     <div class="perf-outputs">
       <div class="perf-out"><div class="perf-label">Temperature (&deg;C)</div><div class="perf-value">${p.celsius!==null?p.celsius:"--"}</div></div>
@@ -948,6 +948,15 @@ function updateTempAloft6000(v){state.tempAloft6000=v;render();}
 // INIT
 // =====================================================================
 loadFromFirebase();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('SW registered, scope:', reg.scope);
+    }).catch(err => console.log('SW registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>
