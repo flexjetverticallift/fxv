@@ -202,51 +202,68 @@ td.number{text-align:right}
 }
 
 @media print{
+  /* ── Hide interactive / non-record elements ── */
   .no-print{display:none !important}
   .admin-panel{display:none !important}
   .pw-overlay{display:none !important}
-  select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
-  .perf-section{background:#f5f5dc !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .fuel-shortcuts{display:none !important}
+  .summary{display:none !important}
+
+  /* ── Page setup ── */
+  @page{margin:0.25in;size:letter}
+  *{box-sizing:border-box}
+  body{font-size:9px !important}
+  .container{padding:4px 6px !important}
+
+  /* ── Header ── */
+  .header{padding:4px 0 !important;margin-bottom:4px !important}
+  .header h1{font-size:16px !important;margin:2px 0 !important}
+  .header h2{font-size:11px !important;margin:1px 0 !important}
+  .admin-btn{display:none !important}
+
+  /* ── Aircraft info — single row ── */
+  .aircraft-section{margin:2px 0 !important;font-size:9px !important}
+  .info-box{display:flex;flex-wrap:wrap;gap:6px 16px !important;font-size:9px !important;padding:2px 0 !important}
+
+  /* ── Flight info row ── */
+  .flight-info{margin:2px 0 !important;gap:8px !important}
+  .form-group{margin:0 6px 0 0 !important}
+  .form-group label{font-size:8px !important}
+
+  /* ── Performance section — outputs only ── */
+  .perf-section{background:#f5f5dc !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:4px 8px !important;margin:4px 0 !important}
+  .perf-title{font-size:11px !important;margin:0 0 3px 0 !important}
+  .perf-outputs{gap:4px !important;padding:2px 0 !important;margin:0 !important}
+  .perf-out{padding:3px !important}
+  .perf-label{font-size:8px !important}
+  .perf-value{font-size:12px !important}
+
+  /* ── W&B heading ── */
+  h3{font-size:11px !important;margin:4px 0 2px 0 !important;padding:3px 0 !important}
+
+  /* ── Table ── */
+  table{font-size:9px !important;margin:2px 0 !important;width:100% !important}
+  th,td{padding:1px 3px !important;line-height:1.3 !important}
+  th{font-size:9px !important}
   .yellow-row{background:#fff9c4 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .total-row{background:#e0e0e0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .inline-input span{font-size:8px !important}
+  .crew-inputs{gap:4px !important}
+  select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:transparent !important;border:none !important;padding:0 !important}
+  input{border:none !important;background:transparent !important;font-size:9px !important;padding:0 !important}
+
+  /* ── CG result ── */
+  .cg-result{margin:3px 0 !important;padding:4px 8px !important}
+  .cg-value{font-size:13px !important;margin:2px 0 !important}
+  .cg-limits{font-size:8px !important}
+  .status{padding:4px 8px !important;font-size:11px !important}
   .status.ok{background:#c8e6c9 !important;color:#2e7d32 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .status.error{background:#ffcdd2 !important;color:#c62828 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  @page{margin:0.3in;size:letter}
-  body{font-size:10px !important}
-  .container{padding:8px !important}
-  .header h1{font-size:20px !important;margin:4px 0 !important}
-  .header h2{font-size:14px !important;margin:3px 0 !important}
-  .aircraft-section{margin:5px 0 !important;font-size:10px !important}
-  .info-box{gap:8px !important;font-size:10px !important}
-  .flight-info{margin:5px 0 !important}
-  .form-group{margin:0 8px 0 0 !important}
-  .form-group label{font-size:10px !important}
-  .perf-section{padding:8px !important;margin:8px 0 !important}
-  .perf-title{font-size:14px !important;margin:0 0 5px 0 !important}
-  .perf-inputs{gap:5px !important;padding:5px 0 !important}
-  .perf-outputs{gap:5px !important;padding:5px 0 !important;margin:5px 0 !important}
-  .perf-out{padding:5px !important}
-  .perf-label{font-size:9px !important}
-  .perf-value{font-size:13px !important}
-  h3{font-size:15px !important;margin:8px 0 5px 0 !important;padding:5px 0 !important}
-  table{font-size:10px !important;margin:5px 0 !important}
-  th,td{padding:2px 4px !important}
-  th{font-size:10px !important}
-  .summary{gap:5px !important;margin:8px 0 !important}
-  .summary-card{padding:5px !important;font-size:10px !important}
-  .summary-label{font-size:9px !important}
-  .summary-value{font-size:13px !important}
-  .cg-result{margin:8px 0 !important;padding:8px !important;page-break-before:always}
-  .cg-value{font-size:16px !important;margin:3px 0 !important}
-  .cg-limits{font-size:10px !important}
-  .status{padding:8px !important;font-size:13px !important}
-  .graph-section{margin:5px 0 !important;padding:8px 0 !important}
-  .graph-title{font-size:16px !important;margin:0 0 8px 0 !important}
-  #cgGraph{width:600px !important;height:380px !important;display:block;margin:0 auto}
-  input,select{border:none;background:transparent;font-size:9px !important;padding:0 !important}
-  .fuel-shortcuts{display:none !important}
-  .inline-input span{font-size:8px !important}
-  .crew-inputs{gap:8px !important}
+
+  /* ── CG Graph — compact ── */
+  .graph-section{margin:2px 0 !important;padding:0 !important}
+  .graph-title{font-size:10px !important;margin:0 0 2px 0 !important}
+  #cgGraph{width:480px !important;height:240px !important;display:block;margin:0 auto}
 }
 </style>
 </head>
@@ -746,7 +763,7 @@ function render(){
   </div>
   <div class="perf-section">
     <div class="perf-title">Performance Calculations</div>
-    <div class="perf-inputs">
+    <div class="perf-inputs no-print">
       <div class="form-group"><label>Temperature (&deg;F)</label><input type="number" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div>
       <div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" oninput="formatAltimeter(this)" onchange="updateAltimeter(this.value)" placeholder="29.92" style="ime-mode:disabled;"></div>
       <div class="form-group"><label>Field Elevation (ft)</label><input type="number" inputmode="numeric" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" placeholder="Enter elevation"></div>
