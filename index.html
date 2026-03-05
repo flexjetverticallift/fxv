@@ -521,9 +521,21 @@ async function exportPDF(){
     const tail=(helicopters[state.selectedHeliIndex]||{}).tailNumber||'FXV';
     const fn='FXV_WB_'+tail+'_'+(state.date||new Date().toISOString().split('T')[0])+'_leg'+legNum+'.pdf';
     const idx=pdfQueue.findIndex(i=>i.leg===legNum);
-    if(idx>=0){pdfQueue[idx]={leg:legNum,blob,filename:fn};showToast('Leg '+legNum+' replaced ✓');}
-    else{pdfQueue.push({leg:legNum,blob,filename:fn});showToast('Leg '+legNum+' added ✓');currentLeg=legNum+1;}
+    const wasReplace=replacingLeg!==null;
+    if(idx>=0){pdfQueue[idx]={leg:legNum,blob,filename:fn};showToast('Leg '+legNum+' replaced \u2713');}
+    else{pdfQueue.push({leg:legNum,blob,filename:fn});showToast('Leg '+legNum+' added \u2713');currentLeg=legNum+1;}
     replacingLeg=null;renderQueuePanel();updateSendBtn();
+    // Auto-advance: destination→departure, clear pax/baggage, keep crew & fuel
+    if(!wasReplace){
+      state.from=state.to||'';
+      state.to='';
+      state.numPassFwd=0;
+      state.passFwdWeight=0;
+      state.numPassAft=0;
+      state.passAftWeight=0;
+      state.baggage=0;
+      render();
+    }
   }catch(err){alert('PDF error: '+(err&&err.message?err.message:String(err)));console.error(err);}
   pdfGenerating=false;updateExportBtn();
 }
