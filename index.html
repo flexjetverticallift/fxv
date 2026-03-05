@@ -581,9 +581,22 @@ function updateFahrenheit(v){state.fahrenheit=v;render()}
 function updateAltimeter(v){state.altimeter=v;render()}
 function updateFieldElevation(v){state.fieldElevation=v;render()}
 function updateTempAloft6000(v){state.tempAloft6000=v;render()}
-render();
+try {
+  render();
+} catch(e) {
+  document.getElementById('app').innerHTML =
+    '<div style="padding:20px;font-family:Arial;color:red;">' +
+    '<h2>Load Error</h2><pre style="white-space:pre-wrap;font-size:13px;">' +
+    (e && e.stack ? e.stack : String(e)) +
+    '</pre></div>';
+}
 </script>
 <script>
+window.onerror = function(msg, src, line, col, err) {
+  var app = document.getElementById('app');
+  if(app) app.innerHTML = '<div style="padding:20px;font-family:Arial;color:red;"><h2>Runtime Error</h2><pre>' + msg + '\nLine: ' + line + '\n' + (err&&err.stack?err.stack:'') + '</pre></div>';
+  return false;
+};
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('sw.js')
