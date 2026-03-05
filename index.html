@@ -703,6 +703,15 @@ function updateSendBtn(){
 
 async function exportPDF(){
   if(pdfGenerating) return;
+  // Check libraries loaded
+  if(typeof html2canvas === 'undefined'){
+    alert('html2canvas library not loaded. Please check your internet connection and reload.');
+    return;
+  }
+  if(typeof window.jspdf === 'undefined'){
+    alert('jsPDF library not loaded. Please check your internet connection and reload.');
+    return;
+  }
   pdfGenerating = true;
   updateExportBtn();
 
@@ -771,8 +780,11 @@ async function exportPDF(){
 
   } catch(err){
     document.body.classList.remove('generating-pdf');
-    showToast('PDF generation failed — try again');
+    const msg = err && err.message ? err.message : String(err);
+    showToast('Error: ' + msg.substring(0,60), 4000);
     console.error('PDF export error:', err);
+    // Also alert so it's visible on iOS
+    alert('PDF error: ' + msg);
   }
 
   pdfGenerating = false;
