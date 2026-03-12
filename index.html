@@ -175,7 +175,170 @@
   .graph-title{font-size:9px !important;margin:0 0 1px 0 !important}
   #cgGraph{width:100% !important;max-width:380px !important;height:170px !important;display:block;margin:0 auto}
 }
-</style></head><body><div id="app"></div><script>
+
+/* Admin panel */
+.admin-btn{display:block;margin:8px auto 0;padding:6px 18px;background:transparent;color:#aaa;border:1px solid #ddd;border-radius:4px;font-size:11px;cursor:pointer;letter-spacing:0.5px}
+.admin-btn:hover{background:#f5f5f5;color:#666}
+
+/* Password modal */
+.pw-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center}
+.pw-box{background:white;padding:32px;border-radius:10px;width:320px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.3)}
+.pw-box h3{margin-bottom:16px;color:#333;font-size:18px}
+.pw-box input{width:100%;padding:10px;font-size:16px;border:2px solid #ccc;border-radius:6px;text-align:center;letter-spacing:2px;margin-bottom:12px}
+.pw-box input.shake{animation:shake 0.4s ease}
+.pw-box input.error{border-color:#f44336}
+.pw-btn{padding:10px 24px;background:#1976d2;color:white;border:none;border-radius:6px;font-size:15px;cursor:pointer;width:100%}
+.pw-btn:hover{background:#1565c0}
+.pw-cancel{margin-top:10px;background:none;border:none;color:#999;cursor:pointer;font-size:13px}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+
+/* Admin panel */
+.admin-panel{position:fixed;top:0;left:0;width:100%;height:100%;background:#f0f2f5;z-index:999;display:flex;flex-direction:column;overflow:hidden}
+.admin-header{background:#1a237e;color:white;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.admin-header h2{font-size:20px;font-weight:bold;letter-spacing:0.5px}
+.admin-header-right{display:flex;gap:12px;align-items:center}
+.admin-save-btn{padding:8px 22px;background:#43a047;color:white;border:none;border-radius:5px;font-size:14px;cursor:pointer;font-weight:bold}
+.admin-save-btn:hover{background:#388e3c}
+.admin-save-btn:disabled{background:#aaa;cursor:not-allowed}
+.admin-close-btn{padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:5px;font-size:14px;cursor:pointer}
+.admin-close-btn:hover{background:rgba(255,255,255,0.25)}
+.admin-tabs{display:flex;background:#283593;padding:0 24px;flex-shrink:0}
+.admin-tab{padding:12px 24px;color:rgba(255,255,255,0.7);cursor:pointer;font-size:14px;border-bottom:3px solid transparent;font-weight:500}
+.admin-tab.active{color:white;border-bottom-color:#90caf9}
+.admin-tab:hover:not(.active){color:white}
+.admin-body{flex:1;overflow-y:auto;padding:24px}
+.admin-section{background:white;border-radius:8px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.admin-section h3{font-size:16px;color:#1a237e;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e3f2fd}
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{background:#e8eaf6;padding:10px 12px;text-align:left;font-size:13px;color:#3949ab;font-weight:600;border-bottom:2px solid #c5cae9}
+.admin-table td{padding:8px 12px;border-bottom:1px solid #eee;vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:#f8f9ff}
+.admin-input{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;width:100%}
+.admin-input:focus{outline:none;border-color:#3949ab}
+.admin-input-sm{width:70px}
+.admin-input-med{width:100px}
+.role-check{display:flex;gap:16px;align-items:center}
+.role-check label{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:normal;color:#333;cursor:pointer;margin:0}
+.role-check input[type=checkbox]{width:15px;height:15px;cursor:pointer;margin:0}
+.admin-del-btn{padding:4px 10px;background:#ef5350;color:white;border:none;border-radius:4px;font-size:12px;cursor:pointer}
+.admin-del-btn:hover{background:#c62828}
+.admin-add-row{background:#f3f4ff;border-top:2px solid #c5cae9}
+.admin-add-row td{padding:10px 12px}
+.admin-add-btn{padding:7px 16px;background:#1976d2;color:white;border:none;border-radius:4px;font-size:13px;cursor:pointer;font-weight:500;white-space:nowrap}
+.admin-add-btn:hover{background:#1565c0}
+.ac-card{border:1px solid #e0e0e0;border-radius:8px;padding:16px;margin-bottom:12px;background:white}
+.ac-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.ac-card-title{font-weight:bold;font-size:15px;color:#1a237e}
+.ac-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.ac-field{display:flex;flex-direction:column;gap:3px}
+.ac-field label{font-size:11px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin:0}
+.ac-field input,ac-field select{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px}
+.ac-field input:focus{outline:none;border-color:#3949ab}
+.ac-field select{padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px}
+.ac-divider{font-size:11px;color:#888;margin:10px 0 6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-top:1px solid #eee;padding-top:10px}
+.add-ac-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#e3f2fd;border:2px dashed #90caf9;border-radius:8px;cursor:pointer;color:#1976d2;font-size:14px;font-weight:500;width:100%;margin-top:4px}
+.add-ac-btn:hover{background:#bbdefb}
+.save-status{font-size:13px;color:rgba(255,255,255,0.85);margin-right:4px}
+.save-status.ok{color:#a5d6a7}
+</style>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head><body><div id="pw-overlay" class="pw-overlay" style="display:none">
+  <div class="pw-box">
+    <h3>&#x1F512; Admin Access</h3>
+    <p style="font-size:13px;color:#666;margin-bottom:14px">Enter admin password to continue</p>
+    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPW()">
+    <button class="pw-btn" onclick="checkPW()">Unlock</button>
+    <br><button class="pw-cancel" onclick="closePW()">Cancel</button>
+  </div>
+</div>
+
+<div id="admin-panel" class="admin-panel" style="display:none">
+  <div class="admin-header">
+    <h2>&#x2699;&#xFE0F; Admin Panel &mdash; FXV Weight &amp; Balance</h2>
+    <div class="admin-header-right">
+      <span id="save-status" class="save-status"></span>
+      <button class="admin-save-btn" id="admin-save-btn" onclick="adminSave()">&#x2601; Save &amp; Push to All Users</button>
+      <button class="admin-close-btn" onclick="closeAdmin()">&#x2715; Close</button>
+    </div>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab active" id="tab-personnel" onclick="switchTab('personnel')">&#x1F9D1;&#x200D;&#x2708;&#xFE0F; Personnel</div>
+    <div class="admin-tab" id="tab-aircraft" onclick="switchTab('aircraft')">&#x1F681; Aircraft</div>
+  </div>
+  <div class="admin-body">
+    <div id="admin-personnel-panel"></div>
+    <div id="admin-aircraft-panel" style="display:none"></div>
+  </div>
+</div>
+
+<div id="app"></div><script>
+
+// =====================================================================
+// FIREBASE
+// =====================================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyC3CpGwwwFzs2UF_eCSSVGTwTXYTSnN_J4",
+  authDomain: "fxv-weight-and-balance.firebaseapp.com",
+  projectId: "fxv-weight-and-balance",
+  storageBucket: "fxv-weight-and-balance.firebasestorage.app",
+  messagingSenderId: "313744532529",
+  appId: "1:313744532529:web:8a3e8f7f256dd459e7a110"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const FUNCTION_URL = "https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave";
+
+function loadFromFirebase() {
+  db.collection("config").doc("pilots").get().then(doc => {
+    if (doc.exists && doc.data().list && doc.data().list.length) {
+      allPilots = doc.data().list;
+      refreshLists();
+      render();
+    }
+  }).catch(()=>{});
+  db.collection("config").doc("aircraft").get().then(doc => {
+    if (doc.exists && doc.data().list && doc.data().list.length) {
+      helicopters = doc.data().list;
+      render();
+    }
+  }).catch(()=>{});
+}
+
+function saveToFirebase() {
+  const btn = document.getElementById("admin-save-btn");
+  const status = document.getElementById("save-status");
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+  status.className = "save-status";
+  status.textContent = "";
+  fetch(FUNCTION_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password: "kbdr", pilots: allPilots, aircraft: helicopters })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      status.textContent = "✓ Saved";
+      status.className = "save-status ok";
+    } else {
+      status.textContent = "✗ " + (data.error || "Save failed");
+      status.className = "save-status";
+    }
+    btn.disabled = false;
+    btn.textContent = "☁ Save & Push to All Users";
+    setTimeout(() => { status.textContent = ""; }, 3000);
+  })
+  .catch(e => {
+    status.textContent = "✗ Network error";
+    btn.disabled = false;
+    btn.textContent = "☁ Save & Push to All Users";
+    setTimeout(() => { status.textContent = ""; }, 3000);
+  });
+}
+
 const helicopters=[
 {"tailNumber":"N76FX","serial":"760585","model":"SIKORSKY  S-76C+","emptyWeight":8363.7,"emptyArm":208,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
 {"tailNumber":"N1103S","serial":"761016","model":"SIKORSKY S-76D","emptyWeight":8694.4,"emptyArm":207.8,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
@@ -618,7 +781,166 @@ function fuelToMEA(p, c) {
   render();
 }
 
-function render(){const _scrollY=window.scrollY||0;const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);document.getElementById('app').innerHTML=`<div class="container"><div class="print-header-bar"><span class="print-title">FLEXJET VERTICAL LIFT — LOAD MANIFEST</span><span class="print-ac">${h.tailNumber} • ${h.model} • S/N ${h.serial} • EW ${h.emptyWeight} lbs • Arm ${h.emptyArm.toFixed(2)}</span></div><div class="header"><h1>FLEXJET VERTICAL LIFT</h1><h2>LOAD MANIFEST</h2></div><div class="aircraft-section"><div class="form-group"><label>Aircraft</label><select onchange="updateHeli(this.value)">${helicopters.map((h,i)=>`<option value="${i}" ${i===state.selectedHeliIndex?'selected':''}>${h.tailNumber} - ${h.model}</option>`).join('')}</select></div><div class="info-box"><div><strong>Serial:</strong> ${h.serial}</div><div><strong>Empty Weight:</strong> ${h.emptyWeight} lbs</div><div><strong>Empty Arm:</strong> ${h.emptyArm.toFixed(2)}</div><div><strong>Fuel Capacity:</strong> ${h.fuelCapacity} Gals.</div></div></div><div class="flight-info"><div class="form-group"><label>Date</label><input type="date" value="${state.date}" onchange="updateDate(this.value)"></div><div class="form-group"><label>From</label><input type="text" value="${state.from}" onchange="updateFrom(this.value)" placeholder="KJRA" style="text-transform:uppercase;"></div><div class="form-group"><label>To</label><input type="text" value="${state.to}" onchange="updateTo(this.value)" placeholder="KALB" style="text-transform:uppercase;"></div></div><div class="perf-section"><div class="perf-title">Performance Calculations</div><div class="perf-inputs"><div class="form-group"><label>Temperature (°F)</label><input type="number" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div><div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" onchange="updateAltimeter(this.value)" onblur="formatAltimeter(this)" placeholder="e.g., 30.12"></div><div class="form-group"><label>Field Elevation (ft)</label><input type="number" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" placeholder="Enter elevation"></div><div class="form-group"><label>Temperature Aloft at 6000 ft (°C)</label><input type="number" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" placeholder="Enter temperature"></div></div><div class="perf-outputs"><div class="perf-out"><div class="perf-label">Temperature (°C)</div><div class="perf-value">${p.celsius!==null?p.celsius:'--'}</div></div><div class="perf-out"><div class="perf-label">Pressure Altitude (Hp)</div><div class="perf-value">${p.hp!==null?p.hp+' ft':'--'}</div></div><div class="perf-out"><div class="perf-label">Temp at 5000 ft (°C)</div><div class="perf-value">${p.temp5000!==null?p.temp5000:'--'}</div></div></div><div class="perf-outputs" style="margin-top:15px;"><div class="perf-out"><div class="perf-label">HOGE Weight</div><div class="perf-value">${p.hogeWeight!==null&&p.hogeWeight!==undefined?p.hogeWeight+' lbs':'--'}</div><div style="font-size:10px;color:#666;margin-top:3px;">(at computed Hp)</div></div><div class="perf-out"><div class="perf-label">MEA/5000ft Weight</div><div class="perf-value">${p.meaWeight!==null&&p.meaWeight!==undefined?p.meaWeight+' lbs':'--'}</div></div><div class="perf-out"><div class="perf-label">V1</div><div class="perf-value">${p.v1!==null&&p.v1!==undefined?p.v1+' kts':(c.heli.model.includes('S-76D')?'N/A':'--')}</div><div style="font-size:10px;color:#666;margin-top:3px;">(Sea level)</div></div></div></div><div style="margin-top:30px;margin-bottom:15px;"><h3 style="margin:0;padding:10px 0;border-bottom:3px solid #333;font-size:18px;">Weight & Balance</h3></div><table><thead><tr><th>Item</th><th class="number">Weight (LBS)</th><th class="number">Arm</th><th class="number">Moment</th></tr></thead><tbody><tr class="yellow-row"><td><strong>Empty Weight</strong></td><td class="number">${h.emptyWeight}</td><td class="number">${h.emptyArm.toFixed(2)}</td><td class="number">${c.emptyMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Nav Bag:<input type="number" value="${state.navBag}" onchange="updateNavBag(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.navBag}</td><td class="number">${h.arms.navBag}</td><td class="number">${c.navBagMoment.toFixed(0)}</td></tr><tr><td><div class="crew-inputs"><div class="crew-select"><label>PIC:</label><select onchange="updatePIC(this.value)"><option value="">Select PIC</option>${captains.map(cp=>`<option value="${cp.name}" ${cp.name===state.picName?'selected':''}>${cp.name} (${cp.weight})</option>`).join('')}</select></div><div class="crew-select"><label>SIC:</label><select onchange="updateSIC(this.value)"><option value="">Select SIC</option>${pilots.map(p=>`<option value="${p.name}" ${p.name===state.sicName?'selected':''}>${p.name} (${p.weight})</option>`).join('')}</select></div></div></td><td class="number"><strong>${c.crewWeight}</strong></td><td class="number">${h.arms.crew}</td><td class="number">${c.crewMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Credenza:<input type="number" value="${state.credenza}" onchange="updateCredenza(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.credenza}</td><td class="number">${h.arms.credenza}</td><td class="number">${c.credenzaMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Fwd Pax:</span><select onchange="updateNumPassFwd(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassFwd?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passFwdWeight}" onchange="updatePassFwdWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passFwdWeight}</td><td class="number">${h.arms.passFwd}</td><td class="number">${c.passFwdMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Aft Pax:</span><select onchange="updateNumPassAft(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassAft?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passAftWeight}" onchange="updatePassAftWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passAftWeight}</td><td class="number">${h.arms.passAft}</td><td class="number">${c.passAftMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Baggage Comp:<input type="number" value="${state.baggage}" onchange="updateBaggage(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.baggage}</td><td class="number">${h.arms.baggage}</td><td class="number">${c.baggageMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Jet A Fuel:<input type="number" value="${state.fuel}" onchange="updateFuel(this.value)" class="wide-input"><span style="font-size:12px;color:#666;">lbs</span>${c.maxFuelGallons<=0?'<span style="font-size:11px;color:#c62828;margin-left:8px;">⚠ MGTOW exceeded</span>':'<span style="font-size:11px;color:#666;margin-left:8px;">(Max: '+c.maxFuelGallons.toFixed(1)+' gal / '+c.maxFuelPounds.toFixed(0)+' lbs)</span>'}<div class="fuel-shortcuts"><button class="fuel-shortcut-btn" onclick="fuelToMaxGross(calculate())">Max Gross</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToHOGE(p,c)">HOGE</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToMEA(p,c)">MEA/5000ft</button></div></div></td><td class="number">${state.fuel}</td><td class="number">${c.fuelArm.toFixed(2)}</td><td class="number">${c.fuelMoment.toFixed(0)}</td></tr><tr class="total-row"><td>TOTALS:</td><td class="number">${c.totalWeight.toFixed(1)}</td><td class="number">-</td><td class="number">${c.totalMoment.toFixed(0)}</td></tr></tbody></table><div class="cg-result"><div class="cg-value">CENTER OF GRAVITY (CG): ${c.cg.toFixed(2)}</div><div class="cg-limits">CG limits are from sta: <strong>${c.cgLimits.min}</strong> to Sta: <strong>${c.cgLimits.max}</strong> at this gross weight.</div><div class="status ${c.weightExceeded||!c.cgInLimits?'error':'ok'}">${c.weightExceeded?'✗ MGTOW EXCEEDED':c.cgInLimits?'✓ WITHIN LIMITS':'✗ OUT OF CG LIMITS'}</div></div><div class="summary"><div class="summary-card"><div class="summary-label">Total Weight</div><div class="summary-value">${c.totalWeight.toFixed(0)} lbs</div></div><div class="summary-card"><div class="summary-label">Center of Gravity</div><div class="summary-value">${c.cg.toFixed(2)}</div></div><div class="summary-card"><div class="summary-label">Total Passengers</div><div class="summary-value">${state.numPassFwd+state.numPassAft}</div></div><div class="summary-card"><div class="summary-label">Fuel Load</div><div class="summary-value">${state.fuel} lbs</div></div>${h.model.includes('S-76D')?'<div class="summary-card"><div class="summary-label">Lateral CG</div><div class="summary-value">'+c.lateralCG.toFixed(2)+' in</div></div>':''}</div><div class="graph-section"><div class="graph-title">Center of Gravity Envelope</div><canvas id="cgGraph" width="800" height="500"></canvas></div></div>
+let adminActiveTab="personnel";
+
+function openPW(){
+  document.getElementById("pw-overlay").style.display="flex";
+  setTimeout(()=>{const i=document.getElementById("pw-input");if(i){i.value="";i.focus();}},50);
+}
+function closePW(){
+  document.getElementById("pw-overlay").style.display="none";
+}
+function checkPW(){
+  const inp=document.getElementById("pw-input");
+  if(inp.value.toLowerCase()==="kbdr"){
+    closePW();
+    openAdminPanel();
+  }else{
+    inp.classList.add("error","shake");
+    inp.value="";
+    setTimeout(()=>{inp.classList.remove("shake");inp.focus();},450);
+    setTimeout(()=>inp.classList.remove("error"),1500);
+  }
+}
+
+function openAdminPanel(){
+  document.getElementById("admin-panel").style.display="flex";
+  adminActiveTab="personnel";
+  renderAdminPersonnel();
+  renderAdminAircraft();
+  document.getElementById("tab-personnel").classList.add("active");
+  document.getElementById("tab-aircraft").classList.remove("active");
+  document.getElementById("admin-personnel-panel").style.display="";
+  document.getElementById("admin-aircraft-panel").style.display="none";
+}
+function closeAdmin(){
+  document.getElementById("admin-panel").style.display="none";
+}
+function switchTab(tab){
+  adminActiveTab=tab;
+  document.getElementById("tab-personnel").classList.toggle("active",tab==="personnel");
+  document.getElementById("tab-aircraft").classList.toggle("active",tab==="aircraft");
+  document.getElementById("admin-personnel-panel").style.display=tab==="personnel"?"":"none";
+  document.getElementById("admin-aircraft-panel").style.display=tab==="aircraft"?"":"none";
+}
+function adminSave(){
+  refreshLists();
+  render();
+  saveToFirebase();
+}
+
+// --- PERSONNEL ADMIN ---
+function renderAdminPersonnel(){
+  const sorted=[...allPilots].sort((a,b)=>a.name.localeCompare(b.name));
+  let rows=sorted.map((p,i)=>{
+    const realIdx=allPilots.indexOf(p);
+    return `<tr>
+      <td><input class="admin-input" value="${p.name}" onchange="adminUpdatePilot(${realIdx},'name',this.value)"></td>
+      <td><input class="admin-input admin-input-sm" type="number" value="${p.weight}" onchange="adminUpdatePilot(${realIdx},'weight',this.value)"></td>
+      <td><div class="role-check">
+        <label><input type="checkbox" ${p.roles.includes("pic")?"checked":""} onchange="adminToggleRole(${realIdx},'pic',this.checked)"> PIC</label>
+        <label><input type="checkbox" ${p.roles.includes("sic")?"checked":""} onchange="adminToggleRole(${realIdx},'sic',this.checked)"> SIC</label>
+      </div></td>
+      <td><button class="admin-del-btn" onclick="adminDeletePilot(${realIdx})">&#x2715; Remove</button></td>
+    </tr>`;
+  }).join("");
+  const html=`<div class="admin-section">
+    <h3>Personnel Roster (${allPilots.length} people)</h3>
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Weight (lbs)</th><th>Role(s)</th><th>Actions</th></tr></thead>
+      <tbody>${rows}
+        <tr class="admin-add-row">
+          <td><input class="admin-input" id="new-pilot-name" placeholder="LASTNAME" style="text-transform:uppercase"></td>
+          <td><input class="admin-input admin-input-sm" type="number" id="new-pilot-weight" placeholder="lbs"></td>
+          <td><div class="role-check">
+            <label><input type="checkbox" id="new-pilot-pic"> PIC</label>
+            <label><input type="checkbox" id="new-pilot-sic" checked> SIC</label>
+          </div></td>
+          <td><button class="admin-add-btn" onclick="adminAddPilot()">&#x2795; Add Person</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>`;
+  document.getElementById("admin-personnel-panel").innerHTML=html;
+}
+function adminUpdatePilot(idx,field,val){
+  if(field==="weight")allPilots[idx][field]=parseFloat(val)||0;
+  else allPilots[idx][field]=val.toUpperCase().trim();
+}
+function adminToggleRole(idx,role,checked){
+  if(checked){if(!allPilots[idx].roles.includes(role))allPilots[idx].roles.push(role);}
+  else{allPilots[idx].roles=allPilots[idx].roles.filter(r=>r!==role);}
+}
+function adminDeletePilot(idx){
+  if(confirm("Remove "+allPilots[idx].name+"?")){allPilots.splice(idx,1);renderAdminPersonnel();}
+}
+function adminAddPilot(){
+  const name=document.getElementById("new-pilot-name").value.toUpperCase().trim();
+  const weight=parseFloat(document.getElementById("new-pilot-weight").value)||0;
+  const pic=document.getElementById("new-pilot-pic").checked;
+  const sic=document.getElementById("new-pilot-sic").checked;
+  if(!name){alert("Please enter a name.");return;}
+  const roles=[];
+  if(pic)roles.push("pic");
+  if(sic)roles.push("sic");
+  if(roles.length===0){alert("Please select at least one role.");return;}
+  allPilots.push({name,weight,roles});
+  renderAdminPersonnel();
+}
+
+// --- AIRCRAFT ADMIN ---
+const MODEL_OPTIONS=["SIKORSKY  S-76C+","SIKORSKY S76C++","SIKORSKY S-76D"];
+function renderAdminAircraft(){
+  const cards=helicopters.map((ac,i)=>`
+    <div class="ac-card">
+      <div class="ac-card-header">
+        <span class="ac-card-title">${ac.tailNumber} &mdash; ${ac.model}</span>
+        <button class="admin-del-btn" onclick="adminDeleteAC(${i})">&#x2715; Remove Aircraft</button>
+      </div>
+      <div class="ac-fields">
+        <div class="ac-field"><label>Tail Number</label><input class="admin-input" value="${ac.tailNumber}" onchange="adminUpdateAC(${i},'tailNumber',this.value)"></div>
+        <div class="ac-field"><label>Serial</label><input class="admin-input" value="${ac.serial}" onchange="adminUpdateAC(${i},'serial',this.value)"></div>
+        <div class="ac-field"><label>Model</label><select class="admin-input" onchange="adminUpdateAC(${i},'model',this.value)">${MODEL_OPTIONS.map(m=>`<option value="${m}" ${ac.model===m?"selected":""}>${m}</option>`).join("")}</select></div>
+        <div class="ac-field"><label>Empty Weight (lbs)</label><input class="admin-input" type="number" step="0.1" value="${ac.emptyWeight}" onchange="adminUpdateAC(${i},'emptyWeight',this.value)"></div>
+        <div class="ac-field"><label>Empty Arm</label><input class="admin-input" type="number" step="0.01" value="${ac.emptyArm}" onchange="adminUpdateAC(${i},'emptyArm',this.value)"></div>
+        <div class="ac-field"><label>Fuel Capacity (gal)</label><input class="admin-input" type="number" step="0.1" value="${ac.fuelCapacity}" onchange="adminUpdateAC(${i},'fuelCapacity',this.value)"></div>
+      </div>
+      <div class="ac-divider">Arm Values</div>
+      <div class="ac-fields">
+        <div class="ac-field"><label>Nav Bag</label><input class="admin-input" type="number" step="0.1" value="${ac.arms.navBag}" onchange="adminUpdateACArm(${i},'navBag',this.value)"></div>
+        <div class="ac-field"><label>Crew</label><input class="admin-input" type="number" step="0.1" value="${ac.arms.crew}" onchange="adminUpdateACArm(${i},'crew',this.value)"></div>
+        <div class="ac-field"><label>Credenza</label><input class="admin-input" type="number" step="0.1" value="${ac.arms.credenza}" onchange="adminUpdateACArm(${i},'credenza',this.value)"></div>
+        <div class="ac-field"><label>Pax Forward</label><input class="admin-input" type="number" step="0.1" value="${ac.arms.passFwd}" onchange="adminUpdateACArm(${i},'passFwd',this.value)"></div>
+        <div class="ac-field"><label>Pax Aft</label><input class="admin-input" type="number" step="0.1" value="${ac.arms.passAft}" onchange="adminUpdateACArm(${i},'passAft',this.value)"></div>
+        <div class="ac-field"><label>Baggage</label><input class="admin-input" type="number" step="0.1" value="${ac.arms.baggage}" onchange="adminUpdateACArm(${i},'baggage',this.value)"></div>
+      </div>
+    </div>`).join("");
+  const html=`<div class="admin-section">
+    <h3>Aircraft Fleet (${helicopters.length} aircraft)</h3>
+    ${cards}
+    <button class="add-ac-btn" onclick="adminAddAC()">&#x2795; Add New Aircraft</button>
+  </div>`;
+  document.getElementById("admin-aircraft-panel").innerHTML=html;
+}
+function adminUpdateAC(i,field,val){
+  if(field==="emptyWeight"||field==="emptyArm")helicopters[i][field]=parseFloat(val)||0;
+  else if(field==="model"){helicopters[i][field]=val;renderAdminAircraft();}
+  else helicopters[i][field]=val;
+}
+function adminUpdateACArm(i,arm,val){helicopters[i].arms[arm]=parseFloat(val)||0;}
+function adminDeleteAC(i){
+  if(confirm("Remove "+helicopters[i].tailNumber+"?")){helicopters.splice(i,1);if(state.selectedHeliIndex>=helicopters.length)state.selectedHeliIndex=0;renderAdminAircraft();}}
+function adminAddAC(){
+  helicopters.push({tailNumber:"N000XX",serial:"000000",model:"SIKORSKY  S-76C+",emptyWeight:8300,emptyArm:208,fuelCapacity:"281.2",arms:{navBag:110,crew:102.5,credenza:134,passFwd:133,passAft:197.5,baggage:235}});
+  renderAdminAircraft();
+  setTimeout(()=>{const cards=document.querySelectorAll(".ac-card");if(cards.length)cards[cards.length-1].scrollIntoView({behavior:"smooth"});},100);
+}
+
+// =====================================================================
+// RENDER
+// =====================================================================
+
+function render(){const _scrollY=window.scrollY||0;const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);document.getElementById('app').innerHTML=`<div class="container"><div class="print-header-bar"><span class="print-title">FLEXJET VERTICAL LIFT — LOAD MANIFEST</span><span class="print-ac">${h.tailNumber} • ${h.model} • S/N ${h.serial} • EW ${h.emptyWeight} lbs • Arm ${h.emptyArm.toFixed(2)}</span></div><div class="header"><h1>FLEXJET VERTICAL LIFT</h1><h2>LOAD MANIFEST</h2></div><button class=\"admin-btn no-print\" onclick=\"openPW()\">&#x1F512; Update / Edit (Admin Only)</button><div class="aircraft-section"><div class="form-group"><label>Aircraft</label><select onchange="updateHeli(this.value)">${helicopters.map((h,i)=>`<option value="${i}" ${i===state.selectedHeliIndex?'selected':''}>${h.tailNumber} - ${h.model}</option>`).join('')}</select></div><div class="info-box"><div><strong>Serial:</strong> ${h.serial}</div><div><strong>Empty Weight:</strong> ${h.emptyWeight} lbs</div><div><strong>Empty Arm:</strong> ${h.emptyArm.toFixed(2)}</div><div><strong>Fuel Capacity:</strong> ${h.fuelCapacity} Gals.</div></div></div><div class="flight-info"><div class="form-group"><label>Date</label><input type="date" value="${state.date}" onchange="updateDate(this.value)"></div><div class="form-group"><label>From</label><input type="text" value="${state.from}" onchange="updateFrom(this.value)" placeholder="KJRA" style="text-transform:uppercase;"></div><div class="form-group"><label>To</label><input type="text" value="${state.to}" onchange="updateTo(this.value)" placeholder="KALB" style="text-transform:uppercase;"></div></div><div class="perf-section"><div class="perf-title">Performance Calculations</div><div class="perf-inputs"><div class="form-group"><label>Temperature (°F)</label><input type="number" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" placeholder="Enter temperature"></div><div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" onchange="updateAltimeter(this.value)" onblur="formatAltimeter(this)" placeholder="e.g., 30.12"></div><div class="form-group"><label>Field Elevation (ft)</label><input type="number" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" placeholder="Enter elevation"></div><div class="form-group"><label>Temperature Aloft at 6000 ft (°C)</label><input type="number" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" placeholder="Enter temperature"></div></div><div class="perf-outputs"><div class="perf-out"><div class="perf-label">Temperature (°C)</div><div class="perf-value">${p.celsius!==null?p.celsius:'--'}</div></div><div class="perf-out"><div class="perf-label">Pressure Altitude (Hp)</div><div class="perf-value">${p.hp!==null?p.hp+' ft':'--'}</div></div><div class="perf-out"><div class="perf-label">Temp at 5000 ft (°C)</div><div class="perf-value">${p.temp5000!==null?p.temp5000:'--'}</div></div></div><div class="perf-outputs" style="margin-top:15px;"><div class="perf-out"><div class="perf-label">HOGE Weight</div><div class="perf-value">${p.hogeWeight!==null&&p.hogeWeight!==undefined?p.hogeWeight+' lbs':'--'}</div><div style="font-size:10px;color:#666;margin-top:3px;">(at computed Hp)</div></div><div class="perf-out"><div class="perf-label">MEA/5000ft Weight</div><div class="perf-value">${p.meaWeight!==null&&p.meaWeight!==undefined?p.meaWeight+' lbs':'--'}</div></div><div class="perf-out"><div class="perf-label">V1</div><div class="perf-value">${p.v1!==null&&p.v1!==undefined?p.v1+' kts':(c.heli.model.includes('S-76D')?'N/A':'--')}</div><div style="font-size:10px;color:#666;margin-top:3px;">(Sea level)</div></div></div></div><div style="margin-top:30px;margin-bottom:15px;"><h3 style="margin:0;padding:10px 0;border-bottom:3px solid #333;font-size:18px;">Weight & Balance</h3></div><table><thead><tr><th>Item</th><th class="number">Weight (LBS)</th><th class="number">Arm</th><th class="number">Moment</th></tr></thead><tbody><tr class="yellow-row"><td><strong>Empty Weight</strong></td><td class="number">${h.emptyWeight}</td><td class="number">${h.emptyArm.toFixed(2)}</td><td class="number">${c.emptyMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Nav Bag:<input type="number" value="${state.navBag}" onchange="updateNavBag(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.navBag}</td><td class="number">${h.arms.navBag}</td><td class="number">${c.navBagMoment.toFixed(0)}</td></tr><tr><td><div class="crew-inputs"><div class="crew-select"><label>PIC:</label><select onchange="updatePIC(this.value)"><option value="">Select PIC</option>${captains.map(cp=>`<option value="${cp.name}" ${cp.name===state.picName?'selected':''}>${cp.name} (${cp.weight})</option>`).join('')}</select></div><div class="crew-select"><label>SIC:</label><select onchange="updateSIC(this.value)"><option value="">Select SIC</option>${pilots.map(p=>`<option value="${p.name}" ${p.name===state.sicName?'selected':''}>${p.name} (${p.weight})</option>`).join('')}</select></div></div></td><td class="number"><strong>${c.crewWeight}</strong></td><td class="number">${h.arms.crew}</td><td class="number">${c.crewMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Credenza:<input type="number" value="${state.credenza}" onchange="updateCredenza(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.credenza}</td><td class="number">${h.arms.credenza}</td><td class="number">${c.credenzaMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Fwd Pax:</span><select onchange="updateNumPassFwd(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassFwd?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passFwdWeight}" onchange="updatePassFwdWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passFwdWeight}</td><td class="number">${h.arms.passFwd}</td><td class="number">${c.passFwdMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Aft Pax:</span><select onchange="updateNumPassAft(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassAft?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passAftWeight}" onchange="updatePassAftWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passAftWeight}</td><td class="number">${h.arms.passAft}</td><td class="number">${c.passAftMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Baggage Comp:<input type="number" value="${state.baggage}" onchange="updateBaggage(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.baggage}</td><td class="number">${h.arms.baggage}</td><td class="number">${c.baggageMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Jet A Fuel:<input type="number" value="${state.fuel}" onchange="updateFuel(this.value)" class="wide-input"><span style="font-size:12px;color:#666;">lbs</span>${c.maxFuelGallons<=0?'<span style="font-size:11px;color:#c62828;margin-left:8px;">⚠ MGTOW exceeded</span>':'<span style="font-size:11px;color:#666;margin-left:8px;">(Max: '+c.maxFuelGallons.toFixed(1)+' gal / '+c.maxFuelPounds.toFixed(0)+' lbs)</span>'}<div class="fuel-shortcuts"><button class="fuel-shortcut-btn" onclick="fuelToMaxGross(calculate())">Max Gross</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToHOGE(p,c)">HOGE</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToMEA(p,c)">MEA/5000ft</button></div></div></td><td class="number">${state.fuel}</td><td class="number">${c.fuelArm.toFixed(2)}</td><td class="number">${c.fuelMoment.toFixed(0)}</td></tr><tr class="total-row"><td>TOTALS:</td><td class="number">${c.totalWeight.toFixed(1)}</td><td class="number">-</td><td class="number">${c.totalMoment.toFixed(0)}</td></tr></tbody></table><div class="cg-result"><div class="cg-value">CENTER OF GRAVITY (CG): ${c.cg.toFixed(2)}</div><div class="cg-limits">CG limits are from sta: <strong>${c.cgLimits.min}</strong> to Sta: <strong>${c.cgLimits.max}</strong> at this gross weight.</div><div class="status ${c.weightExceeded||!c.cgInLimits?'error':'ok'}">${c.weightExceeded?'✗ MGTOW EXCEEDED':c.cgInLimits?'✓ WITHIN LIMITS':'✗ OUT OF CG LIMITS'}</div></div><div class="summary"><div class="summary-card"><div class="summary-label">Total Weight</div><div class="summary-value">${c.totalWeight.toFixed(0)} lbs</div></div><div class="summary-card"><div class="summary-label">Center of Gravity</div><div class="summary-value">${c.cg.toFixed(2)}</div></div><div class="summary-card"><div class="summary-label">Total Passengers</div><div class="summary-value">${state.numPassFwd+state.numPassAft}</div></div><div class="summary-card"><div class="summary-label">Fuel Load</div><div class="summary-value">${state.fuel} lbs</div></div>${h.model.includes('S-76D')?'<div class="summary-card"><div class="summary-label">Lateral CG</div><div class="summary-value">'+c.lateralCG.toFixed(2)+' in</div></div>':''}</div><div class="graph-section"><div class="graph-title">Center of Gravity Envelope</div><canvas id="cgGraph" width="800" height="500"></canvas></div></div>
 
 <div id="pdf-queue-panel" class="pdf-queue-panel no-print"></div>
   <button id="export-pdf-btn" class="export-btn no-print" onclick="exportPDF()">Export Leg 1</button>
@@ -666,6 +988,9 @@ try {
     (e && e.stack ? e.stack : String(e)) +
     '</pre></div>';
 }
+
+// Load data from Firebase on startup
+loadFromFirebase();
 </script>
 <script>
 window.onerror = function(msg, src, line, col, err) {
