@@ -1,4 +1,60 @@
 <!DOCTYPE html>
+<!--
+================================================================================
+  FXV WEIGHT & BALANCE — FEATURE CHECKLIST
+  Verify ALL of the following are present before making any edits.
+  If anything is missing, restore it from transcript history first.
+================================================================================
+
+  [FIREBASE]
+  - Firebase SDK scripts (firebase-app-compat, firebase-firestore-compat) in <head>
+  - firebase.initializeApp() with fxv-weight-and-balance config
+  - const db = firebase.firestore()
+  - loadFromFirebase() — reads pilots + aircraft from Firestore on startup
+  - saveToFirebase() — POSTs to Cloud Function (NOT direct Firestore write)
+  - FUNCTION_URL = https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave
+  - loadFromFirebase() called at bottom of <script> on startup
+
+  [ADMIN PANEL]
+  - CSS: .admin-btn, .pw-overlay, .pw-box, .admin-panel, .admin-table, .ac-card etc.
+  - HTML: <div id="pw-overlay"> password modal
+  - HTML: <div id="admin-panel"> full-screen overlay with Personnel + Aircraft tabs
+  - Button: "🔒 Update / Edit (Admin Only)" with class="admin-btn no-print"
+  - JS: openPW(), closePW(), checkPW() — password is "kbdr" (case insensitive)
+  - JS: openAdminPanel(), closeAdmin(), switchTab()
+  - JS: renderAdminPersonnel(), renderAdminAircraft()
+  - JS: adminUpdatePilot(), adminToggleRole(), adminDeletePilot(), adminAddPilot()
+  - JS: adminUpdateAircraft(), adminDeleteAircraft(), adminAddAircraft()
+  - JS: adminSave() — calls refreshLists() + render() + saveToFirebase()
+  - JS: let adminActiveTab = "personnel"
+
+  [PDF EXPORT]
+  - drawWBToCanvas() — renders W&B sheet to 1632px-wide canvas (2x resolution)
+  - canvasToPDF() — converts canvas to single-page PDF binary
+  - exportPDF() — queue workflow, leg numbering, export/re-export logic
+  - printThisSheet() — one-shot PDF via navigator.share() (no queue)
+  - PDF queue panel + Export Leg N button + Send All to Ops button
+  - "PDF this sheet" button (.print-sheet-btn)
+
+  [PERFORMANCE]
+  - calcPerf() — HOGE, MEA, V1/CDP for C+, C++, D models
+  - hogeTableCP, hogeTableCPP, hogeTableD — 2D bilinear interpolation tables
+  - MEA_CP, MEA_CPP, MEA_D — 1D lookup tables
+  - CDP_CP_INT/SLO, CDP_CPP_INT/SLO — V1 formula constants
+
+  [UI / UX]
+  - Altimeter input: type="text" inputmode="decimal" with formatAltimeter() onblur
+  - Passenger count: <select> dropdowns 0-9 for numPassFwd and numPassAft
+  - Mobile responsive CSS @media (max-width:600px)
+  - @media print — hides .no-print elements (admin btn, export buttons etc.)
+  - CG envelope canvas graph with drawGraph()
+
+  [SERVICE WORKER / PWA]
+  - Service worker registration at bottom of <script>
+  - sw.js must be deployed alongside index.html on GitHub Pages
+
+================================================================================
+-->
 <html><head><meta charset="UTF-8"><title>FXV W&B</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -296,6 +352,7 @@ function loadFromFirebase() {
       allPilots = doc.data().list;
       refreshLists();
       render();
+      console.log('Loaded', allPilots.length, 'pilots from Firebase');
     }
   }).catch(()=>{});
   db.collection("config").doc("aircraft").get().then(doc => {
@@ -373,8 +430,46 @@ function getFuelArm(fuelWeight, model) {
   return table[0][1];
 }
 
-const pilots=[{"name":"ALTIERI","weight":190},{"name":"APREA","weight":180},{"name":"COURTNEY","weight":185},{"name":"DEMARCHI","weight":150},{"name":"EVANS","weight":250},{"name":"FRONK","weight":180},{"name":"GUEDES","weight":182},{"name":"KEYES","weight":217},{"name":"KOPCYK","weight":245},{"name":"LAYDEN","weight":170},{"name":"LOCK","weight":216},{"name":"LOVETT","weight":210},{"name":"LUTCHKO","weight":165},{"name":"MARSHALL","weight":190},{"name":"MULLEN","weight":180},{"name":"PEARSON","weight":210},{"name":"PIACENTE","weight":215},{"name":"PROCUNIER","weight":260},{"name":"RENDON","weight":210},{"name":"ROBERTS","weight":205},{"name":"RYAN","weight":159},{"name":"SIMMONS","weight":240},{"name":"SIMONE","weight":175},{"name":"SOLO PILOT","weight":0},{"name":"SOTTILE","weight":220},{"name":"STOKOWSKI","weight":150},{"name":"TAYLOR","weight":235}];
-const captains=[{"name":"ALTIERI","weight":190},{"name":"APREA","weight":180},{"name":"SIMONE","weight":175},{"name":"LOCK","weight":216},{"name":"KOPCYK","weight":245},{"name":"PIACENTE","weight":215},{"name":"PEARSON","weight":210},{"name":"LANE","weight":198},{"name":"LOVETT","weight":210},{"name":"SIMMONS","weight":240},{"name":"GUEDES","weight":182},{"name":"EVANS","weight":250},{"name":"DEMARCHI","weight":150},{"name":"MARSHALL","weight":190},{"name":"RYAN","weight":159},{"name":"LUTCHKO","weight":165},{"name":"RENDON","weight":210},{"name":"LAYDEN","weight":170},{"name":"PROCUNIER","weight":260}];
+// allPilots is the master list (Firebase-backed). pilots/captains are derived views.
+let allPilots=[
+  {name:"ALTIERI",   weight:190, roles:["pic","sic"]},
+  {name:"APREA",     weight:180, roles:["pic","sic"]},
+  {name:"COURTNEY",  weight:185, roles:["sic"]},
+  {name:"DEMARCHI",  weight:150, roles:["pic","sic"]},
+  {name:"EVANS",     weight:250, roles:["pic","sic"]},
+  {name:"FRONK",     weight:180, roles:["sic"]},
+  {name:"GUEDES",    weight:182, roles:["pic","sic"]},
+  {name:"KEYES",     weight:217, roles:["sic"]},
+  {name:"KOPCYK",    weight:245, roles:["pic","sic"]},
+  {name:"KURIKOVA",  weight:120, roles:["sic"]},
+  {name:"LANE",      weight:198, roles:["pic"]},
+  {name:"LAYDEN",    weight:170, roles:["pic","sic"]},
+  {name:"LOCK",      weight:216, roles:["pic","sic"]},
+  {name:"LOVETT",    weight:210, roles:["pic","sic"]},
+  {name:"LUTCHKO",   weight:165, roles:["pic","sic"]},
+  {name:"MARSHALL",  weight:190, roles:["pic","sic"]},
+  {name:"MULLEN",    weight:180, roles:["sic"]},
+  {name:"PEARSON",   weight:210, roles:["pic","sic"]},
+  {name:"PIACENTE",  weight:215, roles:["pic","sic"]},
+  {name:"PROCUNIER", weight:260, roles:["pic","sic"]},
+  {name:"RENDON",    weight:210, roles:["pic","sic"]},
+  {name:"ROBERTS",   weight:205, roles:["sic"]},
+  {name:"RYAN",      weight:159, roles:["pic","sic"]},
+  {name:"SIMMONS",   weight:240, roles:["pic","sic"]},
+  {name:"SIMONE",    weight:175, roles:["pic","sic"]},
+  {name:"SOLO PILOT",weight:0,   roles:["pic","sic"]},
+  {name:"SOTTILE",   weight:220, roles:["sic"]},
+  {name:"STOKOWSKI", weight:150, roles:["sic"]},
+  {name:"TAYLOR",    weight:235, roles:["sic"]},
+];
+let pilots = [];    // SIC-eligible — rebuilt by refreshLists()
+let captains = [];  // PIC-eligible — rebuilt by refreshLists()
+function refreshLists() {
+  const sorted = [...allPilots].sort((a,b) => a.name.localeCompare(b.name));
+  pilots   = sorted.filter(p => p.roles.includes("sic"));
+  captains = sorted.filter(p => p.roles.includes("pic"));
+}
+refreshLists(); // initialise from defaults before Firebase loads
 const HOGE_CP={"-30": 11700, "24": 11700, "25": 11600, "26": 11500, "27": 11450, "28": 11400, "29": 11350, "30": 11300, "31": 11250, "32": 11200, "33": 11150, "34": 11100, "35": 11000, "36": 10900, "37": 10850, "38": 10800, "39": 10750, "40": 10700, "41": 10650, "42": 10600};
 const HOGE_CPP={"-30": 11700, "31": 11700, "32": 11600, "33": 11550, "34": 11500, "35": 11400, "36": 11300, "37": 11250, "38": 11200, "39": 11150, "40": 11100, "41": 11050, "42": 11000, "43": 10950, "44": 10900, "45": 10800};
 const HOGE_D={"-30": 11875, "31": 11875, "32": 11875, "33": 11875, "34": 11875, "35": 11875, "36": 11875, "37": 11875, "38": 11875, "39": 11875, "40": 11875, "41": 11770, "42": 11665, "43": 11560, "44": 11455, "45": 11350};
