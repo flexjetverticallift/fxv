@@ -451,11 +451,11 @@ function drawWBToCanvas(){
   const cv=calculate();const h=cv.heli;const p=calcPerf(cv.totalWeight,h.model);
   const W=816;const can=document.createElement('canvas');can.width=W;
   const ctx=can.getContext('2d');
-  const L=24,R=W-24,CW=R-L,RH=18,GH=280;
+  const L=24,R=W-24,CW=R-L,RH=18,GH=570;
   function sf(sz,b,col){ctx.font=(b?'bold ':'')+sz+'px Arial';ctx.fillStyle=col||'#000';}
   function hl(y){ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#ccc';ctx.lineWidth=0.5;ctx.stroke();}
   function bx(x,y,w,h2,f){ctx.fillStyle=f;ctx.fillRect(x,y,w,h2);}
-  can.height=60+24+36+11*RH+30+22+GH+44+40;
+  can.height=1200;  // oversized; trim canvas crops to actual content
   ctx.fillStyle='#fff';ctx.fillRect(0,0,can.width,can.height);
   let y=16;
   sf(13,true,'#1a237e');ctx.fillText('FLEXJET VERTICAL LIFT — LOAD MANIFEST',L,y+13);y+=18;
@@ -497,7 +497,7 @@ function drawWBToCanvas(){
   bx(L,y,CW,20,ok?'#c8e6c9':'#ffcdd2');
   sf(9,true,ok?'#2e7d32':'#c62828');
   ctx.fillText('CG: '+cv.cg.toFixed(2)+' in  —  '+cgStatusStr+'  (Limits: '+cv.cgLimits.min+' – '+cv.cgLimits.max+')',L+4,y+13);
-  y+=8;
+  y+=26;
   // Summary box: total pax + zero fuel W&B
   bx(L,y,CW,22,'#e8eaf6');
   sf(8,true,'#1a237e');ctx.fillText('TOTAL PAX ON BOARD: '+(state.numPassFwd+state.numPassAft),L+4,y+14);
