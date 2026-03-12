@@ -720,14 +720,14 @@ function drawWBToCanvas(){
   sf(16,false,'#444');ctx.fillText(h.tailNumber+' • '+h.model+' • S/N '+h.serial+' • EW '+h.emptyWeight+' lbs • Arm '+h.emptyArm.toFixed(2),L,y+18);y+=28;
   ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.stroke();y+=16;
   const fi=[['Date',state.date||''],['From',state.from||''],['To',state.to||''],['PIC',state.picName||''],['SIC',state.sicName||'']].filter(f=>f[1]);
-  let fx=L;fi.forEach(([lbl,val])=>{sf(14,false,'#888');ctx.fillText(lbl,fx,y+28);sf(18,true,'#111');ctx.fillText(val,fx,y+34);fx+=240;});
-  y+=48;hl(y);y+=24;
-  bx(L,y,CW,64,'#f5f5dc');
-  sf(18,true,'#555');ctx.fillText('Performance (Anti-Ice OFF, PM=0%)',L+8,y+40);
+  let fx=L;fi.forEach(([lbl,val])=>{sf(14,false,'#888');ctx.fillText(lbl,fx,y+14);sf(18,true,'#111');ctx.fillText(val,fx,y+36);fx+=240;});
+  y+=52;hl(y);y+=24;
+  bx(L,y,CW,80,'#f5f5dc');
+  sf(18,true,'#555');ctx.fillText('Performance (Anti-Ice OFF, PM=0%)',L+8,y+20);
   [['HOGE',p.hogeWeight===null?'Not permitted':(p.hogeWeight+' lbs')],['MEA',p.meaWeight?(p.meaWeight+' lbs'):'N/A'],['V1/CDP',p.v1?(p.v1+' kts'):'N/A']].forEach(([lbl,val],i)=>{
-    let px=L+4+i*280;sf(14,false,'#666');ctx.fillText(lbl,px,y+40);sf(20,true,'#000');ctx.fillText(val,px,y+60);
-  });y+=76;
-  sf(20,true,'#1a237e');ctx.fillText('Weight & Balance',L,y+40);y+=28;
+    let px=L+8+i*280;sf(14,false,'#666');ctx.fillText(lbl,px,y+46);sf(20,true,'#000');ctx.fillText(val,px,y+68);
+  });y+=92;
+  sf(20,true,'#1a237e');ctx.fillText('Weight & Balance',L,y+20);y+=28;
   const cx=[L,L+CW*0.46,L+CW*0.62,L+CW*0.79];
   bx(L,y,CW,RH,'#1a237e');sf(16,true,'#fff');
   ['Item','Weight (lbs)','Arm (in)','Moment'].forEach((t,i)=>ctx.fillText(t,cx[i]+2,y+24));y+=RH;
