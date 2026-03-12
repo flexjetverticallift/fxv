@@ -449,30 +449,30 @@ function updateSendBtn(){
 }
 function drawWBToCanvas(){
   const cv=calculate();const h=cv.heli;const p=calcPerf(cv.totalWeight,h.model);
-  const W=816;const can=document.createElement('canvas');can.width=W;
+  const W=1632;const can=document.createElement('canvas');can.width=W;
   const ctx=can.getContext('2d');
-  const L=24,R=W-24,CW=R-L,RH=18,GH=570;
+  const L=48,R=W-48,CW=R-L,RH=36,GH=1140;
   function sf(sz,b,col){ctx.font=(b?'bold ':'')+sz+'px Arial';ctx.fillStyle=col||'#000';}
-  function hl(y){ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#ccc';ctx.lineWidth=0.5;ctx.stroke();}
+  function hl(y){ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#ccc';ctx.lineWidth=2;ctx.stroke();}
   function bx(x,y,w,h2,f){ctx.fillStyle=f;ctx.fillRect(x,y,w,h2);}
-  can.height=1200;  // oversized; trim canvas crops to actual content
+  can.height=2400;  // oversized at 2x; trim canvas crops to actual content
   ctx.fillStyle='#fff';ctx.fillRect(0,0,can.width,can.height);
   let y=16;
-  sf(13,true,'#1a237e');ctx.fillText('FLEXJET VERTICAL LIFT — LOAD MANIFEST',L,y+13);y+=18;
-  sf(8,false,'#444');ctx.fillText(h.tailNumber+' • '+h.model+' • S/N '+h.serial+' • EW '+h.emptyWeight+' lbs • Arm '+h.emptyArm.toFixed(2),L,y+9);y+=14;
-  ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.stroke();y+=8;
+  sf(26,true,'#1a237e');ctx.fillText('FLEXJET VERTICAL LIFT — LOAD MANIFEST',L,y+26);y+=36;
+  sf(16,false,'#444');ctx.fillText(h.tailNumber+' • '+h.model+' • S/N '+h.serial+' • EW '+h.emptyWeight+' lbs • Arm '+h.emptyArm.toFixed(2),L,y+18);y+=28;
+  ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.stroke();y+=16;
   const fi=[['Date',state.date||''],['From',state.from||''],['To',state.to||''],['PIC',state.picName||''],['SIC',state.sicName||'']].filter(f=>f[1]);
-  let fx=L;fi.forEach(([lbl,val])=>{sf(7,false,'#888');ctx.fillText(lbl,fx,y+7);sf(9,true,'#111');ctx.fillText(val,fx,y+17);fx+=120;});
-  y+=24;hl(y);y+=6;
-  bx(L,y,CW,32,'#f5f5dc');
-  sf(9,true,'#555');ctx.fillText('Performance (Anti-Ice OFF, PM=0%)',L+4,y+10);
+  let fx=L;fi.forEach(([lbl,val])=>{sf(14,false,'#888');ctx.fillText(lbl,fx,y+28);sf(18,true,'#111');ctx.fillText(val,fx,y+34);fx+=240;});
+  y+=48;hl(y);y+=24;
+  bx(L,y,CW,64,'#f5f5dc');
+  sf(18,true,'#555');ctx.fillText('Performance (Anti-Ice OFF, PM=0%)',L+8,y+40);
   [['HOGE',p.hogeWeight===null?'Not permitted':(p.hogeWeight+' lbs')],['MEA',p.meaWeight?(p.meaWeight+' lbs'):'N/A'],['V1/CDP',p.v1?(p.v1+' kts'):'N/A']].forEach(([lbl,val],i)=>{
-    let px=L+4+i*140;sf(7,false,'#666');ctx.fillText(lbl,px,y+20);sf(10,true,'#000');ctx.fillText(val,px,y+30);
-  });y+=38;
-  sf(10,true,'#1a237e');ctx.fillText('Weight & Balance',L,y+10);y+=14;
+    let px=L+4+i*280;sf(14,false,'#666');ctx.fillText(lbl,px,y+40);sf(20,true,'#000');ctx.fillText(val,px,y+60);
+  });y+=76;
+  sf(20,true,'#1a237e');ctx.fillText('Weight & Balance',L,y+40);y+=28;
   const cx=[L,L+CW*0.46,L+CW*0.62,L+CW*0.79];
-  bx(L,y,CW,RH,'#1a237e');sf(8,true,'#fff');
-  ['Item','Weight (lbs)','Arm (in)','Moment'].forEach((t,i)=>ctx.fillText(t,cx[i]+2,y+12));y+=RH;
+  bx(L,y,CW,RH,'#1a237e');sf(16,true,'#fff');
+  ['Item','Weight (lbs)','Arm (in)','Moment'].forEach((t,i)=>ctx.fillText(t,cx[i]+2,y+24));y+=RH;
   const cgStatusStr=cv.weightExceeded?'MGTOW EXCEEDED':cv.cgInLimits?'WITHIN LIMITS':'OUT OF CG LIMITS';
   const rows=[
     ['Empty Weight',h.emptyWeight,h.emptyArm.toFixed(2),cv.emptyMoment.toFixed(0)],
@@ -489,28 +489,28 @@ function drawWBToCanvas(){
   rows.forEach((row,ri)=>{
     const isT=ri===rows.length-1,isZ=ri===7;
     bx(L,y,CW,RH,isT?'#e0e0e0':isZ?'#fff9c4':(ri%2===0?'#fff':'#f9f9f9'));
-    sf(8,isT||isZ,'#000');row.forEach((cell,i)=>ctx.fillText(String(cell),cx[i]+2,y+12));
+    sf(16,isT||isZ,'#000');row.forEach((cell,i)=>ctx.fillText(String(cell),cx[i]+2,y+24));
     hl(y+RH);y+=RH;
   });
-  y+=6;
+  y+=24;
   const ok=!cv.weightExceeded&&cv.cgInLimits;
-  bx(L,y,CW,20,ok?'#c8e6c9':'#ffcdd2');
-  sf(9,true,ok?'#2e7d32':'#c62828');
-  ctx.fillText('CG: '+cv.cg.toFixed(2)+' in  —  '+cgStatusStr+'  (Limits: '+cv.cgLimits.min+' – '+cv.cgLimits.max+')',L+4,y+13);
-  y+=26;
+  bx(L,y,CW,40,ok?'#c8e6c9':'#ffcdd2');
+  sf(18,true,ok?'#2e7d32':'#c62828');
+  ctx.fillText('CG: '+cv.cg.toFixed(2)+' in  —  '+cgStatusStr+'  (Limits: '+cv.cgLimits.min+' – '+cv.cgLimits.max+')',L+8,y+26);
+  y+=52;
   // Summary box: total pax + zero fuel W&B
-  bx(L,y,CW,22,'#e8eaf6');
-  sf(8,true,'#1a237e');ctx.fillText('TOTAL PAX ON BOARD: '+(state.numPassFwd+state.numPassAft),L+4,y+14);
-  ctx.fillText('ZERO FUEL: '+cv.zeroFuelWeight.toFixed(0)+' lbs  |  ZF CG: '+cv.zeroFuelCG.toFixed(2)+' in  |  ZF Moment: '+(cv.zeroFuelWeight*cv.zeroFuelCG).toFixed(0),L+220,y+14);
-  y+=22;
-  bx(L,y,CW,22,'#f3f4ff');
-  sf(8,false,'#444');
+  bx(L,y,CW,44,'#e8eaf6');
+  sf(16,true,'#1a237e');ctx.fillText('TOTAL PAX ON BOARD: '+(state.numPassFwd+state.numPassAft),L+8,y+28);
+  ctx.fillText('ZERO FUEL: '+cv.zeroFuelWeight.toFixed(0)+' lbs  |  ZF CG: '+cv.zeroFuelCG.toFixed(2)+' in  |  ZF Moment: '+(cv.zeroFuelWeight*cv.zeroFuelCG).toFixed(0),L+440,y+28);
+  y+=44;
+  bx(L,y,CW,44,'#f3f4ff');
+  sf(16,false,'#444');
   const zfOK=!cv.weightExceeded&&cv.cgInLimits;
-  ctx.fillText('Fuel: '+state.fuel+' lbs  |  Fuel Arm: '+cv.fuelArm.toFixed(2)+' in  |  Full fuel CG: '+cv.cg.toFixed(2)+' in  |  Status: '+(zfOK?'WITHIN LIMITS':'OUT OF LIMITS'),L+4,y+14);
-  y+=30;
-  sf(9,true,'#333');ctx.fillText('Center of Gravity Envelope',L,y+9);y+=12;
+  ctx.fillText('Fuel: '+state.fuel+' lbs  |  Fuel Arm: '+cv.fuelArm.toFixed(2)+' in  |  Full fuel CG: '+cv.cg.toFixed(2)+' in  |  Status: '+(zfOK?'WITHIN LIMITS':'OUT OF LIMITS'),L+8,y+28);
+  y+=60;
+  sf(18,true,'#333');ctx.fillText('Center of Gravity Envelope',L,y+18);y+=24;
   const gc=document.getElementById('cgGraph');
-  if(gc){const sw=gc.width,sh=gc.height;gc.width=560;gc.height=GH;drawGraph(cv);ctx.drawImage(gc,L,y,CW,GH);gc.width=sw;gc.height=sh;drawGraph(cv);}
+  if(gc){const sw=gc.width,sh=gc.height;gc.width=1120;gc.height=GH;drawGraph(cv);ctx.drawImage(gc,L,y,CW,GH);gc.width=sw;gc.height=sh;drawGraph(cv);}
   y+=GH+10;
   const tr=document.createElement('canvas');tr.width=W;tr.height=y;tr.getContext('2d').drawImage(can,0,0);return tr;
 }
