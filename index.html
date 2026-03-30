@@ -347,20 +347,37 @@ const db = firebase.firestore();
 const FUNCTION_URL = "https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave";
 
 function loadFromFirebase() {
-  db.collection("config").doc("pilots").get().then(doc => {
+  db.collection("config").doc("pilots").get({ source: 'server' }).then(doc => {
     if (doc.exists && doc.data().list && doc.data().list.length) {
       allPilots = doc.data().list;
       refreshLists();
       render();
       console.log('Loaded', allPilots.length, 'pilots from Firebase');
     }
-  }).catch(()=>{});
-  db.collection("config").doc("aircraft").get().then(doc => {
+  }).catch(()=>{
+    // Server fetch failed — fall back to cache
+    db.collection("config").doc("pilots").get().then(doc => {
+      if (doc.exists && doc.data().list && doc.data().list.length) {
+        allPilots = doc.data().list;
+        refreshLists();
+        render();
+      }
+    }).catch(()=>{});
+  });
+  db.collection("config").doc("aircraft").get({ source: 'server' }).then(doc => {
     if (doc.exists && doc.data().list && doc.data().list.length) {
       helicopters = doc.data().list;
       render();
     }
-  }).catch(()=>{});
+  }).catch(()=>{
+    // Server fetch failed — fall back to cache
+    db.collection("config").doc("aircraft").get().then(doc => {
+      if (doc.exists && doc.data().list && doc.data().list.length) {
+        helicopters = doc.data().list;
+        render();
+      }
+    }).catch(()=>{});
+  });
 }
 
 function saveToFirebase() {
@@ -397,13 +414,13 @@ function saveToFirebase() {
 }
 
 const helicopters=[
-{"tailNumber":"N76FX","serial":"760585","model":"SIKORSKY  S-76C+","emptyWeight":8363.7,"emptyArm":208,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
-{"tailNumber":"N1103S","serial":"761016","model":"SIKORSKY S-76D","emptyWeight":8694.4,"emptyArm":207.8,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
-{"tailNumber":"N276FX","serial":"760509","model":"SIKORSKY  S-76C+","emptyWeight":8225,"emptyArm":209,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":126,"passFwd":142,"passAft":197.5,"baggage":235}},
-{"tailNumber":"N277FX","serial":"760676","model":"SIKORSKY S76C++","emptyWeight":8426.3,"emptyArm":205.1,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
-{"tailNumber":"N176FX","serial":"760646","model":"SIKORSKY S76C++","emptyWeight":8488.8,"emptyArm":205.8,"fuelCapacity":"281.2","arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
-{"tailNumber":"N800SG","serial":"761006","model":"SIKORSKY S-76D","emptyWeight":8736.8,"emptyArm":206.92,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
-{"tailNumber":"N676FX","serial":"761025","model":"SIKORSKY S-76D","emptyWeight":8730,"emptyArm":208.99,"fuelCapacity":"286","arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}}
+{"tailNumber":"N76FX","serial":"760585","model":"SIKORSKY  S-76C+","emptyWeight":8363.7,"emptyArm":208,"fuelCapacity":281.2,"arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N1103S","serial":"761016","model":"SIKORSKY S-76D","emptyWeight":8694.4,"emptyArm":207.8,"fuelCapacity":286,"arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N276FX","serial":"760509","model":"SIKORSKY  S-76C+","emptyWeight":8225,"emptyArm":209,"fuelCapacity":281.2,"arms":{"navBag":110,"crew":102.5,"credenza":126,"passFwd":142,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N277FX","serial":"760676","model":"SIKORSKY S76C++","emptyWeight":8426.3,"emptyArm":205.1,"fuelCapacity":281.2,"arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N176FX","serial":"760646","model":"SIKORSKY S76C++","emptyWeight":8488.8,"emptyArm":205.8,"fuelCapacity":281.2,"arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N800SG","serial":"761006","model":"SIKORSKY S-76D","emptyWeight":8736.8,"emptyArm":206.92,"fuelCapacity":286,"arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
+{"tailNumber":"N676FX","serial":"761025","model":"SIKORSKY S-76D","emptyWeight":8730,"emptyArm":208.99,"fuelCapacity":286,"arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}}
 ];
 
 // Fuel arm lookup tables (weight in lbs, arm in inches)
@@ -595,11 +612,22 @@ function getHOGEWeight(pressureAltitude, tempCelsius, model) {
     }
   }
   
-  // Get temperature keys from table
-  const temps = Object.keys(table[altLower]).map(Number).sort((a,b) => a-b);
-  
-  // Clamp temperature to table range
-  const temp = Math.max(temps[0], Math.min(temps[temps.length-1], tempCelsius));
+  // Get temperature keys from both bounding altitudes, excluding null entries
+  const tempsLower = Object.keys(table[altLower]).map(Number).sort((a,b) => a-b)
+    .filter(t => table[altLower][t] !== null);
+  const tempsUpper = Object.keys(table[altUpper]).map(Number).sort((a,b) => a-b)
+    .filter(t => table[altUpper][t] !== null);
+
+  // If temp exceeds the max permitted at either bounding altitude, return null ("Not Permitted")
+  if (tempCelsius > tempsLower[tempsLower.length-1] || tempCelsius > tempsUpper[tempsUpper.length-1]) {
+    return null;
+  }
+
+  // Use lower altitude's valid temp keys for interpolation
+  const temps = tempsLower;
+
+  // Clamp temperature to table minimum (cold end is always permitted)
+  const temp = Math.max(temps[0], tempCelsius);
   
   // Find surrounding temperature points
   let tempLower = temps[0];
@@ -647,7 +675,7 @@ function lookup(table,temp){if(temp===null)return null;const keys=Object.keys(ta
 function lookupV1(temps,table,temp,weight){if(temp===null||weight===null)return null;const wt=Math.round(weight/100)*100;if(!table[wt])return null;let tempIdx=0;let minDiff=Math.abs(temp-temps[0]);for(let i=0;i<temps.length;i++){const diff=Math.abs(temp-temps[i]);if(diff<minDiff){minDiff=diff;tempIdx=i}}return table[wt][tempIdx]}
 let hogeWt=null,meaWt=null,v1=null;
 if(c!==null && hp!==null){
-hogeWt=Math.round(getHOGEWeight(hp,c,model));
+const _hogeRaw=getHOGEWeight(hp,c,model);hogeWt=_hogeRaw===null?null:Math.round(_hogeRaw);
 if(model.includes('S-76D')){meaWt=lookup(MEA_D,t5);v1=null}
 else if(model.includes('C++')){meaWt=lookup(MEA_CPP,t5);v1=lookupV1(V1_CPP_TEMPS,V1_CPP,c,totalWeight)}
 else{meaWt=lookup(MEA_CP,t5);v1=lookupV1(V1_CP_TEMPS,V1_CP,c,totalWeight)}
@@ -1031,7 +1059,7 @@ function renderAdminAircraft(){
   document.getElementById("admin-aircraft-panel").innerHTML=html;
 }
 function adminUpdateAC(i,field,val){
-  if(field==="emptyWeight"||field==="emptyArm")helicopters[i][field]=parseFloat(val)||0;
+  if(field==="emptyWeight"||field==="emptyArm"||field==="fuelCapacity")helicopters[i][field]=parseFloat(val)||0;
   else if(field==="model"){helicopters[i][field]=val;renderAdminAircraft();}
   else helicopters[i][field]=val;
 }
@@ -1039,7 +1067,7 @@ function adminUpdateACArm(i,arm,val){helicopters[i].arms[arm]=parseFloat(val)||0
 function adminDeleteAC(i){
   if(confirm("Remove "+helicopters[i].tailNumber+"?")){helicopters.splice(i,1);if(state.selectedHeliIndex>=helicopters.length)state.selectedHeliIndex=0;renderAdminAircraft();}}
 function adminAddAC(){
-  helicopters.push({tailNumber:"N000XX",serial:"000000",model:"SIKORSKY  S-76C+",emptyWeight:8300,emptyArm:208,fuelCapacity:"281.2",arms:{navBag:110,crew:102.5,credenza:134,passFwd:133,passAft:197.5,baggage:235}});
+  helicopters.push({tailNumber:"N000XX",serial:"000000",model:"SIKORSKY  S-76C+",emptyWeight:8300,emptyArm:208,fuelCapacity:281.2,arms:{navBag:110,crew:102.5,credenza:134,passFwd:133,passAft:197.5,baggage:235}});
   renderAdminAircraft();
   setTimeout(()=>{const cards=document.querySelectorAll(".ac-card");if(cards.length)cards[cards.length-1].scrollIntoView({behavior:"smooth"});},100);
 }
