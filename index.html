@@ -367,6 +367,7 @@ function loadFromFirebase() {
   db.collection("config").doc("aircraft").get({ source: 'server' }).then(doc => {
     if (doc.exists && doc.data().list && doc.data().list.length) {
       helicopters = doc.data().list;
+      console.log('Loaded', helicopters.length, 'aircraft from Firebase');
       render();
     }
   }).catch(()=>{
@@ -413,7 +414,7 @@ function saveToFirebase() {
   });
 }
 
-const helicopters=[
+let helicopters=[
 {"tailNumber":"N76FX","serial":"760585","model":"SIKORSKY  S-76C+","emptyWeight":8363.7,"emptyArm":208,"fuelCapacity":281.2,"arms":{"navBag":110,"crew":102.5,"credenza":134,"passFwd":133,"passAft":197.5,"baggage":235}},
 {"tailNumber":"N1103S","serial":"761016","model":"SIKORSKY S-76D","emptyWeight":8694.4,"emptyArm":207.8,"fuelCapacity":286,"arms":{"navBag":126.5,"crew":102.5,"credenza":134,"passFwd":131,"passAft":197.5,"baggage":235}},
 {"tailNumber":"N276FX","serial":"760509","model":"SIKORSKY  S-76C+","emptyWeight":8225,"emptyArm":209,"fuelCapacity":281.2,"arms":{"navBag":110,"crew":102.5,"credenza":126,"passFwd":142,"passAft":197.5,"baggage":235}},
