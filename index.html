@@ -346,6 +346,14 @@ const db = firebase.firestore();
 
 const FUNCTION_URL = "https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave";
 
+function sortHelicopters(){
+  helicopters.sort((a,b)=>{
+    const na=parseInt((a.tailNumber||"").match(/\d+/)?.[0]||0);
+    const nb=parseInt((b.tailNumber||"").match(/\d+/)?.[0]||0);
+    return na-nb;
+  });
+}
+
 function loadFromFirebase() {
   db.collection("config").doc("pilots").get({ source: 'server' }).then(doc => {
     if (doc.exists && doc.data().list && doc.data().list.length) {
@@ -367,6 +375,7 @@ function loadFromFirebase() {
   db.collection("config").doc("aircraft").get({ source: 'server' }).then(doc => {
     if (doc.exists && doc.data().list && doc.data().list.length) {
       helicopters = doc.data().list;
+      sortHelicopters();
       console.log('Loaded', helicopters.length, 'aircraft from Firebase');
       render();
     }
@@ -1062,13 +1071,14 @@ function renderAdminAircraft(){
 function adminUpdateAC(i,field,val){
   if(field==="emptyWeight"||field==="emptyArm"||field==="fuelCapacity")helicopters[i][field]=parseFloat(val)||0;
   else if(field==="model"){helicopters[i][field]=val;renderAdminAircraft();}
-  else helicopters[i][field]=val;
+  else{helicopters[i][field]=val;if(field==="tailNumber"){sortHelicopters();renderAdminAircraft();}}
 }
 function adminUpdateACArm(i,arm,val){helicopters[i].arms[arm]=parseFloat(val)||0;}
 function adminDeleteAC(i){
   if(confirm("Remove "+helicopters[i].tailNumber+"?")){helicopters.splice(i,1);if(state.selectedHeliIndex>=helicopters.length)state.selectedHeliIndex=0;renderAdminAircraft();}}
 function adminAddAC(){
   helicopters.push({tailNumber:"N000XX",serial:"000000",model:"SIKORSKY  S-76C+",emptyWeight:8300,emptyArm:208,fuelCapacity:281.2,arms:{navBag:110,crew:102.5,credenza:134,passFwd:133,passAft:197.5,baggage:235}});
+  sortHelicopters();
   renderAdminAircraft();
   setTimeout(()=>{const cards=document.querySelectorAll(".ac-card");if(cards.length)cards[cards.length-1].scrollIntoView({behavior:"smooth"});},100);
 }
