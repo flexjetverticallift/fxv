@@ -347,11 +347,7 @@ const db = firebase.firestore();
 const FUNCTION_URL = "https://us-central1-fxv-weight-and-balance.cloudfunctions.net/adminSave";
 
 function sortHelicopters(){
-  helicopters.sort((a,b)=>{
-    const na=parseInt((a.tailNumber||"").match(/\d+/)?.[0]||0);
-    const nb=parseInt((b.tailNumber||"").match(/\d+/)?.[0]||0);
-    return na-nb;
-  });
+  helicopters.sort((a,b)=>(a.tailNumber||"").localeCompare(b.tailNumber||""));
 }
 
 function loadFromFirebase() {
