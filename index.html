@@ -742,6 +742,99 @@ return{celsius:c,hp:hp,temp5000:t5,hogeWeight:hogeWt,meaWeight:meaWt,v1:v1}
 // PDF Queue State
 let pdfQueue=[],currentSeq=1,replacingSeq=null,pdfGenerating=false;
 
+// ── IndexedDB queue persistence ────────────────────────────────────────────
+const DB_NAME='fxv_wb',DB_VER=1,STORE='queue';
+let _db=null;
+function openDB(){
+  return new Promise((res,rej)=>{
+    if(_db){res(_db);return;}
+    const req=indexedDB.open(DB_NAME,DB_VER);
+    req.onupgradeneeded=e=>{
+      const db=e.target.result;
+      if(!db.objectStoreNames.contains(STORE))
+        db.createObjectStore(STORE,{keyPath:'seq'});
+    };
+    req.onsuccess=e=>{_db=e.target.result;res(_db);};
+    req.onerror=e=>rej(e.target.error);
+  });
+}
+function isDST(d){
+  const jan=new Date(d.getFullYear(),0,1).getTimezoneOffset();
+  const jul=new Date(d.getFullYear(),6,1).getTimezoneOffset();
+  return d.getTimezoneOffset()<Math.max(jan,jul);
+}
+function getETDateStr(){
+  const now=new Date();
+  const off=isDST(now)?-4:-5;
+  const et=new Date(now.getTime()+off*3600000);
+  return et.toISOString().slice(0,10);
+}
+function pastResetToday(){
+  const now=new Date();
+  const off=isDST(now)?-4:-5;
+  const et=new Date(now.getTime()+off*3600000);
+  const h=et.getUTCHours();
+  return h>=3;
+}
+async function saveQueueToDB(){
+  try{
+    const db=await openDB();
+    // Pre-convert all blobs to ArrayBuffers before opening transaction
+    const entries=await Promise.all(pdfQueue.map(async item=>({
+      seq:item.seq,tripLabel:item.tripLabel,filename:item.filename,
+      blob:await item.blob.arrayBuffer(),
+      formState:item.formState||null,
+      savedDate:getETDateStr()
+    })));
+    // Now run everything in one synchronous transaction and await its completion
+    await new Promise((res,rej)=>{
+      const tx=db.transaction(STORE,'readwrite');
+      const st=tx.objectStore(STORE);
+      tx.oncomplete=()=>res();
+      tx.onerror=e=>rej(e.target.error);
+      tx.onabort=e=>rej(e.target.error);
+      st.clear();
+      for(const entry of entries) st.put(entry);
+      st.put({seq:-1,currentSeq,savedDate:getETDateStr()});
+    });
+  }catch(e){console.warn('Queue save failed:',e);}
+}
+async function loadQueueFromDB(){
+  try{
+    const db=await openDB();
+    const tx=db.transaction(STORE,'readonly');
+    const all=await new Promise((res,rej)=>{
+      const req=tx.objectStore(STORE).getAll();
+      req.onsuccess=e=>res(e.target.result);
+      req.onerror=e=>rej(e.target.error);
+    });
+    if(!all||all.length===0)return;
+    const todayET=getETDateStr();
+    const sentinel=all.find(r=>r.seq===-1);
+    const savedDate=sentinel?sentinel.savedDate:'';
+    if(savedDate&&savedDate<todayET&&pastResetToday()){
+      await clearDB();
+      console.log('FXV queue: 3am ET reset');
+      return;
+    }
+    const items=all.filter(r=>r.seq!==-1).sort((a,b)=>a.seq-b.seq);
+    pdfQueue=items.map(r=>({seq:r.seq,tripLabel:r.tripLabel,filename:r.filename,
+      blob:new Blob([r.blob],{type:'application/pdf'}),formState:r.formState||null}));
+    if(sentinel&&sentinel.currentSeq)currentSeq=sentinel.currentSeq;
+    renderQueuePanel();updateSendBtn();
+    if(pdfQueue.length>0)showToast(pdfQueue.length+' leg'+(pdfQueue.length>1?'s':'')+' restored ✓');
+  }catch(e){console.warn('Queue load failed:',e);}
+}
+async function clearDB(){
+  try{
+    const db=await openDB();
+    const tx=db.transaction(STORE,'readwrite');
+    tx.objectStore(STORE).clear();
+  }catch(e){console.warn('Queue clear failed:',e);}
+}
+// ── End IndexedDB persistence ───────────────────────────────────────────────
+
+
 function showToast(msg,dur=2200){
   let t=document.getElementById('pdf-toast');
   if(!t){t=document.createElement('div');t.id='pdf-toast';t.className='pdf-toast';document.body.appendChild(t);}
@@ -752,12 +845,38 @@ function renderQueuePanel(){
   if(pdfQueue.length===0){panel.classList.remove('has-items');return;}
   panel.classList.add('has-items');
   panel.innerHTML='<div class="pdf-queue-title">Queued PDFs</div><div class="pdf-queue-legs">'+
-    pdfQueue.map(i=>`<span class="pdf-leg-pill${replacingSeq===i.seq?' pdf-leg-replacing':''}">${i.tripLabel}<button onclick="reExportEntry(${i.seq})">&#8635;</button><button onclick="removeEntry(${i.seq})">&#215;</button></span>`).join('')+
+    pdfQueue.map(i=>`<span class="pdf-leg-pill${replacingSeq===i.seq?' pdf-leg-replacing':''}" onclick="restoreLeg(${i.seq})" title="Tap to edit this leg"><button onclick="event.stopPropagation();sendSingleLeg(${i.seq})" title="Send this leg">&#8679;</button>${i.tripLabel}<button onclick="event.stopPropagation();removeEntry(${i.seq})">&#215;</button></span>`).join('')+
     '</div>';
 }
 function getTripLabel(){const base=(state.tripNo||'').trim();if(!base)return 'Leg '+currentSeq;const ex=pdfQueue.filter(i=>i.tripLabel===base||i.tripLabel.startsWith(base+' ('));return ex.length===0?base:base+' ('+ex.length+')';}
 function reExportEntry(seq){replacingSeq=seq;renderQueuePanel();updateExportBtn();const item=pdfQueue.find(i=>i.seq===seq);showToast('Re-export will replace '+(item?item.tripLabel:'entry'));}
-function removeEntry(seq){pdfQueue=pdfQueue.filter(i=>i.seq!==seq);if(replacingSeq===seq)replacingSeq=null;renderQueuePanel();updateExportBtn();updateSendBtn();}
+function restoreLeg(seq){
+  const item=pdfQueue.find(i=>i.seq===seq);
+  if(!item||!item.formState)return;
+  // Repopulate full form state from snapshot
+  Object.assign(state,JSON.parse(JSON.stringify(item.formState)));
+  // Set replacingSeq so export will replace this entry
+  replacingSeq=seq;
+  renderQueuePanel();updateExportBtn();updateSendBtn();
+  render();
+  window.scrollTo(0,0);
+  showToast(item.tripLabel+' loaded — edit and re-export when ready');
+}
+async function sendSingleLeg(seq){
+  const item=pdfQueue.find(i=>i.seq===seq);
+  if(!item)return;
+  try{
+    const file=new File([item.blob],item.filename,{type:'application/pdf'});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'FXV W&B — '+item.tripLabel,text:item.tripLabel});
+    }else{
+      const u=URL.createObjectURL(file);
+      const a=document.createElement('a');a.href=u;a.download=file.name;a.click();
+      setTimeout(()=>URL.revokeObjectURL(u),5000);
+    }
+  }catch(err){if(err.name!=='AbortError')showToast('Share failed — try again');}
+}
+function removeEntry(seq){pdfQueue=pdfQueue.filter(i=>i.seq!==seq);if(replacingSeq===seq)replacingSeq=null;renderQueuePanel();updateExportBtn();updateSendBtn();saveQueueToDB();}
 function updateExportBtn(){
   const b=document.getElementById('export-pdf-btn');if(!b)return;
   const repItem=replacingSeq!==null?pdfQueue.find(i=>i.seq===replacingSeq):null;
@@ -910,9 +1029,11 @@ async function exportPDF(){
     const fn=safeLbl+'_FXV_WB_'+tail+'_'+dateStr+'.pdf';
     const idx=pdfQueue.findIndex(i=>i.seq===seq);
     const wasReplace=replacingSeq!==null;
-    if(idx>=0){pdfQueue[idx]={seq,tripLabel,blob,filename:fn};showToast(tripLabel+' replaced ✓');}
-    else{pdfQueue.push({seq:currentSeq,tripLabel,blob,filename:fn});showToast(tripLabel+' added ✓');currentSeq++;}
-    replacingSeq=null;renderQueuePanel();updateSendBtn();
+    // Snapshot full form state so the leg can be restored later
+    const formSnap=JSON.parse(JSON.stringify(state));
+    if(idx>=0){pdfQueue[idx]={seq,tripLabel,blob,filename:fn,formState:formSnap};showToast(tripLabel+' replaced ✓');}
+    else{pdfQueue.push({seq:currentSeq,tripLabel,blob,filename:fn,formState:formSnap});showToast(tripLabel+' added ✓');currentSeq++;}
+    replacingSeq=null;renderQueuePanel();updateSendBtn();saveQueueToDB();
     // Auto-advance: destination→departure, clear pax/baggage, keep crew & fuel
     if(!wasReplace){
       state.from=state.to||'';
@@ -932,12 +1053,21 @@ async function exportPDF(){
 async function sendToOps(){
   if(pdfQueue.length===0)return;
   try{
-    const files=pdfQueue.sort((a,b)=>a.seq-b.seq).map(i=>new File([i.blob],i.filename,{type:'application/pdf'}));
-    const isTouchDevice=('ontouchstart' in window)||(navigator.maxTouchPoints>0);
-    if(isTouchDevice&&navigator.share&&navigator.canShare&&navigator.canShare({files})){
-      await navigator.share({files,title:'FXV Weight & Balance',text:'W&B — '+files.length+' leg(s)'});
+    const sorted=pdfQueue.slice().sort((a,b)=>a.seq-b.seq);
+    const files=sorted.map(i=>new File([i.blob],i.filename,{type:'application/pdf'}));
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files})){
+      await navigator.share({
+        files,
+        title:'FXV Weight & Balance',
+        text:'W&B — '+files.length+' leg'+(files.length>1?'s':'')
+      });
     }else{
-      files.forEach(f=>{const u=URL.createObjectURL(f);const a=document.createElement('a');a.href=u;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+      // Desktop fallback: download each file
+      files.forEach(f=>{
+        const u=URL.createObjectURL(f);
+        const a=document.createElement('a');a.href=u;a.download=f.name;a.click();
+        setTimeout(()=>URL.revokeObjectURL(u),5000);
+      });
     }
   }catch(err){if(err.name!=='AbortError')showToast('Share failed — try again');}
 }
@@ -1030,6 +1160,7 @@ function renderAdminPersonnel(){
     return `<tr>
       <td><input class="admin-input" value="${p.name}" onchange="adminUpdatePilot(${realIdx},'name',this.value)"></td>
       <td><input class="admin-input admin-input-sm" type="number" value="${p.weight}" onchange="adminUpdatePilot(${realIdx},'weight',this.value)"></td>
+      <td><input class="admin-input" type="email" value="${p.email||''}" placeholder="email@flexjet.com" onchange="adminUpdatePilot(${realIdx},'email',this.value)"></td>
       <td><div class="role-check">
         <label><input type="checkbox" ${p.roles.includes("pic")?"checked":""} onchange="adminToggleRole(${realIdx},'pic',this.checked)"> PIC</label>
         <label><input type="checkbox" ${p.roles.includes("sic")?"checked":""} onchange="adminToggleRole(${realIdx},'sic',this.checked)"> SIC</label>
@@ -1040,11 +1171,12 @@ function renderAdminPersonnel(){
   const html=`<div class="admin-section">
     <h3>Personnel Roster (${allPilots.length} people)</h3>
     <table class="admin-table">
-      <thead><tr><th>Name</th><th>Weight (lbs)</th><th>Role(s)</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Name</th><th>Weight (lbs)</th><th>Email</th><th>Role(s)</th><th>Actions</th></tr></thead>
       <tbody>${rows}
         <tr class="admin-add-row">
           <td><input class="admin-input" id="new-pilot-name" placeholder="LASTNAME" style="text-transform:uppercase"></td>
           <td><input class="admin-input admin-input-sm" type="number" id="new-pilot-weight" placeholder="lbs"></td>
+          <td><input class="admin-input" type="email" id="new-pilot-email" placeholder="email@flexjet.com"></td>
           <td><div class="role-check">
             <label><input type="checkbox" id="new-pilot-pic"> PIC</label>
             <label><input type="checkbox" id="new-pilot-sic" checked> SIC</label>
@@ -1058,6 +1190,7 @@ function renderAdminPersonnel(){
 }
 function adminUpdatePilot(idx,field,val){
   if(field==="weight")allPilots[idx][field]=parseFloat(val)||0;
+  else if(field==="email")allPilots[idx][field]=val.trim().toLowerCase();
   else allPilots[idx][field]=val.toUpperCase().trim();
 }
 function adminToggleRole(idx,role,checked){
@@ -1077,7 +1210,8 @@ function adminAddPilot(){
   if(pic)roles.push("pic");
   if(sic)roles.push("sic");
   if(roles.length===0){alert("Please select at least one role.");return;}
-  allPilots.push({name,weight,roles});
+  const email=(document.getElementById("new-pilot-email").value||"").trim().toLowerCase();
+  allPilots.push({name,weight,roles,email});
   renderAdminPersonnel();
 }
 
@@ -1134,7 +1268,7 @@ function adminAddAC(){
 // RENDER
 // =====================================================================
 
-function render(){const _scrollY=window.scrollY||0;const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);document.getElementById('app').innerHTML=`<div class="container"><div class="print-header-bar"><span class="print-title">FLEXJET VERTICAL LIFT — LOAD MANIFEST</span>${state.tripNo?'<span class="print-trip">Trip No: <strong>'+state.tripNo+'</strong></span>':''}<span class="print-ac">${h.tailNumber} • ${h.model} • S/N ${h.serial} • EW ${h.emptyWeight} lbs • Arm ${h.emptyArm.toFixed(2)}</span></div><div class="header"><h1>FLEXJET VERTICAL LIFT</h1><h2>LOAD MANIFEST</h2>${state.tripNo?'<div class="trip-no-badge">Trip No: '+state.tripNo+'</div>':''}</div><button class=\"admin-btn no-print\" onclick=\"openPW()\">&#x1F512; Update / Edit (Admin Only)</button><div class="aircraft-section"><div class="form-group"><label>Aircraft</label><select onchange="updateHeli(this.value)">${helicopters.map((h,i)=>`<option value="${i}" ${i===state.selectedHeliIndex?'selected':''}>${h.tailNumber} - ${h.model}</option>`).join('')}</select></div><div class="info-box"><div><strong>Serial:</strong> ${h.serial}</div><div><strong>Empty Weight:</strong> ${h.emptyWeight} lbs</div><div><strong>Empty Arm:</strong> ${h.emptyArm.toFixed(2)}</div><div><strong>Fuel Capacity:</strong> ${h.fuelCapacity} Gals.</div></div></div><div class="flight-info"><div class="form-group"><label>Date</label><input type="date" value="${state.date}" onchange="updateDate(this.value)"></div><div class="form-group"><label>From</label><input type="text" value="${state.from}" onchange="updateFrom(this.value)" placeholder="KBDR" style="text-transform:uppercase;max-width:90px"></div><div class="form-group"><label>To</label><input type="text" value="${state.to}" onchange="updateTo(this.value)" placeholder="KTEB" style="text-transform:uppercase;max-width:90px"></div><div class="form-group"><label>Trip No.</label><input type="text" value="${state.tripNo}" onchange="updateTripNo(this.value)" style="max-width:90px"></div></div><div class="perf-section"><div class="perf-title">Performance Calculations</div><div class="perf-inputs"><div class="form-group"><label>Temperature (°F)</label><input type="text" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" style="max-width:90px"></div><div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" onchange="updateAltimeter(this.value)" onblur="formatAltimeter(this)" style="max-width:90px"></div><div class="form-group"><label>Field Elevation (ft)</label><input type="number" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" style="max-width:90px"></div><div class="form-group"><label>Temp Aloft 6000 ft (°C)</label><input type="text" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" style="max-width:90px"></div></div><div class="perf-outputs"><div class="perf-out"><div class="perf-label">Temperature (°C)</div><div class="perf-value">${p.celsius!==null?p.celsius:'--'}</div></div><div class="perf-out"><div class="perf-label">Pressure Altitude (Hp)</div><div class="perf-value">${p.hp!==null?p.hp+' ft':'--'}</div></div><div class="perf-out"><div class="perf-label">Temp at 5000 ft (°C)</div><div class="perf-value">${p.temp5000!==null?p.temp5000:'--'}</div></div></div><div class="perf-outputs" style="margin-top:15px;"><div class="perf-out"><div class="perf-label">HOGE Weight</div><div class="perf-value">${p.hogeWeight!==null&&p.hogeWeight!==undefined?p.hogeWeight+' lbs':'--'}</div><div style="font-size:10px;color:#666;margin-top:3px;">(at computed Hp)</div></div><div class="perf-out"><div class="perf-label">MEA/5000ft Weight</div><div class="perf-value">${p.meaWeight!==null&&p.meaWeight!==undefined?p.meaWeight+' lbs':'--'}</div></div><div class="perf-out"><div class="perf-label">V1</div><div class="perf-value">${c.heli.model.includes('S-76D')?(p.v1===35?'35 kts':p.v1===-1?'Outside Env':'--'):(p.v1!==null&&p.v1!==undefined?p.v1+' kts':'--')}</div><div style="font-size:10px;color:#666;margin-top:3px;">${c.heli.model.includes('S-76D')?'(Cat A Horiz)':'(at computed Hp)'}</div></div></div></div><div style="margin-top:30px;margin-bottom:15px;"><h3 style="margin:0;padding:10px 0;border-bottom:3px solid #333;font-size:18px;">Weight & Balance</h3></div><table><thead><tr><th>Item</th><th class="number">Weight (LBS)</th><th class="number">Arm</th><th class="number">Moment</th></tr></thead><tbody><tr class="yellow-row"><td><strong>Empty Weight</strong></td><td class="number">${h.emptyWeight}</td><td class="number">${h.emptyArm.toFixed(2)}</td><td class="number">${c.emptyMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Nav Bag:<input type="number" value="${state.navBag}" onchange="updateNavBag(this.value)"><span style="font-size:12px;color:#666;">lbs</span>${state.navBag!==20?'<span style="font-size:10px;color:#e65100;margin-left:4px;">&#x270E;</span>':''}</div></td><td class="number">${state.navBag}</td><td class="number">${h.arms.navBag}</td><td class="number">${c.navBagMoment.toFixed(0)}</td></tr><tr><td><div class="crew-inputs"><div class="crew-select"><label>PIC: <span style="font-size:10px;color:#e65100;">${state.picWeightOverride!==null?"&#x270E; edited":""}</span></label><select onchange="updatePIC(this.value)"><option value="">Select PIC</option>${captains.map(cp=>`<option value="${cp.name}" ${cp.name===state.picName?'selected':''}>${cp.name} (${cp.weight})</option>`).join('')}</select>${state.picName?'<div style="display:flex;align-items:center;gap:4px;margin-top:3px;"><span style="font-size:11px;color:#666;">Wt:</span><input type="number" value="'+( state.picWeightOverride!==null?state.picWeightOverride:(captains.find(p=>p.name===state.picName)?.weight||0) )+'" onchange="updatePICWeight(this.value)" style="width:60px;font-size:12px;padding:3px;" inputmode="numeric"><span style="font-size:11px;color:#666;">lbs</span></div>':''}</div><div class="crew-select"><label>SIC: <span style="font-size:10px;color:#e65100;">${state.sicWeightOverride!==null?"&#x270E; edited":""}</span></label><select onchange="updateSIC(this.value)"><option value="">Select SIC</option>${pilots.map(p=>`<option value="${p.name}" ${p.name===state.sicName?'selected':''}>${p.name} (${p.weight})</option>`).join('')}</select>${state.sicName?'<div style="display:flex;align-items:center;gap:4px;margin-top:3px;"><span style="font-size:11px;color:#666;">Wt:</span><input type="number" value="'+( state.sicWeightOverride!==null?state.sicWeightOverride:(pilots.find(p=>p.name===state.sicName)?.weight||0) )+'" onchange="updateSICWeight(this.value)" style="width:60px;font-size:12px;padding:3px;" inputmode="numeric"><span style="font-size:11px;color:#666;">lbs</span></div>':''}</div></div></td><td class="number"><strong>${c.crewWeight}</strong></td><td class="number">${h.arms.crew}</td><td class="number">${c.crewMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Credenza:<input type="number" value="${state.credenza}" onchange="updateCredenza(this.value)"><span style="font-size:12px;color:#666;">lbs</span>${state.credenza!==14?'<span style="font-size:10px;color:#e65100;margin-left:4px;">&#x270E;</span>':''}</div></td><td class="number">${state.credenza}</td><td class="number">${h.arms.credenza}</td><td class="number">${c.credenzaMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Fwd Pax:</span><select onchange="updateNumPassFwd(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassFwd?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passFwdWeight}" onchange="updatePassFwdWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passFwdWeight}</td><td class="number">${h.arms.passFwd}</td><td class="number">${c.passFwdMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Aft Pax:</span><select onchange="updateNumPassAft(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassAft?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passAftWeight}" onchange="updatePassAftWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passAftWeight}</td><td class="number">${h.arms.passAft}</td><td class="number">${c.passAftMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Baggage Comp:<input type="number" value="${state.baggage}" onchange="updateBaggage(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.baggage}</td><td class="number">${h.arms.baggage}</td><td class="number">${c.baggageMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Jet A Fuel:<input type="number" value="${state.fuel}" onchange="updateFuel(this.value)" class="wide-input"><span style="font-size:12px;color:#666;">lbs</span>${c.maxFuelGallons<=0?'<span style="font-size:11px;color:#c62828;margin-left:8px;">⚠ MGTOW exceeded</span>':'<span style="font-size:11px;color:#666;margin-left:8px;">(Max: '+c.maxFuelGallons.toFixed(1)+' gal / '+c.maxFuelPounds.toFixed(0)+' lbs)</span>'}<div class="fuel-shortcuts"><button class="fuel-shortcut-btn" onclick="fuelToMaxGross(calculate())">Max Gross</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToHOGE(p,c)">HOGE</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToMEA(p,c)">MEA/5000ft</button></div></div></td><td class="number">${state.fuel}</td><td class="number">${c.fuelArm.toFixed(2)}</td><td class="number">${c.fuelMoment.toFixed(0)}</td></tr><tr class="total-row"><td>TOTALS:</td><td class="number">${c.totalWeight.toFixed(1)}</td><td class="number">-</td><td class="number">${c.totalMoment.toFixed(0)}</td></tr></tbody></table><div class="cg-result"><div class="cg-value">CENTER OF GRAVITY (CG): ${c.cg.toFixed(2)}</div><div class="cg-limits">CG limits are from sta: <strong>${c.cgLimits.min}</strong> to Sta: <strong>${c.cgLimits.max}</strong> at this gross weight.</div><div class="status ${c.weightExceeded||!c.cgInLimits?'error':'ok'}">${c.weightExceeded?'✗ MGTOW EXCEEDED':c.cgInLimits?'✓ WITHIN LIMITS':'✗ OUT OF CG LIMITS'}</div></div><div class="summary"><div class="summary-card"><div class="summary-label">Total Weight</div><div class="summary-value">${c.totalWeight.toFixed(0)} lbs</div></div><div class="summary-card"><div class="summary-label">Center of Gravity</div><div class="summary-value">${c.cg.toFixed(2)}</div></div><div class="summary-card"><div class="summary-label">Total Passengers</div><div class="summary-value">${state.numPassFwd+state.numPassAft}</div></div><div class="summary-card"><div class="summary-label">Fuel Load</div><div class="summary-value">${state.fuel} lbs</div></div>${h.model.includes('S-76D')?'<div class="summary-card"><div class="summary-label">Lateral CG</div><div class="summary-value">'+c.lateralCG.toFixed(2)+' in</div></div>':''}</div><div class="graph-section"><div class="graph-title">Center of Gravity Envelope</div><canvas id="cgGraph" width="800" height="500"></canvas></div></div>
+function render(){const _scrollY=window.scrollY||0;const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);document.getElementById('app').innerHTML=`<div class="container"><div class="print-header-bar"><span class="print-title">FLEXJET VERTICAL LIFT — LOAD MANIFEST</span>${state.tripNo?'<span class="print-trip">Trip No: <strong>'+state.tripNo+'</strong></span>':''}<span class="print-ac">${h.tailNumber} • ${h.model} • S/N ${h.serial} • EW ${h.emptyWeight} lbs • Arm ${h.emptyArm.toFixed(2)}</span></div><div class="header"><h1>FLEXJET VERTICAL LIFT</h1><h2>LOAD MANIFEST</h2>${state.tripNo?'<div class="trip-no-badge">Trip No: '+state.tripNo+'</div>':''}</div><button class=\"admin-btn no-print\" onclick=\"openPW()\">&#x1F512; Update / Edit (Admin Only)</button><div class="aircraft-section"><div class="form-group"><label>Aircraft</label><select onchange="updateHeli(this.value)">${helicopters.map((h,i)=>`<option value="${i}" ${i===state.selectedHeliIndex?'selected':''}>${h.tailNumber} - ${h.model}</option>`).join('')}</select></div><div class="info-box"><div><strong>Serial:</strong> ${h.serial}</div><div><strong>Empty Weight:</strong> ${h.emptyWeight} lbs</div><div><strong>Empty Arm:</strong> ${h.emptyArm.toFixed(2)}</div><div><strong>Fuel Capacity:</strong> ${h.fuelCapacity} Gals.</div></div></div><div class="flight-info"><div class="form-group"><label>Date</label><input type="date" value="${state.date}" onchange="updateDate(this.value)"></div><div class="form-group"><label>From</label><input type="text" value="${state.from}" onchange="updateFrom(this.value)" placeholder="KBDR" style="text-transform:uppercase;max-width:90px"></div><div class="form-group"><label>To</label><input type="text" value="${state.to}" onchange="updateTo(this.value)" placeholder="KTEB" style="text-transform:uppercase;max-width:90px"></div><div class="form-group"><label>Trip No.</label><input type="text" value="${state.tripNo}" onchange="updateTripNo(this.value)" style="max-width:90px"></div></div><div class="perf-section"><div class="perf-title">Performance Calculations</div><div class="perf-inputs"><div class="form-group"><label>Temperature (°F)</label><input type="number" value="${state.fahrenheit}" onchange="updateFahrenheit(this.value)" style="max-width:90px"></div><div class="form-group"><label>Altimeter (inHg)</label><input type="text" inputmode="decimal" value="${state.altimeter}" onchange="updateAltimeter(this.value)" onblur="formatAltimeter(this)" style="max-width:90px"></div><div class="form-group"><label>Field Elevation (ft)</label><input type="number" value="${state.fieldElevation}" onchange="updateFieldElevation(this.value)" style="max-width:90px"></div><div class="form-group"><label>Temp Aloft 6000 ft (°C)</label><input type="number" value="${state.tempAloft6000}" onchange="updateTempAloft6000(this.value)" style="max-width:90px"></div></div><div class="perf-outputs"><div class="perf-out"><div class="perf-label">Temperature (°C)</div><div class="perf-value">${p.celsius!==null?p.celsius:'--'}</div></div><div class="perf-out"><div class="perf-label">Pressure Altitude (Hp)</div><div class="perf-value">${p.hp!==null?p.hp+' ft':'--'}</div></div><div class="perf-out"><div class="perf-label">Temp at 5000 ft (°C)</div><div class="perf-value">${p.temp5000!==null?p.temp5000:'--'}</div></div></div><div class="perf-outputs" style="margin-top:15px;"><div class="perf-out"><div class="perf-label">HOGE Weight</div><div class="perf-value">${p.hogeWeight!==null&&p.hogeWeight!==undefined?p.hogeWeight+' lbs':'--'}</div><div style="font-size:10px;color:#666;margin-top:3px;">(at computed Hp)</div></div><div class="perf-out"><div class="perf-label">MEA/5000ft Weight</div><div class="perf-value">${p.meaWeight!==null&&p.meaWeight!==undefined?p.meaWeight+' lbs':'--'}</div></div><div class="perf-out"><div class="perf-label">V1</div><div class="perf-value">${c.heli.model.includes('S-76D')?(p.v1===35?'35 kts':p.v1===-1?'Outside Env':'--'):(p.v1!==null&&p.v1!==undefined?p.v1+' kts':'--')}</div><div style="font-size:10px;color:#666;margin-top:3px;">${c.heli.model.includes('S-76D')?'(Cat A Horiz)':'(at computed Hp)'}</div></div></div></div><div style="margin-top:30px;margin-bottom:15px;"><h3 style="margin:0;padding:10px 0;border-bottom:3px solid #333;font-size:18px;">Weight & Balance</h3></div><table><thead><tr><th>Item</th><th class="number">Weight (LBS)</th><th class="number">Arm</th><th class="number">Moment</th></tr></thead><tbody><tr class="yellow-row"><td><strong>Empty Weight</strong></td><td class="number">${h.emptyWeight}</td><td class="number">${h.emptyArm.toFixed(2)}</td><td class="number">${c.emptyMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Nav Bag:<input type="number" value="${state.navBag}" onchange="updateNavBag(this.value)"><span style="font-size:12px;color:#666;">lbs</span>${state.navBag!==20?'<span style="font-size:10px;color:#e65100;margin-left:4px;">&#x270E;</span>':''}</div></td><td class="number">${state.navBag}</td><td class="number">${h.arms.navBag}</td><td class="number">${c.navBagMoment.toFixed(0)}</td></tr><tr><td><div class="crew-inputs"><div class="crew-select"><label>PIC: <span style="font-size:10px;color:#e65100;">${state.picWeightOverride!==null?"&#x270E; edited":""}</span></label><select onchange="updatePIC(this.value)"><option value="">Select PIC</option>${captains.map(cp=>`<option value="${cp.name}" ${cp.name===state.picName?'selected':''}>${cp.name} (${cp.weight})</option>`).join('')}</select>${state.picName?'<div style="display:flex;align-items:center;gap:4px;margin-top:3px;"><span style="font-size:11px;color:#666;">Wt:</span><input type="number" value="'+( state.picWeightOverride!==null?state.picWeightOverride:(captains.find(p=>p.name===state.picName)?.weight||0) )+'" onchange="updatePICWeight(this.value)" style="width:60px;font-size:12px;padding:3px;" inputmode="numeric"><span style="font-size:11px;color:#666;">lbs</span></div>':''}</div><div class="crew-select"><label>SIC: <span style="font-size:10px;color:#e65100;">${state.sicWeightOverride!==null?"&#x270E; edited":""}</span></label><select onchange="updateSIC(this.value)"><option value="">Select SIC</option>${pilots.map(p=>`<option value="${p.name}" ${p.name===state.sicName?'selected':''}>${p.name} (${p.weight})</option>`).join('')}</select>${state.sicName?'<div style="display:flex;align-items:center;gap:4px;margin-top:3px;"><span style="font-size:11px;color:#666;">Wt:</span><input type="number" value="'+( state.sicWeightOverride!==null?state.sicWeightOverride:(pilots.find(p=>p.name===state.sicName)?.weight||0) )+'" onchange="updateSICWeight(this.value)" style="width:60px;font-size:12px;padding:3px;" inputmode="numeric"><span style="font-size:11px;color:#666;">lbs</span></div>':''}</div></div></td><td class="number"><strong>${c.crewWeight}</strong></td><td class="number">${h.arms.crew}</td><td class="number">${c.crewMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Credenza:<input type="number" value="${state.credenza}" onchange="updateCredenza(this.value)"><span style="font-size:12px;color:#666;">lbs</span>${state.credenza!==14?'<span style="font-size:10px;color:#e65100;margin-left:4px;">&#x270E;</span>':''}</div></td><td class="number">${state.credenza}</td><td class="number">${h.arms.credenza}</td><td class="number">${c.credenzaMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Fwd Pax:</span><select onchange="updateNumPassFwd(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassFwd?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passFwdWeight}" onchange="updatePassFwdWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passFwdWeight}</td><td class="number">${h.arms.passFwd}</td><td class="number">${c.passFwdMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input"><span>Aft Pax:</span><select onchange="updateNumPassAft(this.value)" style="width:58px;padding:4px;">${[...Array(10)].map((_,i)=>`<option value="${i}" ${i===state.numPassAft?'selected':''} >${i}</option>`).join('')}</select><input type="number" value="${state.passAftWeight}" onchange="updatePassAftWeight(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.passAftWeight}</td><td class="number">${h.arms.passAft}</td><td class="number">${c.passAftMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Baggage Comp:<input type="number" value="${state.baggage}" onchange="updateBaggage(this.value)"><span style="font-size:12px;color:#666;">lbs</span></div></td><td class="number">${state.baggage}</td><td class="number">${h.arms.baggage}</td><td class="number">${c.baggageMoment.toFixed(0)}</td></tr><tr><td><div class="inline-input">Jet A Fuel:<input type="number" value="${state.fuel}" onchange="updateFuel(this.value)" class="wide-input"><span style="font-size:12px;color:#666;">lbs</span>${c.maxFuelGallons<=0?'<span style="font-size:11px;color:#c62828;margin-left:8px;">⚠ MGTOW exceeded</span>':'<span style="font-size:11px;color:#666;margin-left:8px;">(Max: '+c.maxFuelGallons.toFixed(1)+' gal / '+c.maxFuelPounds.toFixed(0)+' lbs)</span>'}<div class="fuel-shortcuts"><button class="fuel-shortcut-btn" onclick="fuelToMaxGross(calculate())">Max Gross</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToHOGE(p,c)">HOGE</button><button class="fuel-shortcut-btn" onclick="const c=calculate();const h=c.heli;const p=calcPerf(c.totalWeight,h.model);fuelToMEA(p,c)">MEA/5000ft</button></div></div></td><td class="number">${state.fuel}</td><td class="number">${c.fuelArm.toFixed(2)}</td><td class="number">${c.fuelMoment.toFixed(0)}</td></tr><tr class="total-row"><td>TOTALS:</td><td class="number">${c.totalWeight.toFixed(1)}</td><td class="number">-</td><td class="number">${c.totalMoment.toFixed(0)}</td></tr></tbody></table><div class="cg-result"><div class="cg-value">CENTER OF GRAVITY (CG): ${c.cg.toFixed(2)}</div><div class="cg-limits">CG limits are from sta: <strong>${c.cgLimits.min}</strong> to Sta: <strong>${c.cgLimits.max}</strong> at this gross weight.</div><div class="status ${c.weightExceeded||!c.cgInLimits?'error':'ok'}">${c.weightExceeded?'✗ MGTOW EXCEEDED':c.cgInLimits?'✓ WITHIN LIMITS':'✗ OUT OF CG LIMITS'}</div></div><div class="summary"><div class="summary-card"><div class="summary-label">Total Weight</div><div class="summary-value">${c.totalWeight.toFixed(0)} lbs</div></div><div class="summary-card"><div class="summary-label">Center of Gravity</div><div class="summary-value">${c.cg.toFixed(2)}</div></div><div class="summary-card"><div class="summary-label">Total Passengers</div><div class="summary-value">${state.numPassFwd+state.numPassAft}</div></div><div class="summary-card"><div class="summary-label">Fuel Load</div><div class="summary-value">${state.fuel} lbs</div></div>${h.model.includes('S-76D')?'<div class="summary-card"><div class="summary-label">Lateral CG</div><div class="summary-value">'+c.lateralCG.toFixed(2)+' in</div></div>':''}</div><div class="graph-section"><div class="graph-title">Center of Gravity Envelope</div><canvas id="cgGraph" width="800" height="500"></canvas></div></div>
 
 <div id="pdf-queue-panel" class="pdf-queue-panel no-print"></div>
   <button id="export-pdf-btn" class="export-btn no-print" onclick="exportPDF()">Export</button>
@@ -1188,6 +1322,7 @@ try {
 
 // Load data from Firebase on startup
 loadFromFirebase();
+loadQueueFromDB();
 </script>
 <script>
 window.onerror = function(msg, src, line, col, err) {
